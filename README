@@ -1,0 +1,6 @@
+krop is a tool to crop PDF files, with an eye towards eReaders.
+
+It depends on:
+PyQT
+python-poppler-qt4
+pyPdf

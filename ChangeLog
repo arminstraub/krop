@@ -1,0 +1,30 @@
+krop (0.4.1)  2013-07-28 -- Armin Straub
+
+  * Initial public release.
+  + Several small bug fixes.
+
+
+krop (0.4.0)  2013-06-16 -- Armin Straub
+
+  * Rewrote cropping code, resulting in much smaller pdf files.
+
+
+krop (0.3.0)  2011-07-14 -- Armin Straub
+
+  + Added option to specify file name for cropped file.
+  + Added option to specify which pages to include into the cropped file.
+
+
+krop (0.2.0)  2010-10-16 -- Armin Straub
+
+  + Added option to automatically trim selection (right-click a selection for
+  this option).
+  + Added support to subdivide selections into several pages in order to
+  exactly fit the screen size of specific devices (with eReaders, such as my
+  Nook, in mind).
+
+
+krop (0.1.0)  2010-08-19 -- Armin Straub
+
+  * Initial personal release.
+

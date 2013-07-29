@@ -1,0 +1,17 @@
+Source: krop
+Maintainer: Armin Straub <mail@arminstraub.com>
+Section: utils
+Priority: optional
+Build-Depends: python (>= 2.6.6-3), debhelper (>= 7.4.3)
+Standards-Version: 3.9.1
+
+Package: krop
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends}, python-poppler-qt4, python-pypdf
+Description: Tool to crop PDF files, with an eye towards eReaders
+ .
+ krop depends on:
+ PyQT
+ python-poppler-qt4
+ pyPdf
+ .

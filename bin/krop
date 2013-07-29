@@ -1,0 +1,19 @@
+#! /usr/bin/env python
+# -*- coding: iso-8859-1 -*-
+
+"""
+Krop: A tool to crop PDF files, with an eye towards eReaders
+
+Copyright (C) 2010-2013 Armin Straub, http://arminstraub.com
+"""
+
+"""
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 3 of the License, or
+(at your option) any later version.
+"""
+
+import krop.krop
+
+krop.krop.main()
