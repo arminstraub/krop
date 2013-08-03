@@ -18,6 +18,12 @@ from os.path import exists, splitext
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
+from config import KDE
+if KDE:
+    from PyKDE4.kdeui import KMainWindow as QKMainWindow
+else:
+    QKMainWindow = QMainWindow
+
 from mainwindowui import Ui_MainWindow
 
 from viewerselections import ViewerSelections
@@ -76,12 +82,12 @@ class DeviceTypeManager:
             self.addDefaults()
 
 
-class MainWindow(QMainWindow):
+class MainWindow(QKMainWindow):
 
     fileName = None
 
     def __init__(self):
-        QMainWindow.__init__(self)
+        QKMainWindow.__init__(self)
 
         self.devicetypes = DeviceTypeManager()
 

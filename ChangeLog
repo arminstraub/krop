@@ -1,3 +1,8 @@
+krop (0.4.2)  2013-08-03 -- Armin Straub
+
+  + Use PyKDE if available.
+
+
 krop (0.4.1)  2013-07-28 -- Armin Straub
 
   * Initial public release.
