@@ -1,5 +1,11 @@
+krop (0.4.2-1) unstable; urgency=low
+
+  * New release of krop.
+
+ -- Armin Straub <mail@arminstraub.com>  Sun, 04 Aug 2013 11:18:27 +0200
+
 krop (0.4.1-1) unstable; urgency=low
 
-  * source package automatically created by stdeb 0.6.0+git
+  * New release of krop.
 
  -- Armin Straub <mail@arminstraub.com>  Mon, 29 Jul 2013 13:06:38 +0200
