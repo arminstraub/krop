@@ -116,12 +116,29 @@ class MainWindow(QKMainWindow):
         self.ui.actionNextPage.setIcon(QIcon.fromTheme('go-next'))
         self.ui.actionFirstPage.setIcon(QIcon.fromTheme('go-first'))
         self.ui.actionLastPage.setIcon(QIcon.fromTheme('go-last'))
-        self.ui.buttonPrevious.setIcon(QIcon.fromTheme('go-previous'))
-        self.ui.buttonNext.setIcon(QIcon.fromTheme('go-next'))
-        self.ui.buttonFirst.setIcon(QIcon.fromTheme('go-first'))
-        self.ui.buttonLast.setIcon(QIcon.fromTheme('go-last'))
 
-        self.ui.buttonFileSelect.setIcon(QIcon.fromTheme('document-open'))
+        if QIcon.hasThemeIcon('document-open'):
+            self.ui.buttonFileSelect.setIcon(QIcon.fromTheme('document-open'))
+        else:
+            self.ui.buttonFileSelect.setText('...')
+            self.ui.buttonFileSelect.setAutoRaise(False)
+
+        if QIcon.hasThemeIcon('go-first') and QIcon.hasThemeIcon('go-previous') \
+                and QIcon.hasThemeIcon('go-next') and QIcon.hasThemeIcon('go-last'):
+            self.ui.buttonFirst.setIcon(QIcon.fromTheme('go-first'))
+            self.ui.buttonPrevious.setIcon(QIcon.fromTheme('go-previous'))
+            self.ui.buttonNext.setIcon(QIcon.fromTheme('go-next'))
+            self.ui.buttonLast.setIcon(QIcon.fromTheme('go-last'))
+        else:
+            self.ui.buttonFirst.setText('<<')
+            self.ui.buttonPrevious.setText('<')
+            self.ui.buttonNext.setText('>')
+            self.ui.buttonLast.setText('>>')
+            self.ui.buttonFirst.setFlat(False)
+            self.ui.buttonPrevious.setFlat(False)
+            self.ui.buttonNext.setFlat(False)
+            self.ui.buttonLast.setFlat(False)
+
 
         self.connect(self.ui.actionOpenFile, SIGNAL("triggered()"), self.slotOpenFile)
         self.connect(self.ui.actionSelectFile, SIGNAL("triggered()"), self.slotSelectFile)

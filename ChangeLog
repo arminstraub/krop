@@ -1,6 +1,7 @@
-krop (0.4.2)  2013-08-03 -- Armin Straub
+krop (0.4.2)  2013-08-04 -- Armin Straub
 
-  + Use PyKDE if available.
+  + Use PyKDE if available (though this is not really used yet).
+  * If default icons are missing, use text instead.
 
 
 krop (0.4.1)  2013-07-28 -- Armin Straub
