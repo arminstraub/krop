@@ -107,6 +107,7 @@ class MainWindow(QKMainWindow):
         # self.ui.tabWidget.
 
         # http://standards.freedesktop.org/icon-naming-spec/icon-naming-spec-latest.html
+        self.setWindowIcon(QIcon.fromTheme('edit-cut'))
         self.ui.actionOpenFile.setIcon(QIcon.fromTheme('document-open'))
         self.ui.actionKrop.setIcon(QIcon.fromTheme('face-smile'))
         self.ui.actionZoomIn.setIcon(QIcon.fromTheme('zoom-in'))

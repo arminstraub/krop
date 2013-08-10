@@ -25,8 +25,8 @@ def main():
     parser = ArgumentParser(description=__doc__, version=__version__,
             formatter_class=RawTextHelpFormatter)
 
-    parser.add_argument('file', nargs='?', help='PDF file to open')
     parser.add_argument('--nokde', action='store_true', help='do not use KDE libraries (default: use if available)')
+    parser.add_argument('file', nargs='?', help='PDF file to open')
 
     args = parser.parse_args()
 
@@ -40,7 +40,7 @@ def main():
          
         aboutData = KAboutData(appName, catalog, programName, __version__)
          
-        KCmdLineArgs.init (sys.argv, aboutData)
+        KCmdLineArgs.init(aboutData)
         app = KApplication()
     else:
         from PyQt4.QtGui import QApplication

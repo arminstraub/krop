@@ -1,3 +1,11 @@
+krop (0.4.3)  2013-08-07 -- Armin Straub
+
+  * Fix a bug that prevented PDF files to be specified on the command line
+  (thanks to roctheme for reporting).
+  * Instead of no icon at all, use the system icon 'edit-cut' as application
+  icon (thanks to roctheme for the suggestion).
+
+
 krop (0.4.2)  2013-08-04 -- Armin Straub
 
   + Use PyKDE if available (though this is not really used yet).
