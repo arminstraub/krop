@@ -259,7 +259,7 @@ class MainWindow(QKMainWindow):
             pdf.loadFromFile(inputFileName)
             cropper = PdfCropper()
             for nr in pages:
-                c = self.selections.cropValues(nr-1)
+                c = self.viewer.cropValues(nr-1)
                 cropper.addPageCropped(pdf, nr, c, rotate=rotation)
             cropper.writeToFile(outputFileName)
             QApplication.restoreOverrideCursor()

@@ -124,6 +124,9 @@ class AbstractViewerItem(QGraphicsItem):
     def cacheImage(self, idx):        
         return None
 
+    def cropValues(self, idx):
+        return self.selections.cropValues(idx)
+
 
 class PopplerViewerItem(AbstractViewerItem):
     """Viewer implementation which uses Poppler to display PDF documents."""
@@ -146,6 +149,21 @@ class PopplerViewerItem(AbstractViewerItem):
     def cacheImage(self, idx):        
         page = self._pdfdoc.page(idx)
         return page.renderToImage()
+
+    def cropValues(self, idx):
+        def adjustForOrientation(cv):
+            if o == page.Landscape:
+                return [ cv[1], cv[2], cv[3], cv[0] ]
+            elif o == page.UpsideDown:
+                return [ cv[2], cv[3], cv[0], cv[1] ]
+            elif o == page.Seascape:
+                return [ cv[3], cv[0], cv[1], cv[2] ]
+            else: # o == page.Portrait
+                return cv
+        page = self._pdfdoc.page(idx)
+        o = page.orientation()
+        return [ adjustForOrientation(cv)
+                for cv in self.selections.cropValues(idx) ]
 
 
 ViewerItem = PopplerViewerItem

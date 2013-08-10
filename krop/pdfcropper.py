@@ -14,11 +14,14 @@ the Free Software Foundation; either version 3 of the License, or
 """
 
 try:
-    from pyPdf import PdfFileReader, PdfFileWriter, pdf
+    from PyPDF2 import PdfFileReader, PdfFileWriter, pdf
 except ImportError:
-    _msg = "Please install pyPdf first."\
-        "\n\tOn recent versions of Ubuntu, the following should do the trick:\n\tsudo apt-get install python-pypdf"
-    raise RuntimeError(_msg)
+    try:
+        from pyPdf import PdfFileReader, PdfFileWriter, pdf
+    except ImportError:
+        _msg = "Please install pyPdf (or the successor PyPDF2) first."\
+            "\n\tOn recent versions of Ubuntu, the following should do the trick:\n\tsudo apt-get install python-pypdf"
+        raise RuntimeError(_msg)
 
 
 class AbstractPdfFile:
