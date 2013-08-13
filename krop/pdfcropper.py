@@ -71,6 +71,8 @@ class PyPdfCropper(AbstractPdfCropper):
             newpage = pdf.PageObject.createBlankPage(None,
                     page.mediaBox.getWidth(), page.mediaBox.getHeight())
             newpage.mergePage(page)
+            newpage.mediaBox.lowerLeft = page.mediaBox.lowerLeft
+            newpage.mediaBox.upperRight = page.mediaBox.upperRight
             newpage.compressContentStreams()
             self.cropPage(newpage, c, rotate)
             self.output.addPage(newpage)

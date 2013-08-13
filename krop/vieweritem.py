@@ -110,6 +110,7 @@ class AbstractViewerItem(QGraphicsItem):
 
     def load(self, filename):
         self.doLoad(filename)
+        self.selections.deleteSelections()
         self._images = [None for i in range(self.numPages())]
         self.firstPage()
 

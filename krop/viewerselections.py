@@ -57,6 +57,10 @@ class ViewerSelections(object):
         """Returns a list of the actual selections."""
         return self.viewer.childItems()
 
+    def deleteSelections(self):
+        for s in self.items:
+            s.scene().removeItem(s)
+
     def pageIndexChanged(self, idx):
         for s in self.items:
             s.setVisible(s.visibleOnPage(idx))
@@ -176,6 +180,8 @@ class ViewerSelectionItem(QGraphicsItem):
             else:
                 nrect.setTop(nrect.top()-extra/2)
                 nrect.setBottom(nrect.bottom()+extra/2)
+        # store parent rect for comparison (when cropping later)
+        self.parentrect = self.mapRectFromParent(self.viewer.irect)
         # enlarge
         self.prepareGeometryChange()
         self.rect = self.mapRectFromParent(nrect)
@@ -196,13 +202,13 @@ class ViewerSelectionItem(QGraphicsItem):
         return [ QRectF(x0, y0+i*(h-o), x1-x0, h) for i in range(nr) ]
 
     def cropValues(self):
-        p = self.viewer.irect
+        p = self.parentrect
         def cV(r):
             return ((r.left()-p.left())/p.width(),
                     (r.top()-p.top())/p.height(),
                     (p.right()-r.right())/p.width(),
                     (p.bottom()-r.bottom())/p.height())
-        return [ cV(self.mapRectToParent(r)) for r in self.distributeRect() ]
+        return [ cV(r) for r in self.distributeRect() ]
 
     def mapRectToImage(self, r):
         m = self.mapRectToParent(r)

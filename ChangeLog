@@ -1,8 +1,9 @@
-krop (0.4.4)  2013-08-11 -- Armin Straub
+krop (0.4.4)  2013-08-13 -- Armin Straub
 
   * If available use PyPDF2 in place of pyPdf.
   * Correctly crop PDFs which have orientation other than 'portrait' (thanks
   to Gaetano Pepe for sending sample PDFs).
+  * Delete old selections when opening a new file.
 
 
 krop (0.4.3)  2013-08-10 -- Armin Straub
