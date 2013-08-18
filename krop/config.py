@@ -1,6 +1,6 @@
 # use KDE unless not available or specified otherwise
 import sys
-if '--nokde' in sys.argv:
+if '--no-kde' in sys.argv:
     KDE = False
 else:
     try:

@@ -13,11 +13,19 @@ the Free Software Foundation; either version 3 of the License, or
 (at your option) any later version.
 """
 
-try:
-    from PyPDF2 import PdfFileReader, PdfFileWriter, pdf
-except ImportError:
+import copy
+import sys
+
+# Unless specified otherwise, use PyPDF2 instead of pyPdf if available.
+usepypdf2 = '--no-PyPDF2' not in sys.argv
+if usepypdf2:
     try:
-        from pyPdf import PdfFileReader, PdfFileWriter, pdf
+        from PyPDF2 import PdfFileReader, PdfFileWriter
+    except ImportError:
+        usepypdf2 = False
+if not usepypdf2:
+    try:
+        from pyPdf import PdfFileReader, PdfFileWriter
     except ImportError:
         _msg = "Please install pyPdf (or the successor PyPDF2) first."\
             "\n\tOn recent versions of Ubuntu, the following should do the trick:\n\tsudo apt-get install python-pypdf"
@@ -64,23 +72,10 @@ class PyPdfCropper(AbstractPdfCropper):
         if not croplist:
             return
         page = pdffile.reader.getPage(pagenumber-1)
-        # In order to use a page in more than one cropped version, we need to
-        # create copies of it (the route via createBlankPage, though unpleasant
-        # looking, works well enough).
-        for c in croplist[:-1]:
-            newpage = pdf.PageObject.createBlankPage(None,
-                    page.mediaBox.getWidth(), page.mediaBox.getHeight())
-            newpage.mergePage(page)
-            newpage.mediaBox.lowerLeft = page.mediaBox.lowerLeft
-            newpage.mediaBox.upperRight = page.mediaBox.upperRight
-            newpage.compressContentStreams()
+        for c in croplist:
+            newpage = copy.copy(page)
             self.cropPage(newpage, c, rotate)
             self.output.addPage(newpage)
-        # Once we may use the original page and we do so, since it results in a
-        # (little bit) smaller file and less work (especially, avoiding the
-        # compression).
-        self.cropPage(page, croplist[-1], rotate)
-        self.output.addPage(page)
     def cropPage(self, page, crop, rotate):
         # Note that the coordinate system is up-side down compared with Qt.
         x0, y0 = page.mediaBox.lowerLeft

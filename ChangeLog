@@ -1,8 +1,10 @@
-krop (0.4.4)  2013-08-13 -- Armin Straub
+krop (0.4.4)  2013-08-18 -- Armin Straub
 
-  * If available use PyPDF2 in place of pyPdf.
+  + If available use PyPDF2 in place of pyPdf.
   * Correctly crop PDFs which have orientation other than 'portrait' (thanks
-  to Gaetano Pepe for sending sample PDFs).
+  to Gaetano Pepe for sending sample PDFs and testing).
+  * In case of more than one selection per page, cropping is much faster now
+  and results in smaller files.
   * Delete old selections when opening a new file.
 
 

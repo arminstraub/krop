@@ -25,7 +25,8 @@ def main():
     parser = ArgumentParser(description=__doc__, version=__version__,
             formatter_class=RawTextHelpFormatter)
 
-    parser.add_argument('--nokde', action='store_true', help='do not use KDE libraries (default: use if available)')
+    parser.add_argument('--no-kde', action='store_true', help='do not use KDE libraries (default: use if available)')
+    parser.add_argument('--no-PyPDF2', action='store_true', help='do not use PyPDF2 instead of pyPdf (default: use PyPDF2 if available)')
     parser.add_argument('file', nargs='?', help='PDF file to open')
 
     args = parser.parse_args()
