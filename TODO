@@ -1,7 +1,7 @@
 Missing
-+ Support PyPDF2 besides pyPDF
++ <del>Support PyPDF2 besides pyPDF</del>
 + Allow translations
-+ Is there a clean solution to shut down on CTRL+c? (see http://stackoverflow.com/questions/4938723/)
++ Is there a clean solution to shut down on CTRL+c? (see [[http://stackoverflow.com/questions/4938723/]])
 
 Ideas
 + Option to overlay pages in order to improve making selections
