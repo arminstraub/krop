@@ -85,6 +85,9 @@ class PyPdfCropper(AbstractPdfCropper):
         y0, y1 = y0+crop[3]*(y1-y0), y1-crop[1]*(y1-y0)
         page.mediaBox.lowerLeft = (x0, y0)
         page.mediaBox.upperRight = (x1, y1)
+        # Update CropBox as well
+        page.cropBox.lowerLeft = (x0, y0)
+        page.cropBox.upperRight = (x1, y1)
         if rotate != 0:
             page.rotateClockwise(rotate)
 

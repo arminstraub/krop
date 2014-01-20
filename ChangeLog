@@ -1,3 +1,8 @@
+krop (0.4.5)  2014-01-09 -- Armin Straub
+
+  * Testing...
+
+
 krop (0.4.4)  2013-08-18 -- Armin Straub
 
   + If available use PyPDF2 in place of pyPdf.
