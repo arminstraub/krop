@@ -208,7 +208,7 @@ class MainWindow(QKMainWindow):
     def openFile(self, fileName):
         if fileName:
             self.fileName = fileName
-            outputFileName = "%s-cropped.pdf" % splitext(str(fileName))[0]
+            outputFileName = "%s-cropped.pdf" % splitext(unicode(fileName))[0]
             self.ui.editFile.setText(outputFileName)
             self.viewer.load(fileName)
             self.updateControls()
@@ -228,8 +228,8 @@ class MainWindow(QKMainWindow):
 
     def slotKrop(self):
         # file names
-        inputFileName = str(self.fileName)
-        outputFileName = self.ui.editFile.text()
+        inputFileName = unicode(self.fileName)
+        outputFileName = unicode(self.ui.editFile.text())
 
         # which pages
         s = str(self.ui.editWhichPages.text())
@@ -269,12 +269,12 @@ class MainWindow(QKMainWindow):
                     self.tr("An error occured while writing the cropped PDF. "
                         "Please make sure that you have permission to write to "
                         "the selected file."
-                        "\n\nThe official error is:\n\n%1").arg(str(err)))
+                        "\n\nThe official error is:\n\n%1").arg(unicode(err)))
         except Exception as err:
             QApplication.restoreOverrideCursor()
             QMessageBox.warning(self, self.tr("Something got in our way"),
                     self.tr("The following unexpected error has occured:"
-                    "\n\n%1").arg(str(err)))
+                    "\n\n%1").arg(unicode(err)))
             raise err
 
     def slotZoomIn(self):

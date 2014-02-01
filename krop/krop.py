@@ -55,7 +55,8 @@ def main():
     window=MainWindow()
 
     if args.file is not None:
-        window.openFile(args.file)
+        fileName = args.file.decode(sys.stdin.encoding)
+        window.openFile(fileName)
 
     window.show()
     sys.exit(app.exec_())
