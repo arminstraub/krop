@@ -712,6 +712,7 @@ p, li { white-space: pre-wrap; margin: 0; }
    <addaction name="actionFitInView"/>
    <addaction name="actionPreviousPage"/>
    <addaction name="actionNextPage"/>
+   <addaction name="actionTrimMarginsAll"/>
   </widget>
   <action name="actionZoomIn">
    <property name="text">
@@ -789,6 +790,14 @@ p, li { white-space: pre-wrap; margin: 0; }
   <action name="actionSelectFile">
    <property name="text">
     <string>Select File</string>
+   </property>
+  </action>
+  <action name="actionTrimMarginsAll">
+   <property name="text">
+    <string>Trim Margins</string>
+   </property>
+   <property name="toolTip">
+    <string>Trim Margins</string>
    </property>
   </action>
  </widget>

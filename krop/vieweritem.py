@@ -149,7 +149,8 @@ class PopplerViewerItem(AbstractViewerItem):
 
     def cacheImage(self, idx):        
         page = self._pdfdoc.page(idx)
-        return page.renderToImage()
+        return page.renderToImage(96.0, 96.0)
+        # return page.renderToImage()
 
     def cropValues(self, idx):
         def adjustForOrientation(cv):

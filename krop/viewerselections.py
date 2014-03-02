@@ -88,8 +88,11 @@ class ViewerSelections(object):
 
 class ViewerSelectionItem(QGraphicsItem):
     """An individual user-created selection"""
-    def __init__(self, parent, rect):
+    def __init__(self, parent, rect=None):
         QGraphicsItem.__init__(self, parent)
+
+        if rect is None:
+            rect = self.mapRectFromParent(self.viewer.irect)
 
         self.rect = rect
         self.minWidth = 1

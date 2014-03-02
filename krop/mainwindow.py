@@ -26,7 +26,7 @@ else:
 
 from mainwindowui import Ui_MainWindow
 
-from viewerselections import ViewerSelections
+from viewerselections import ViewerSelections, ViewerSelectionItem
 from vieweritem import ViewerItem
 from pdfcropper import PdfFile, PdfCropper
 
@@ -117,6 +117,8 @@ class MainWindow(QKMainWindow):
         self.ui.actionNextPage.setIcon(QIcon.fromTheme('go-next'))
         self.ui.actionFirstPage.setIcon(QIcon.fromTheme('go-first'))
         self.ui.actionLastPage.setIcon(QIcon.fromTheme('go-last'))
+        self.ui.actionTrimMarginsAll.setIcon(QIcon.fromTheme('select-rectangular'))
+        # self.ui.actionTrimMarginsAll.setIcon(QIcon.fromTheme('edit-select-all'))
 
         if QIcon.hasThemeIcon('document-open'):
             self.ui.buttonFileSelect.setIcon(QIcon.fromTheme('document-open'))
@@ -153,6 +155,7 @@ class MainWindow(QKMainWindow):
         self.connect(self.ui.actionLastPage, SIGNAL("triggered()"), self.slotLastPage)
         self.connect(self.ui.actionDeleteSelection, SIGNAL("triggered()"), self.slotDeleteSelection)
         self.connect(self.ui.actionTrimMargins, SIGNAL("triggered()"), self.slotTrimMargins)
+        self.connect(self.ui.actionTrimMarginsAll, SIGNAL("triggered()"), self.slotTrimMarginsAll)
         self.connect(self.ui.documentView, SIGNAL('customContextMenuRequested(const QPoint&)'), self.slotContextMenu)
         self.connect(self.ui.editCurrentPage, SIGNAL('textEdited(const QString&)'), self.slotCurrentPageEdited)
         self.connect(self.ui.radioSelAll, SIGNAL("toggled(bool)"), self.slotSelectionMode)
@@ -380,21 +383,37 @@ class MainWindow(QKMainWindow):
             return 2*padding
         return padding
 
+    def slotTrimMarginsAll(self):
+        # trim margins of all selections on the current page
+        noSelections = True
+        for sel in self.selections.items:
+            if sel.isVisible():
+                noSelections = False
+                self.trimMarginsSelection(sel)
+        # if there is no selections, then create one
+        if noSelections:
+            sel = ViewerSelectionItem(self.viewer)
+            self.trimMarginsSelection(sel)
+        self.pdfScene.update()
+
     def slotTrimMargins(self):
         if self.selectedRect is not None:
-            # calculate values for trimming
-            img = self.viewer.getImage(self.viewer.currentPageIndex)
-            r = self.selectedRect.rect
-            r = self.selectedRect.mapRectToImage(r).toRect()
-            r = self.doTrimMargins(img, r)
-            r = QRectF(r)
-            # read padding
-            dw, dh = self.getPadding()
-            r.adjust(-dw,-dh,dw,dh)
-            # set selection to new values
-            r = self.selectedRect.mapRectFromImage(r)
-            self.selectedRect.setBoundingRect(r.topLeft(), r.bottomRight())
+            self.trimMarginsSelection(self.selectedRect)
             self.pdfScene.update()
+
+    def trimMarginsSelection(self, sel):
+        # calculate values for trimming
+        img = self.viewer.getImage(self.viewer.currentPageIndex)
+        r = sel.rect
+        r = sel.mapRectToImage(r).toRect()
+        r = self.doTrimMargins(img, r)
+        r = QRectF(r)
+        # read padding
+        dw, dh = self.getPadding()
+        r.adjust(-dw,-dh,dw,dh)
+        # set selection to new values
+        r = sel.mapRectFromImage(r)
+        sel.setBoundingRect(r.topLeft(), r.bottomRight())
 
     def doTrimMargins(self, img, r):
         def pixAt(x, y):
