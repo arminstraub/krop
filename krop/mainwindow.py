@@ -1,9 +1,9 @@
 # -*- coding: iso-8859-1 -*-
 
 """
-The main window of Krop
+The main window of krop
 
-Copyright (C) 2010-2013 Armin Straub, http://arminstraub.com
+Copyright (C) 2010-2014 Armin Straub, http://arminstraub.com
 """
 
 """
@@ -161,6 +161,8 @@ class MainWindow(QKMainWindow):
         self.connect(self.ui.radioSelAll, SIGNAL("toggled(bool)"), self.slotSelectionMode)
         self.connect(self.ui.radioSelEvenOdd, SIGNAL("toggled(bool)"), self.slotSelectionMode)
         self.connect(self.ui.radioSelIndividual, SIGNAL("toggled(bool)"), self.slotSelectionMode)
+        # self.connect(self.ui.editSelExceptions, SIGNAL("editingFinished()"), self.slotSelExceptionsChanged)
+        self.connect(self.ui.editSelExceptions, SIGNAL('textEdited(const QString&)'), self.slotSelExceptionsEdited)
         self.connect(self.ui.comboDevice, SIGNAL("currentIndexChanged(int)"), self.slotDeviceTypeChanged)
         self.connect(self.ui.editAspectRatio, SIGNAL("editingFinished()"), self.slotAspectRatioChanged)
 
@@ -229,6 +231,17 @@ class MainWindow(QKMainWindow):
                 # None, QFileDialog.DontConfirmOverwrite)
         self.ui.editFile.setText(fileName)
 
+    def str2pages(self, s):
+        pages = []
+        intervals = [ [ n.strip() for n in i.split('-') ]
+                for i in s.split(',') ]
+        for i in intervals:
+            a,b = i[0], i[-1]
+            if a:
+                if not b: b = self.viewer.numPages()
+                pages.extend(range(int(a)-1,int(b))) # subtract 1 because pages are counted from 0 internally
+        return pages
+
     def slotKrop(self):
         # file names
         inputFileName = unicode(self.fileName)
@@ -237,15 +250,9 @@ class MainWindow(QKMainWindow):
         # which pages
         s = str(self.ui.editWhichPages.text())
         if not s:
-            pages = range(1, self.viewer.numPages()+1)
+            pages = range(0, self.viewer.numPages())
         else:
-            pages = []
-            intervals = [ [ n.strip() for n in i.split('-') ]
-                    for i in s.split(',') ]
-            for i in intervals:
-                a,b = i[0], i[-1]
-                if not b: b = self.viewer.numPages()
-                pages.extend(range(int(a),int(b)+1))
+            pages = self.str2pages(s)
 
         # rotate
         rotation = [0, 270, 90, 180][self.ui.comboRotation.currentIndex()]
@@ -262,7 +269,7 @@ class MainWindow(QKMainWindow):
             pdf.loadFromFile(inputFileName)
             cropper = PdfCropper()
             for nr in pages:
-                c = self.viewer.cropValues(nr-1)
+                c = self.viewer.cropValues(nr)
                 cropper.addPageCropped(pdf, nr, c, rotate=rotation)
             cropper.writeToFile(outputFileName)
             QApplication.restoreOverrideCursor()
@@ -323,12 +330,27 @@ class MainWindow(QKMainWindow):
 
     def slotSelectionMode(self, checked):
         if checked:
+            enableExceptions = True
             if self.ui.radioSelAll.isChecked():
                 self.selections.selectionMode = ViewerSelections.all
             elif self.ui.radioSelEvenOdd.isChecked():
                 self.selections.selectionMode = ViewerSelections.evenodd
             elif self.ui.radioSelIndividual.isChecked():
+                enableExceptions = False
                 self.selections.selectionMode = ViewerSelections.individual
+            self.ui.editSelExceptions.setEnabled(enableExceptions)
+
+    def slotSelExceptionsChanged(self):
+        s = str(self.ui.editSelExceptions.text())
+        pages = self.str2pages(s)
+        self.selections.selectionExceptions = pages
+
+    def slotSelExceptionsEdited(self, text):
+        try:
+            pages = self.str2pages(str(text))
+            self.selections.selectionExceptions = pages
+        except ValueError:
+            pass
 
     def aspectRatioChanged(self, aspectRatio):
         self.selections.aspectRatio = aspectRatio
@@ -404,16 +426,15 @@ class MainWindow(QKMainWindow):
     def trimMarginsSelection(self, sel):
         # calculate values for trimming
         img = self.viewer.getImage(self.viewer.currentPageIndex)
-        r = sel.rect
-        r = sel.mapRectToImage(r).toRect()
-        r = self.doTrimMargins(img, r)
-        r = QRectF(r)
-        # read padding
+        r = sel.mapRectToImage(sel.rect).toRect()
+        rt = QRectF(self.doTrimMargins(img, QRect(r)))
+        # adjust for padding
         dw, dh = self.getPadding()
-        r.adjust(-dw,-dh,dw,dh)
+        rt.adjust(-dw,-dh,dw,dh)
+        rt = rt.intersected(QRectF(r)) # but don't overadjust
         # set selection to new values
-        r = sel.mapRectFromImage(r)
-        sel.setBoundingRect(r.topLeft(), r.bottomRight())
+        rt = sel.mapRectFromImage(rt)
+        sel.setBoundingRect(rt.topLeft(), rt.bottomRight())
 
     def doTrimMargins(self, img, r):
         def pixAt(x, y):

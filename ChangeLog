@@ -1,3 +1,11 @@
+krop (0.4.6)  2014-05-23 -- Armin Straub
+
+  + Added option to specify pages which require individual selections.
+  * 'Trim Margins' automatically creates a region for the full page if no
+  regions exist.
+  * Reorganized options across tabs.
+
+
 krop (0.4.5)  2014-02-01 -- Armin Straub
 
   * Load and write files with non-ascii characters in their filename.

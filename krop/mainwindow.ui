@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>831</width>
-    <height>691</height>
+    <width>768</width>
+    <height>566</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Krop: A tool to crop your PDFs</string>
+   <string>krop: A tool to crop your PDFs</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -75,52 +75,6 @@ p, li { white-space: pre-wrap; }
           </widget>
          </item>
          <item>
-          <widget class="QGroupBox" name="groupSelectionMode">
-           <property name="title">
-            <string>Selections apply to</string>
-           </property>
-           <property name="flat">
-            <bool>false</bool>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout_4">
-            <item>
-             <widget class="QRadioButton" name="radioSelAll">
-              <property name="text">
-               <string>all pages</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="radioSelEvenOdd">
-              <property name="text">
-               <string>even/odd pages</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="radioSelIndividual">
-              <property name="text">
-               <string>individual page</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="labelSelHelp">
-              <property name="text">
-               <string>Should all pages be cropped based on the same selections? Maybe you want to treat even and odd pages differently? For full control you can crop each page using individual selections.</string>
-              </property>
-              <property name="wordWrap">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
           <widget class="QGroupBox" name="groupRotation">
            <property name="title">
             <string>Rotate final PDF</string>
@@ -157,26 +111,6 @@ p, li { white-space: pre-wrap; }
           </widget>
          </item>
          <item>
-          <spacer name="verticalSpacer_3">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>484</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="tabAdvanced">
-        <attribute name="title">
-         <string>Advanced</string>
-        </attribute>
-        <layout class="QVBoxLayout" name="verticalLayout_6">
-         <item>
           <widget class="QGroupBox" name="groupWhichPages">
            <property name="title">
             <string>Which pages to include</string>
@@ -200,6 +134,89 @@ p, li { white-space: pre-wrap; margin: 0; }
               </property>
               <property name="wordWrap">
                <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>484</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tabAdvanced">
+        <attribute name="title">
+         <string>Advanced</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_6">
+         <item>
+          <widget class="QGroupBox" name="groupSelectionMode">
+           <property name="title">
+            <string>Selections apply to</string>
+           </property>
+           <property name="flat">
+            <bool>false</bool>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_2">
+            <item row="0" column="0" colspan="2">
+             <widget class="QRadioButton" name="radioSelAll">
+              <property name="text">
+               <string>all pages</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0" colspan="2">
+             <widget class="QRadioButton" name="radioSelEvenOdd">
+              <property name="text">
+               <string>even/odd pages</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0" colspan="2">
+             <widget class="QRadioButton" name="radioSelIndividual">
+              <property name="text">
+               <string>individual page</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0" colspan="2">
+             <widget class="QLabel" name="labelSelHelp">
+              <property name="text">
+               <string>Should all pages be cropped based on the same selections? Maybe you want to treat even and odd pages differently? For full control you can crop each page using individual selections.</string>
+              </property>
+              <property name="wordWrap">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="0">
+             <widget class="QLabel" name="labelSelExceptions">
+              <property name="text">
+               <string>Exceptions:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1">
+             <widget class="QLineEdit" name="editSelExceptions"/>
+            </item>
+            <item row="5" column="0" colspan="2">
+             <widget class="QLabel" name="labelSelExceptionsHelp">
+              <property name="text">
+               <string>List pages which require individual selections.</string>
               </property>
              </widget>
             </item>
@@ -254,6 +271,9 @@ p, li { white-space: pre-wrap; margin: 0; }
             <string>Settings for trimming margins</string>
            </property>
            <layout class="QFormLayout" name="formLayout_2">
+            <property name="fieldGrowthPolicy">
+             <enum>QFormLayout::ExpandingFieldsGrow</enum>
+            </property>
             <item row="0" column="0">
              <widget class="QLabel" name="labelPadding">
               <property name="text">
@@ -399,7 +419,7 @@ p, li { white-space: pre-wrap; margin: 0; }
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Copyright (C) 2010-2013 Armin Straub
+            <string>Copyright (C) 2010-2014 Armin Straub
 &lt;br&gt;&lt;a href='http://arminstraub.com'&gt;http://arminstraub.com&lt;/a&gt;
 &lt;p&gt;This program is free software and available to you in the hope that it will be useful; but without any warranty. It is distributed under the terms of the GNU General Public License (GPLv3+). See the accompanying files for more information.
 </string>
@@ -678,7 +698,7 @@ p, li { white-space: pre-wrap; margin: 0; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>831</width>
+     <width>768</width>
      <height>21</height>
     </rect>
    </property>

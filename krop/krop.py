@@ -2,9 +2,9 @@
 # -*- coding: iso-8859-1 -*-
 
 """
-Krop: A tool to crop PDF files, with an eye towards eReaders
+krop: A tool to crop PDF files
 
-Copyright (C) 2010-2013 Armin Straub, http://arminstraub.com
+Copyright (C) 2010-2014 Armin Straub, http://arminstraub.com
 """
 
 """

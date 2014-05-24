@@ -2,7 +2,7 @@
 # -*- coding: iso-8859-1 -*-
 
 """
-Copyright (C) 2013 Armin Straub, http://arminstraub.com
+Copyright (C) 2014 Armin Straub, http://arminstraub.com
 """
 
 """
@@ -37,7 +37,7 @@ setup(
         author = 'Armin Straub',
         author_email = 'mail@arminstraub.com',
         url = 'http://arminstraub.com/computer/krop',
-        description = 'Tool to crop PDF files, with an eye towards eReaders',
+        description = 'A tool to crop PDF files',
         long_description = read('README'),
         keywords = 'pdf crop ereader',
         packages = ['krop'],

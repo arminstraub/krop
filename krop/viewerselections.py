@@ -3,7 +3,7 @@
 """
 User-created selections used in ViewerItem.
 
-Copyright (C) 2010-2013 Armin Straub, http://arminstraub.com
+Copyright (C) 2010-2014 Armin Straub, http://arminstraub.com
 """
 
 """
@@ -31,6 +31,7 @@ class ViewerSelections(object):
         self.viewer = viewer
         self._aspectRatio = None
         self._selectionMode = ViewerSelections.all
+        self._selectionExceptions = [] # list of page numbers which require individual selections
         self.activepdfrect = None
         self.lastPos = None
 
@@ -48,9 +49,29 @@ class ViewerSelections(object):
 
     def setSelectionMode(self, mode):
         self._selectionMode = mode
-        self.pageIndexChanged(self.viewer.currentPageIndex)
+        self.updateSelectionVisibility()
 
     selectionMode = property(getSelectionMode, setSelectionMode)
+
+    def getSelectionExceptions(self):
+        return self._selectionExceptions
+
+    def setSelectionExceptions(self, exceptions):
+        self._selectionExceptions = exceptions
+        self.updateSelectionVisibility()
+
+    selectionExceptions = property(getSelectionExceptions, setSelectionExceptions)
+
+    def selectionVisibleOnPage(self, selection, idx):
+        """Determines if this selection is visible on a given page."""
+        mode = self.selectionMode
+        selPageIndex = selection.pageIndex
+        if idx in self.selectionExceptions or selPageIndex in self.selectionExceptions or mode == ViewerSelections.individual:
+            return idx == selPageIndex
+        if mode == ViewerSelections.all:
+            return True
+        if mode == ViewerSelections.evenodd:
+            return (idx - selPageIndex) % 2 == 0
 
     @property
     def items(self):
@@ -61,12 +82,13 @@ class ViewerSelections(object):
         for s in self.items:
             s.scene().removeItem(s)
 
-    def pageIndexChanged(self, idx):
+    def updateSelectionVisibility(self):
+        idx = self.viewer.currentPageIndex
         for s in self.items:
-            s.setVisible(s.visibleOnPage(idx))
+            s.setVisible(self.selectionVisibleOnPage(s, idx))
 
     def cropValues(self, idx):
-        return [ c for s in self.items if s.visibleOnPage(idx)
+        return [ c for s in self.items if self.selectionVisibleOnPage(s, idx)
                 for c in s.cropValues() ]
 
     def mousePressEvent(self, event):
@@ -97,7 +119,7 @@ class ViewerSelectionItem(QGraphicsItem):
         self.rect = rect
         self.minWidth = 1
         self.minHeight = 1
-        self._pageIndex = self.viewer.currentPageIndex
+        self.pageIndex = self.viewer.currentPageIndex
         self.lastPos = None
         SelectionHandleItem(self, SelectionHandleItem.LeftHandle)
         SelectionHandleItem(self, SelectionHandleItem.RightHandle)
@@ -128,16 +150,6 @@ class ViewerSelectionItem(QGraphicsItem):
     @property
     def aspectRatio(self):
         return self.viewer.selections.aspectRatio
-
-    def visibleOnPage(self, idx):
-        """Determines if this selection is visible on a given page."""
-        mode = self.viewer.selections.selectionMode
-        if mode == ViewerSelections.all:
-            return True
-        if mode == ViewerSelections.evenodd:
-            return (idx - self._pageIndex) % 2 == 0
-        if mode == ViewerSelections.individual:
-            return idx == self._pageIndex
 
     def boundingRect(self):
         return self.rect

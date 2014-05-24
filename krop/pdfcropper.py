@@ -1,9 +1,9 @@
 # -*- coding: iso-8859-1 -*-
 
 """
-Cropping functionality for Krop.
+Cropping functionality for krop.
 
-Copyright (C) 2010-2013 Armin Straub, http://arminstraub.com
+Copyright (C) 2010-2014 Armin Straub, http://arminstraub.com
 """
 
 """
@@ -71,7 +71,7 @@ class PyPdfCropper(AbstractPdfCropper):
     def addPageCropped(self, pdffile, pagenumber, croplist, rotate=0):
         if not croplist:
             return
-        page = pdffile.reader.getPage(pagenumber-1)
+        page = pdffile.reader.getPage(pagenumber)
         for c in croplist:
             newpage = copy.copy(page)
             self.cropPage(newpage, c, rotate)
