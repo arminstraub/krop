@@ -383,7 +383,7 @@ p, li { white-space: pre-wrap; margin: 0; }
 &lt;p&gt;Right-click a selection to delete it.
 &lt;p&gt;You can choose to create individual selections for each page.
 &lt;p&gt;If you have an eReader that is not good at scrolling documents, you can have each page automatically broken into parts to optimally fit the screen of your eReader.
-&lt;p&gt;Some examples can be found at: &lt;a href='http://arminstraub.com/computer/krop'&gt;arminstraub.com&lt;/a&gt;
+&lt;p&gt;Some examples can be found at: &lt;a href='http://arminstraub.com/software/krop'&gt;arminstraub.com&lt;/a&gt;
 </string>
            </property>
            <property name="textFormat">

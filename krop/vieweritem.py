@@ -42,11 +42,10 @@ class AbstractViewerItem(QGraphicsItem):
         return self.brect
 
     def paint(self, painter, option, widget):
-        painter.drawRect(self.irect.adjusted(-1,-1,1,1))
-
         img = self.getImage(self.currentPageIndex)
         if img is None:
             return
+        painter.drawRect(self.irect.adjusted(-1,-1,1,1))
         painter.drawImage(self.irect, img)
 
     def mapRectToImage(self, r):

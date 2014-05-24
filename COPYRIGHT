@@ -1,7 +1,7 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: krop
 Upstream-Contact: Armin Straub <mail@arminstraub.com>
-Source: http://arminstraub.com/computer/krop
+Source: http://arminstraub.com/software/krop
 
 Files: *
 Copyright: 2010-2014 Armin Straub

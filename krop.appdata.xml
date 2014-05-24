@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2014 Armin Straub <mail@arminstraub.com> -->
 <application>
- <id type="desktop">krop</id>
+ <id type="desktop">krop.desktop</id>
  <metadata_license>CC0-1.0</metadata_license>
  <project_license>GPL-3.0+</project_license>
  <name>krop</name>
  <summary>A tool to crop PDF files</summary>
  <description>
   <p>
-   krop is a simple graphical tool to crop the pages of PDF files. It is written in Python and relies on PyQT, python-poppler-qt4 and pyPDF for its functionality. A unique feature of krop is its ability to automatically split pages into subpages to fit the limited screen size of devices such as eReaders. This is particularly useful, if your eReader does not support convenient scrolling.
+   krop is a simple graphical tool to crop the pages of PDF files.
+  </p>
+  <p>
+   It is written in Python and relies on PyQT, python-poppler-qt4 and pyPDF for its functionality.
+  </p>
+  <p>
+   A unique feature of krop is its ability to automatically split pages into subpages to fit the limited screen size of devices such as eReaders. This is particularly useful, if your eReader does not support convenient scrolling.
   </p>
  </description>
  <screenshots>
   <screenshot type="default" width="1024" height="576">http://arminstraub.com/images/krop/screenshot-appdata.png</screenshot>
  </screenshots>
- <url type="homepage">http://arminstraub.com/computer/krop</url>
+ <url type="homepage">http://arminstraub.com/software/krop</url>
+ <updatecontact>mail@arminstraub.com</updatecontact>
 </application>

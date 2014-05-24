@@ -36,7 +36,7 @@ setup(
         version = version,
         author = 'Armin Straub',
         author_email = 'mail@arminstraub.com',
-        url = 'http://arminstraub.com/computer/krop',
+        url = 'http://arminstraub.com/software/krop',
         description = 'A tool to crop PDF files',
         long_description = read('README'),
         keywords = 'pdf crop ereader',
