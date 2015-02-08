@@ -1,3 +1,9 @@
+krop (0.4.7)  2015-02-07 -- Armin Straub
+
+  * When pressing CTRL-C in the terminal, krop will now shut down (not
+  gracefully, though; only intended for when there is trouble).
+
+
 krop (0.4.6)  2014-05-24 -- Armin Straub
 
   + Added option to specify pages which require individual selections (thanks

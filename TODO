@@ -1,7 +1,9 @@
 Missing
 + <del>Support PyPDF2 besides pyPDF</del>
 + Allow translations
-+ Is there a clean solution to shut down on CTRL+c? (see [[http://stackoverflow.com/questions/4938723/]])
++ <del>Is there a clean solution to shut down on CTRL+c? (see [[http://stackoverflow.com/questions/4938723/]])</del>
++ Shortcuts
++ Specify settings on the command line (also, for instance, which page to open)
 
 Ideas
 + Option to overlay pages in order to improve making selections

@@ -58,6 +58,11 @@ def main():
         fileName = args.file.decode(sys.stdin.encoding)
         window.openFile(fileName)
 
+    # shut down on ctrl+c when pressed in terminal (not gracefully, though)
+    # http://stackoverflow.com/questions/4938723/
+    import signal
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
+
     window.show()
     sys.exit(app.exec_())
 
