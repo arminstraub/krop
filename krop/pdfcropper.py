@@ -3,7 +3,7 @@
 """
 Cropping functionality for krop.
 
-Copyright (C) 2010-2014 Armin Straub, http://arminstraub.com
+Copyright (C) 2010-2015 Armin Straub, http://arminstraub.com
 """
 
 """
