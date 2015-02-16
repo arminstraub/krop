@@ -67,7 +67,14 @@ class PyPdfCropper(AbstractPdfCropper):
     def __init__(self):
         self.output = PdfFileWriter()
     def writeToStream(self, stream):
+        # For certain large pdf files, PdfFileWriter.write() causes the error:
+        #  maximum recursion depth exceeded while calling a Python object
+        # This issue is present in pyPdf as well as PyPDF2 1.23
+        # We therefore temporarily increase the recursion limit.
+        old_reclimit = sys.getrecursionlimit()
+        sys.setrecursionlimit(10000)
         self.output.write(stream)
+        sys.setrecursionlimit(old_reclimit)
     def addPageCropped(self, pdffile, pagenumber, croplist, rotate=0):
         if not croplist:
             return
