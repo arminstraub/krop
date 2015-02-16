@@ -1,3 +1,8 @@
+krop (0.4.8)  2015-02-16 -- Armin Straub
+
+  + More options accessible via command line arguments
+
+
 krop (0.4.7)  2015-02-15 -- Armin Straub
 
   + Basic options are accessible as command line arguments (run krop with
