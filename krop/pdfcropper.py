@@ -58,7 +58,7 @@ class PyPdfFile(AbstractPdfFile):
     def __init__(self):
         self.reader = None
     def loadFromStream(self, stream):
-        self.reader = PdfFileReader(stream)
+        self.reader = PdfFileReader(stream, strict=False)
     def getPage(self, nr):
         page = self.reader.getPage(nr-1)
 

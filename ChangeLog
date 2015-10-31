@@ -1,3 +1,10 @@
+krop (0.4.9)  2015-10-31 -- Armin Straub
+
+  * Reading PDF files is less strict now.  As a consequence, krop doesn't give
+  up cropping some files which resulted in an error before.
+  * Fix a possible crash when starting krop.
+
+
 krop (0.4.8)  2015-07-04 -- Armin Straub
 
   + More options are accessible via command line arguments.

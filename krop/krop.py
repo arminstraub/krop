@@ -61,7 +61,7 @@ def main():
     window=MainWindow()
 
     if args.file is not None:
-        fileName = args.file.decode(sys.stdin.encoding)
+        fileName = args.file.decode(sys.stdin.encoding or sys.getdefaultencoding())
         window.openFile(fileName)
     if args.output is not None:
         window.ui.editFile.setText(args.output)

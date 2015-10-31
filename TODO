@@ -1,6 +1,8 @@
 Missing
++ Specify aspect ratio of crop regions
++ Clone regions (and keep them linked)
 + <del>Support PyPDF2 besides pyPDF</del>
-+ Preserve table of contents or bookmarks when cropping
++ Preserve meta data, table of contents and bookmarks when cropping
 + Allow translations
 + <del>Is there a clean solution to shut down on CTRL+c? (see [[http://stackoverflow.com/questions/4938723/]])</del>
 + Shortcuts
