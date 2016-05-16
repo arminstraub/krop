@@ -1,3 +1,9 @@
+krop (0.4.10)  2016-05-16 -- Armin Straub
+
+  * When cropping, all PDF page boxes (ArtBox, BleedBox, CropBox, MediaBox,
+  TrimBox) are now adjusted.
+
+
 krop (0.4.9)  2015-10-31 -- Armin Straub
 
   * Reading PDF files is less strict now.  As a consequence, krop doesn't give
