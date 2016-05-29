@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright 2014-2015 Armin Straub <mail@arminstraub.com> -->
+<!-- Copyright 2014-2016 Armin Straub <mail@arminstraub.com> -->
 <application>
  <id type="desktop">krop.desktop</id>
  <metadata_license>CC0-1.0</metadata_license>
@@ -17,6 +17,7 @@
    A unique feature of krop is its ability to automatically split pages into subpages to fit the limited screen size of devices such as eReaders. This is particularly useful, if your eReader does not support convenient scrolling.
   </p>
  </description>
+ <keywords><keyword>pdf</keyword><keyword>crop</keyword><keyword>rotate</keyword><keyword>ereader</keyword></keywords>
  <screenshots>
   <screenshot type="default" width="1024" height="576">http://arminstraub.com/images/krop/screenshot-appdata.png</screenshot>
  </screenshots>

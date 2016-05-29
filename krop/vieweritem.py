@@ -3,7 +3,7 @@
 """
 Viewer for krop used to display PDF files.
 
-Copyright (C) 2010-2015 Armin Straub, http://arminstraub.com
+Copyright (C) 2010-2016 Armin Straub, http://arminstraub.com
 """
 
 """

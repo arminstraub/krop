@@ -8,3 +8,4 @@ Exec=krop %F
 Icon=edit-cut
 MimeType=application/pdf;
 Categories=Qt;KDE;Utility;
+Keywords=pdf;crop;rotate;ereader;
