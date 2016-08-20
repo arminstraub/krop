@@ -1,3 +1,8 @@
+krop (0.4.11)  2016-08-15 -- Armin Straub
+
+  * Make krop work with python3.
+
+
 krop (0.4.10)  2016-05-29 -- Armin Straub
 
   * When cropping, all PDF page boxes (ArtBox, BleedBox, CropBox, MediaBox,

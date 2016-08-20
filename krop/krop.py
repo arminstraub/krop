@@ -22,8 +22,10 @@ from config import KDE
 
 def main():
     from argparse import ArgumentParser, RawTextHelpFormatter
-    parser = ArgumentParser(description=__doc__, version=__version__,
+    parser = ArgumentParser(description=__doc__,
             formatter_class=RawTextHelpFormatter)
+
+    parser.add_argument('-v', '--version', action='version', version='%(prog)s ' + __version__)
 
     parser.add_argument('file', nargs='?', help='PDF file to open')
     parser.add_argument('-o', '--output', help='where to save the cropped PDF')

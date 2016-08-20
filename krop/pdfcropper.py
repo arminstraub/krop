@@ -28,7 +28,8 @@ if not usepypdf2:
         from pyPdf import PdfFileReader, PdfFileWriter
     except ImportError:
         _msg = "Please install pyPdf (or the successor PyPDF2) first."\
-            "\n\tOn recent versions of Ubuntu, the following should do the trick:\n\tsudo apt-get install python-pypdf"
+            "\n\tOn recent versions of Ubuntu, the following should do the trick:"\
+            "\n\tsudo apt-get install python-pypdf"
         raise RuntimeError(_msg)
 
 

@@ -20,7 +20,9 @@ try:
     from popplerqt4 import Poppler
 except ImportError:
     _msg = "Please install popplerqt4 first."\
-        "\n\tOn recent versions of Ubuntu, the following should do the trick:\n\tsudo apt-get install python-poppler-qt4"
+        "\n\tOn recent versions of Ubuntu, the following should do the trick:"\
+        "\n\tsudo apt-get install python-poppler-qt4"\
+        "\n\t(or, if using python3) sudo apt-get install python3-poppler-qt4"
     raise RuntimeError(_msg)
 
 from viewerselections import ViewerSelections
