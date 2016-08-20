@@ -14,6 +14,11 @@ the Free Software Foundation; either version 3 of the License, or
 """
 
 from os.path import exists, splitext
+try:
+    str_unicode = unicode
+except:
+    str_unicode = str
+
 
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
@@ -73,9 +78,9 @@ class DeviceTypeManager:
         count = settings.beginReadArray("devicetypes")
         for i in range(count):
             settings.setArrayIndex(i)
-            name  = settings.value("name").toString();
-            width  = settings.value("width").toInt()[0];
-            height  = settings.value("height").toInt()[0];
+            name = settings.value("name").toString()
+            width = settings.value("width").toInt()[0]
+            height = settings.value("height").toInt()[0]
             self.addType(name, width, height)
         settings.endArray()
         if count==0:
@@ -213,7 +218,7 @@ class MainWindow(QKMainWindow):
     def openFile(self, fileName):
         if fileName:
             self.fileName = fileName
-            outputFileName = "%s-cropped.pdf" % splitext(unicode(fileName))[0]
+            outputFileName = "%s-cropped.pdf" % splitext(str_unicode(fileName))[0]
             self.ui.editFile.setText(outputFileName)
             self.viewer.load(fileName)
             self.updateControls()
@@ -244,8 +249,8 @@ class MainWindow(QKMainWindow):
 
     def slotKrop(self):
         # file names
-        inputFileName = unicode(self.fileName)
-        outputFileName = unicode(self.ui.editFile.text())
+        inputFileName = str_unicode(self.fileName)
+        outputFileName = str_unicode(self.ui.editFile.text())
 
         # which pages
         s = str(self.ui.editWhichPages.text())
@@ -279,12 +284,12 @@ class MainWindow(QKMainWindow):
                     self.tr("An error occured while writing the cropped PDF. "
                         "Please make sure that you have permission to write to "
                         "the selected file."
-                        "\n\nThe official error is:\n\n%1").arg(unicode(err)))
+                        "\n\nThe official error is:\n\n{0}").format(err))
         except Exception as err:
             QApplication.restoreOverrideCursor()
             QMessageBox.warning(self, self.tr("Something got in our way"),
                     self.tr("The following unexpected error has occured:"
-                    "\n\n%1").arg(unicode(err)))
+                    "\n\n{0}").format(err))
             raise err
 
     def slotZoomIn(self):

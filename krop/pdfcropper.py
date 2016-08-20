@@ -39,7 +39,7 @@ class AbstractPdfFile:
     def loadFromStream(self, stream):
         pass
     def loadFromFile(self, filename):
-        self.loadFromStream(file(filename, "rb"))
+        self.loadFromStream(open(filename, "rb"))
 
 class AbstractPdfCropper:
     """Abstract class for writing a PDF documents composed of cropped pages
@@ -47,7 +47,7 @@ class AbstractPdfCropper:
     def writeToStream(self, stream):
         pass
     def writeToFile(self, filename):
-        stream = file(filename, "wb")
+        stream = open(filename, "wb")
         self.writeToStream(stream)
         stream.close()
     def addPageCropped(self, pdffile, pagenumber, croplist, rotate=0):

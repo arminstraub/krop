@@ -1,3 +1,7 @@
+import sip
+sip.setapi('QString', 2)
+sip.setapi('QVariant', 1)
+
 # use KDE unless not available or specified otherwise
 import sys
 if '--no-kde' in sys.argv:

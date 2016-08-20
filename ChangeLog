@@ -1,6 +1,6 @@
-krop (0.4.11)  2016-08-15 -- Armin Straub
+krop (0.4.11)  2016-08-20 -- Armin Straub
 
-  * Make krop work with python3.
+  * Make krop compatible with both python2 and python3.
 
 
 krop (0.4.10)  2016-05-29 -- Armin Straub
