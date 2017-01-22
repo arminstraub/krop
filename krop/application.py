@@ -1,10 +1,9 @@
-#! /usr/bin/env python
 # -*- coding: iso-8859-1 -*-
 
 """
 krop: A tool to crop PDF files
 
-Copyright (C) 2010-2016 Armin Straub, http://arminstraub.com
+Copyright (C) 2010-2017 Armin Straub, http://arminstraub.com
 """
 
 """
@@ -16,8 +15,8 @@ the Free Software Foundation; either version 3 of the License, or
 
 import sys
 
-from version import __version__
-from config import KDE
+from krop.version import __version__
+from krop.config import KDE
 
 
 def main():
@@ -59,7 +58,7 @@ def main():
     app.setOrganizationName("arminstraub.com")
     app.setOrganizationDomain("arminstraub.com")
 
-    from mainwindow import MainWindow
+    from krop.mainwindow import MainWindow
     window=MainWindow()
 
     if args.file is not None:
@@ -91,6 +90,3 @@ def main():
 
     window.show()
     sys.exit(app.exec_())
-
-if __name__ == "__main__":
-    main()

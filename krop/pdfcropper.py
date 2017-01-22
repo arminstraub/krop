@@ -3,7 +3,7 @@
 """
 Cropping functionality for krop.
 
-Copyright (C) 2010-2016 Armin Straub, http://arminstraub.com
+Copyright (C) 2010-2017 Armin Straub, http://arminstraub.com
 """
 
 """
@@ -90,8 +90,8 @@ class PyPdfCropper(AbstractPdfCropper):
             self.output.addPage(newpage)
     def cropPage(self, page, crop, rotate):
         # Note that the coordinate system is up-side down compared with Qt.
-        x0, y0 = page.mediaBox.lowerLeft
-        x1, y1 = page.mediaBox.upperRight
+        x0, y0 = page.cropBox.lowerLeft
+        x1, y1 = page.cropBox.upperRight
         x0, y0, x1, y1 = float(x0), float(y0), float(x1), float(y1)
         x0, x1 = x0+crop[0]*(x1-x0), x1-crop[2]*(x1-x0)
         y0, y1 = y0+crop[3]*(y1-y0), y1-crop[1]*(y1-y0)

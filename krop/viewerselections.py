@@ -3,7 +3,7 @@
 """
 User-created selections used in ViewerItem.
 
-Copyright (C) 2010-2016 Armin Straub, http://arminstraub.com
+Copyright (C) 2010-2017 Armin Straub, http://arminstraub.com
 """
 
 """

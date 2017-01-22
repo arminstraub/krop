@@ -1,6 +1,7 @@
 Missing
 + Specify aspect ratio of crop regions
 + Clone regions (and keep them linked)
++ Make it possible to save and later reuse regions.
 + <del>Support PyPDF2 besides pyPDF</del>
 + Preserve meta data, table of contents and bookmarks when cropping
 + Allow translations

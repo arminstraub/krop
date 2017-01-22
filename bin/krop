@@ -14,6 +14,5 @@ the Free Software Foundation; either version 3 of the License, or
 (at your option) any later version.
 """
 
-import krop.krop
-
-krop.krop.main()
+from krop.application import main
+main()

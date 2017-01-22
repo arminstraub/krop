@@ -3,7 +3,7 @@
 """
 The main window of krop
 
-Copyright (C) 2010-2016 Armin Straub, http://arminstraub.com
+Copyright (C) 2010-2017 Armin Straub, http://arminstraub.com
 """
 
 """
@@ -23,17 +23,17 @@ except:
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
-from config import KDE
+from krop.config import KDE
 if KDE:
     from PyKDE4.kdeui import KMainWindow as QKMainWindow
 else:
     QKMainWindow = QMainWindow
 
-from mainwindowui import Ui_MainWindow
+from krop.mainwindowui import Ui_MainWindow
 
-from viewerselections import ViewerSelections, ViewerSelectionItem
-from vieweritem import ViewerItem
-from pdfcropper import PdfFile, PdfCropper
+from krop.viewerselections import ViewerSelections, ViewerSelectionItem
+from krop.vieweritem import ViewerItem
+from krop.pdfcropper import PdfFile, PdfCropper
 
 
 class DeviceType:

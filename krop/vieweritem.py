@@ -3,7 +3,7 @@
 """
 Viewer for krop used to display PDF files.
 
-Copyright (C) 2010-2016 Armin Straub, http://arminstraub.com
+Copyright (C) 2010-2017 Armin Straub, http://arminstraub.com
 """
 
 """
@@ -25,7 +25,7 @@ except ImportError:
         "\n\t(or, if using python3) sudo apt-get install python3-poppler-qt4"
     raise RuntimeError(_msg)
 
-from viewerselections import ViewerSelections
+from krop.viewerselections import ViewerSelections
 
 
 class AbstractViewerItem(QGraphicsItem):
