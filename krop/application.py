@@ -62,7 +62,12 @@ def main():
     window=MainWindow()
 
     if args.file is not None:
-        fileName = args.file.decode(sys.stdin.encoding or sys.getdefaultencoding())
+        fileName = args.file
+        try:
+            fileName = fileName.decode(sys.stdin.encoding or sys.getdefaultencoding())
+        except AttributeError:
+            # not necessary (or possible) in python3, which uses unicode
+            pass
         window.openFile(fileName)
     if args.output is not None:
         window.ui.editFile.setText(args.output)

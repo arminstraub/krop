@@ -1,4 +1,10 @@
-import sip
+try:
+    import sip
+    import PyQt4
+except ImportError:
+    _msg = "Please install PyQt4 first."
+    raise RuntimeError(_msg)
+
 sip.setapi('QString', 2)
 sip.setapi('QVariant', 1)
 
