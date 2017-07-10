@@ -13,6 +13,7 @@ the Free Software Foundation; either version 3 of the License, or
 (at your option) any later version.
 """
 
+import sys
 from os.path import exists, splitext
 try:
     str_unicode = unicode
@@ -236,6 +237,14 @@ class MainWindow(QKMainWindow):
                 # None, QFileDialog.DontConfirmOverwrite)
         self.ui.editFile.setText(fileName)
 
+    def showWarning(self, title, text):
+        # if krop is called with parameter --go, then the main window is never
+        # shown; in that case, we output the warning to the shell
+        if self.isVisible():
+            QMessageBox.warning(self, title, text)
+        else:
+            sys.stderr.write(title + '\n' + text + '\n')
+
     def str2pages(self, s):
         pages = []
         intervals = [ [ n.strip() for n in i.split('-') ]
@@ -264,7 +273,7 @@ class MainWindow(QKMainWindow):
 
         # Done when selecting filename.
         # if exists(outputFileName):
-        #     QMessageBox.warning(self, self.tr("Overwrite File?"),
+        #     self.showWarning(self.tr("Overwrite File?"),
         #             self.tr("A file named \"...\" already exists. Are you sure you want to overwrite it?"))
         #     return
 
@@ -280,14 +289,14 @@ class MainWindow(QKMainWindow):
             QApplication.restoreOverrideCursor()
         except IOError as err:
             QApplication.restoreOverrideCursor()
-            QMessageBox.warning(self, self.tr("Could not write cropped PDF"),
+            self.showWarning(self.tr("Could not write cropped PDF"),
                     self.tr("An error occured while writing the cropped PDF. "
                         "Please make sure that you have permission to write to "
                         "the selected file."
                         "\n\nThe official error is:\n\n{0}").format(err))
         except Exception as err:
             QApplication.restoreOverrideCursor()
-            QMessageBox.warning(self, self.tr("Something got in our way"),
+            self.showWarning(self.tr("Something got in our way"),
                     self.tr("The following unexpected error has occured:"
                     "\n\n{0}").format(err))
             raise err

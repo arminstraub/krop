@@ -1,5 +1,8 @@
-krop (0.4.13)  2017-02-19 -- Armin Straub
+krop (0.4.13)  2017-07-10 -- Armin Straub
 
+  + Added the option --go, which outputs a PDF using the choices from
+  --autotrim, --rotate and --whichpages, without opening the krop GUI (thanks
+  to Mirko Weihrauch for the idea).
   * Fix incorrect string handling when opening files from the command line
   using python3 (thanks to Giuliano Costantini for observing and fixing this).
 
