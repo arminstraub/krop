@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>768</width>
-    <height>566</height>
+    <width>949</width>
+    <height>736</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -291,7 +291,7 @@ p, li { white-space: pre-wrap; margin: 0; }
             <item row="1" column="0" colspan="2">
              <widget class="QLabel" name="labelTrimMarginsEg">
               <property name="text">
-               <string>Right-click a selection to automatically trim it.</string>
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Eg:&lt;/span&gt; 2 or 5,2 or 5,2,5,5 (interpreted as in CSS)&lt;/p&gt;&lt;p&gt;Right-click a selection to automatically trim it.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="wordWrap">
                <bool>true</bool>
@@ -698,8 +698,8 @@ p, li { white-space: pre-wrap; margin: 0; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>768</width>
-     <height>21</height>
+     <width>949</width>
+     <height>30</height>
     </rect>
    </property>
   </widget>
