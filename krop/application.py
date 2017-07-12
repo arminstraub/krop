@@ -32,6 +32,7 @@ def main():
     parser.add_argument('--whichpages', help='which pages (e.g. "1-5" or "1,3-") to include in cropped PDF (default: all)')
     parser.add_argument('--initialpage', help='which page to open initially (default: 1)')
     parser.add_argument('--autotrim', action='store_true', help='create a selection for the entire initial page minus blank margins')
+    parser.add_argument('--autotrim-padding', help='how much padding to include when auto trimming (default: previous value)')
     parser.add_argument('--go', action='store_true', help='output PDF without opening the krop GUI (using the choices from --autotrim, --rotate and --whichpages)')
     parser.add_argument('--selections', type=str, choices=['all','evenodd','individual'], help='to which pages should selections apply')
     parser.add_argument('--no-kde', action='store_true', help='do not use KDE libraries (default: use if available)')
@@ -86,6 +87,8 @@ def main():
     if args.initialpage is not None:
         window.ui.editCurrentPage.setText(args.initialpage)
         window.slotCurrentPageEdited(args.initialpage)
+    if args.autotrim_padding is not None:
+        window.ui.editPadding.setText(args.autotrim_padding)
     if args.autotrim:
         window.slotTrimMarginsAll()
 

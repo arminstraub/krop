@@ -411,13 +411,34 @@ class MainWindow(QKMainWindow):
             self.pdfScene.update()
 
     def getPadding(self):
-        """Return [dw, dh] tuple specifying padding for trimming margins."""
-        padding = [ float(a) for a in self.ui.editPadding.text().split(',') ]
-        if len(padding) == 0:
-            return [0, 0]
-        if len(padding) == 1:
-            return 2*padding
-        return padding
+        """Return [top, right, bottom, left] tuple specifying padding for trimming margins."""
+        try:
+            # padding can be specified as in CSS (using one to four values):
+            # top, right, bottom, left
+            # top, right+left, bottom
+            # top+bottom, right+left
+            # top+bottom+right+left
+            padding = [ float(a) for a in self.ui.editPadding.text().split(',') if a ]
+            if len(padding) == 0:
+                return [0,0,0,0]
+            if len(padding) == 1:
+                return 4*padding
+            if len(padding) == 2:
+                return 2*padding
+            if len(padding) == 3:
+                return padding + [padding[1]]
+            if len(padding) == 4:
+                return padding
+            raise ValueError
+        except ValueError:
+            self.showWarning(self.tr("Bad value for padding"), self.tr("The value of padding "
+                "(under settings for trimming margins) must be a list of one to four floats, "
+                "separated by a comma."
+                "\n\nAs in CSS, options are: "
+                "\n(four values) top, right, bottom, left"
+                "\n(three values) top, right+left, bottom"
+                "\n(two values) top+bottom, right+left"))
+            return [0,0,0,0]
 
     def slotTrimMarginsAll(self):
         # trim margins of all selections on the current page
@@ -443,8 +464,8 @@ class MainWindow(QKMainWindow):
         r = sel.mapRectToImage(sel.rect).toRect()
         rt = QRectF(self.doTrimMargins(img, QRect(r)))
         # adjust for padding
-        dw, dh = self.getPadding()
-        rt.adjust(-dw,-dh,dw,dh)
+        dtop, dright, dbottom, dleft = self.getPadding()
+        rt.adjust(-dleft, -dtop, dright, dbottom)
         rt = rt.intersected(QRectF(r)) # but don't overadjust
         # set selection to new values
         rt = sel.mapRectFromImage(rt)
