@@ -1,9 +1,8 @@
-krop (0.4.13)  2017-07-12 -- Armin Straub
+krop (0.4.13)  2017-07-22 -- Armin Straub
 
   + Added the command line option --go, which outputs a PDF using the choices
-  from --autotrim, --rotate and --whichpages, without opening the krop GUI;
-  still requires a running X server though (thanks to Mirko Weihrauch for the
-  idea).
+  from --autotrim, --rotate and --whichpages, without opening the krop GUI
+  (thanks to Mirko Weihrauch for the idea).
   + Padding for auto trimming can be specified as in CSS using one to four
   values.  This option is now also available on the command line as
   --autotrim-padding.  (Thanks to Jonah Langlieb for providing sanity checks!)

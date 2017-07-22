@@ -33,12 +33,15 @@ class AbstractViewerItem(QGraphicsItem):
     to create selections."""
     def __init__(self):
         QGraphicsItem.__init__(self)
+        self.selections = ViewerSelections(self)
+        self.reset()
 
+    def reset(self):
         self._currentPageIndex = 0
-
         self.brect = QRectF()
         self.irect = QRectF()
-        self.selections = ViewerSelections(self)
+        self._images = []
+        self.selections.deleteSelections()
 
     def boundingRect(self):
         return self.brect
@@ -110,8 +113,8 @@ class AbstractViewerItem(QGraphicsItem):
         self.selections.mouseReleaseEvent(event)
 
     def load(self, filename):
+        self.reset()
         self.doLoad(filename)
-        self.selections.deleteSelections()
         self._images = [None for i in range(self.numPages())]
         self.firstPage()
 
@@ -123,6 +126,9 @@ class AbstractViewerItem(QGraphicsItem):
     def numPages(self):
         return 0
 
+    def isEmpty(self):
+        return self.numPages() <= 0
+
     def cacheImage(self, idx):        
         return None
 
@@ -132,8 +138,8 @@ class AbstractViewerItem(QGraphicsItem):
 
 class PopplerViewerItem(AbstractViewerItem):
     """Viewer implementation which uses Poppler to display PDF documents."""
-    def __init__(self):
-        AbstractViewerItem.__init__(self)
+    def reset(self):
+        AbstractViewerItem.reset(self)
         self._pdfdoc = None
 
     def doLoad(self, filename):

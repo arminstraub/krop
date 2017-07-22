@@ -813,6 +813,9 @@ p, li { white-space: pre-wrap; margin: 0; }
    </property>
   </action>
   <action name="actionTrimMarginsAll">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Trim Margins</string>
    </property>

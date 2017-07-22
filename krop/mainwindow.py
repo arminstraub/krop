@@ -218,13 +218,21 @@ class MainWindow(QKMainWindow):
 
     def openFile(self, fileName):
         if fileName:
-            self.fileName = fileName
-            outputFileName = "%s-cropped.pdf" % splitext(str_unicode(fileName))[0]
-            self.ui.editFile.setText(outputFileName)
             self.viewer.load(fileName)
+            if not self.viewer.isEmpty():
+                self.fileName = fileName
+                outputFileName = "%s-cropped.pdf" % splitext(str_unicode(fileName))[0]
+                self.slotFitInView(self.ui.actionFitInView.isChecked())
+            else:
+                self.fileName = ''
+                outputFileName = ''
+                self.showWarning(self.tr("Something got in our way"),
+                        self.tr("The PDF file couldn't be read. "
+                            "Please check the file and its permissions."))
+            self.ui.actionKrop.setEnabled(not self.viewer.isEmpty())
+            self.ui.actionTrimMarginsAll.setEnabled(not self.viewer.isEmpty())
+            self.ui.editFile.setText(outputFileName)
             self.updateControls()
-            self.slotFitInView(self.ui.actionFitInView.isChecked())
-            self.ui.actionKrop.setEnabled(True)
 
     def slotOpenFile(self):
         fileName = QFileDialog.getOpenFileName(self,
@@ -243,7 +251,7 @@ class MainWindow(QKMainWindow):
         if self.isVisible():
             QMessageBox.warning(self, title, text)
         else:
-            sys.stderr.write(title + '\n' + text + '\n')
+            sys.stderr.write(self.tr('WARNING: ') + title + '\n' + text + '\n')
 
     def str2pages(self, s):
         pages = []
@@ -339,8 +347,13 @@ class MainWindow(QKMainWindow):
             pass
 
     def updateControls(self):
-        self.ui.editCurrentPage.setText(str(self.viewer.currentPageIndex+1))
-        self.ui.editMaxPage.setText(str(self.viewer.numPages()))
+        cur = ''
+        num = ''
+        if not self.viewer.isEmpty():
+            cur = str(self.viewer.currentPageIndex+1)
+            num = str(self.viewer.numPages())
+        self.ui.editCurrentPage.setText(cur)
+        self.ui.editMaxPage.setText(num)
 
     def slotSelectionMode(self, checked):
         if checked:
@@ -448,7 +461,7 @@ class MainWindow(QKMainWindow):
                 noSelections = False
                 self.trimMarginsSelection(sel)
         # if there is no selections, then create one
-        if noSelections:
+        if noSelections and not self.viewer.isEmpty():
             sel = ViewerSelectionItem(self.viewer)
             self.trimMarginsSelection(sel)
         self.pdfScene.update()
