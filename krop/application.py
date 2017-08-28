@@ -53,7 +53,7 @@ def main():
         KCmdLineArgs.init(aboutData)
         app = KApplication()
     else:
-        from PyQt4.QtGui import QApplication
+        from krop.qt import QApplication
         app = QApplication(sys.argv)
         app.setApplicationName("krop")
 
@@ -99,7 +99,7 @@ def main():
 
     if args.go:
         #  sys.stdout.write('kropping...\n')
-        from PyQt4.QtCore import QTimer
+        from krop.qt import QTimer
         QTimer.singleShot(0, window.slotKrop)
         QTimer.singleShot(0, window.close)
     else:

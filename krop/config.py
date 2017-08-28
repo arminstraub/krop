@@ -1,12 +1,20 @@
 try:
     import sip
-    import PyQt4
+    PYQT5 = False
+    try:
+        import PyQt5
+        PYQT5 = True
+        #  PYQT5 = False
+    except ImportError:
+        pass
+    if not PYQT5:
+        import PyQt4
 except ImportError:
-    _msg = "Please install PyQt4 first."
+    _msg = "Please install PyQt4 or PyQt5 first."
     raise RuntimeError(_msg)
 
 sip.setapi('QString', 2)
-sip.setapi('QVariant', 1)
+sip.setapi('QVariant', 2)
 
 # use KDE unless not available or specified otherwise
 import sys

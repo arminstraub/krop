@@ -13,11 +13,11 @@ the Free Software Foundation; either version 3 of the License, or
 (at your option) any later version.
 """
 
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+from krop.qt import *
 
 try:
-    from popplerqt4 import Poppler
+    pass
+    #  from popplerqt4 import Poppler
 except ImportError:
     _msg = "Please install popplerqt4 first."\
         "\n\tOn recent versions of Ubuntu, the following should do the trick:"\

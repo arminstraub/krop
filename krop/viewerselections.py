@@ -15,8 +15,7 @@ the Free Software Foundation; either version 3 of the License, or
 
 from math import ceil
 
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+from krop.qt import *
 
 
 class ViewerSelections(object):

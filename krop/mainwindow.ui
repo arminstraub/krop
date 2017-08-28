@@ -419,7 +419,7 @@ p, li { white-space: pre-wrap; margin: 0; }
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Copyright (C) 2010-2016 Armin Straub
+            <string>Copyright (C) 2010-2017 Armin Straub
 &lt;br&gt;&lt;a href='http://arminstraub.com'&gt;http://arminstraub.com&lt;/a&gt;
 &lt;p&gt;This program is free software and available to you in the hope that it will be useful; but without any warranty. It is distributed under the terms of the GNU General Public License (GPLv3+). See the accompanying files for more information.
 </string>
