@@ -239,6 +239,10 @@ class MainWindow(QKMainWindow):
     def slotOpenFile(self):
         fileName = QFileDialog.getOpenFileName(self,
              self.tr("Open PDF"), "", self.tr("PDF Files (*.pdf)"));
+        # in PyQt5, getOpenFileName is what used to be
+        # getOpenFileNameAndFilter
+        if PYQT5:
+            fileName = fileName[0]
         self.openFile(fileName)
 
     def slotSelectFile(self):

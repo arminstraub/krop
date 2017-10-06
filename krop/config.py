@@ -1,12 +1,15 @@
+import sys
+
+PYQT5 = False
 try:
     import sip
-    PYQT5 = False
-    try:
-        import PyQt5
-        PYQT5 = True
-        #  PYQT5 = False
-    except ImportError:
-        pass
+    # use PyQt5 unless not available or specified otherwise
+    if '--no-qt5' not in sys.argv:
+        try:
+            import PyQt5
+            PYQT5 = True
+        except ImportError:
+            pass
     if not PYQT5:
         import PyQt4
 except ImportError:
@@ -17,13 +20,14 @@ sip.setapi('QString', 2)
 sip.setapi('QVariant', 2)
 
 # use KDE unless not available or specified otherwise
-import sys
-if '--no-kde' in sys.argv:
-    KDE = False
-else:
-    try:
-        import PyKDE4
-        KDE = True
-        del PyKDE4
-    except ImportError:
-        KDE = False
+KDE = False
+if '--no-kde' not in sys.argv:
+    if PYQT5:
+        #TODO use PyKDE5 once more easily available
+        pass
+    else:
+        try:
+            import PyKDE4
+            KDE = True
+        except ImportError:
+            pass

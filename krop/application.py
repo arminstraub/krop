@@ -36,12 +36,14 @@ def main():
     parser.add_argument('--go', action='store_true', help='output PDF without opening the krop GUI (using the choices from --autotrim, --rotate and --whichpages); if used in a script without X server access, you can run krop using xvfb-run')
     parser.add_argument('--selections', type=str, choices=['all','evenodd','individual'], help='to which pages should selections apply')
     parser.add_argument('--no-kde', action='store_true', help='do not use KDE libraries (default: use if available)')
+    parser.add_argument('--no-qt5', action='store_true', help='do not use PyQt5 instead of PyQt4 (default: use PyQt5 if available)')
     parser.add_argument('--no-PyPDF2', action='store_true', help='do not use PyPDF2 instead of pyPdf (default: use PyPDF2 if available)')
 
     args = parser.parse_args()
 
     # start the GUI
     if KDE:
+        #TODO also use PyKDE5 once more easily available
         from PyKDE4.kdecore import ki18n, KCmdLineArgs, KAboutData
         from PyKDE4.kdeui import KApplication
         appName     = "krop"

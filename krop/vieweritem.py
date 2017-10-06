@@ -13,17 +13,24 @@ the Free Software Foundation; either version 3 of the License, or
 (at your option) any later version.
 """
 
+from krop.config import PYQT5
 from krop.qt import *
 
-try:
-    pass
-    #  from popplerqt4 import Poppler
-except ImportError:
-    _msg = "Please install popplerqt4 first."\
-        "\n\tOn recent versions of Ubuntu, the following should do the trick:"\
-        "\n\tsudo apt-get install python-poppler-qt4"\
-        "\n\t(or, if using python3) sudo apt-get install python3-poppler-qt4"
-    raise RuntimeError(_msg)
+if PYQT5:
+    try:
+        from popplerqt5 import Poppler
+    except ImportError:
+        _msg = "Please install popplerqt5 first."
+        raise RuntimeError(_msg)
+else:
+    try:
+        from popplerqt4 import Poppler
+    except ImportError:
+        _msg = "Please install popplerqt4 first."\
+            "\n\tOn recent versions of Ubuntu, the following should do the trick:"\
+            "\n\tsudo apt-get install python-poppler-qt4"\
+            "\n\t(or, if using python3) sudo apt-get install python3-poppler-qt4"
+        raise RuntimeError(_msg)
 
 from krop.viewerselections import ViewerSelections
 
