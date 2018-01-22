@@ -21,14 +21,9 @@ except:
     str_unicode = str
 
 
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
-
-from krop.config import KDE
-if KDE:
-    from PyKDE4.kdeui import KMainWindow as QKMainWindow
-else:
-    QKMainWindow = QMainWindow
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
 
 from krop.mainwindowui import Ui_MainWindow
 
@@ -79,21 +74,21 @@ class DeviceTypeManager:
         count = settings.beginReadArray("devicetypes")
         for i in range(count):
             settings.setArrayIndex(i)
-            name = settings.value("name").toString()
-            width = settings.value("width").toInt()[0]
-            height = settings.value("height").toInt()[0]
+            name = settings.value("name", type=str)
+            width = settings.value("width", type=int)
+            height = settings.value("height", type=int)
             self.addType(name, width, height)
         settings.endArray()
         if count==0:
             self.addDefaults()
 
 
-class MainWindow(QKMainWindow):
+class MainWindow(QMainWindow):
 
     fileName = None
 
     def __init__(self):
-        QKMainWindow.__init__(self)
+        QMainWindow.__init__(self)
 
         self.devicetypes = DeviceTypeManager()
 
@@ -109,68 +104,32 @@ class MainWindow(QKMainWindow):
         self.ui.editAllowedChanges.hide()
         self.ui.labelSensitivity.hide()
         self.ui.editSensitivity.hide()
+        
+        # Only QAction can be added to QToolbar in Qt Designer
+        self.ui.navToolBar.insertWidget(self.ui.actionNextPage,self.ui.frameCurrentPage)
 
-        # self.ui.tabWidget.
-
-        # http://standards.freedesktop.org/icon-naming-spec/icon-naming-spec-latest.html
-        self.setWindowIcon(QIcon.fromTheme('edit-cut'))
-        self.ui.actionOpenFile.setIcon(QIcon.fromTheme('document-open'))
-        self.ui.actionKrop.setIcon(QIcon.fromTheme('face-smile'))
-        self.ui.actionZoomIn.setIcon(QIcon.fromTheme('zoom-in'))
-        self.ui.actionZoomOut.setIcon(QIcon.fromTheme('zoom-out'))
-        self.ui.actionFitInView.setIcon(QIcon.fromTheme('zoom-fit-best'))
-        self.ui.actionPreviousPage.setIcon(QIcon.fromTheme('go-previous'))
-        self.ui.actionNextPage.setIcon(QIcon.fromTheme('go-next'))
-        self.ui.actionFirstPage.setIcon(QIcon.fromTheme('go-first'))
-        self.ui.actionLastPage.setIcon(QIcon.fromTheme('go-last'))
-        self.ui.actionTrimMarginsAll.setIcon(QIcon.fromTheme('select-rectangular'))
-        # self.ui.actionTrimMarginsAll.setIcon(QIcon.fromTheme('edit-select-all'))
-
-        if QIcon.hasThemeIcon('document-open'):
-            self.ui.buttonFileSelect.setIcon(QIcon.fromTheme('document-open'))
-        else:
-            self.ui.buttonFileSelect.setText('...')
-            self.ui.buttonFileSelect.setAutoRaise(False)
-
-        if QIcon.hasThemeIcon('go-first') and QIcon.hasThemeIcon('go-previous') \
-                and QIcon.hasThemeIcon('go-next') and QIcon.hasThemeIcon('go-last'):
-            self.ui.buttonFirst.setIcon(QIcon.fromTheme('go-first'))
-            self.ui.buttonPrevious.setIcon(QIcon.fromTheme('go-previous'))
-            self.ui.buttonNext.setIcon(QIcon.fromTheme('go-next'))
-            self.ui.buttonLast.setIcon(QIcon.fromTheme('go-last'))
-        else:
-            self.ui.buttonFirst.setText('<<')
-            self.ui.buttonPrevious.setText('<')
-            self.ui.buttonNext.setText('>')
-            self.ui.buttonLast.setText('>>')
-            self.ui.buttonFirst.setFlat(False)
-            self.ui.buttonPrevious.setFlat(False)
-            self.ui.buttonNext.setFlat(False)
-            self.ui.buttonLast.setFlat(False)
-
-
-        self.connect(self.ui.actionOpenFile, SIGNAL("triggered()"), self.slotOpenFile)
-        self.connect(self.ui.actionSelectFile, SIGNAL("triggered()"), self.slotSelectFile)
-        self.connect(self.ui.actionKrop, SIGNAL("triggered()"), self.slotKrop)
-        self.connect(self.ui.actionZoomIn, SIGNAL("triggered()"), self.slotZoomIn)
-        self.connect(self.ui.actionZoomOut, SIGNAL("triggered()"), self.slotZoomOut)
-        self.connect(self.ui.actionFitInView, SIGNAL("toggled(bool)"), self.slotFitInView)
-        self.connect(self.ui.actionPreviousPage, SIGNAL("triggered()"), self.slotPreviousPage)
-        self.connect(self.ui.actionNextPage, SIGNAL("triggered()"), self.slotNextPage)
-        self.connect(self.ui.actionFirstPage, SIGNAL("triggered()"), self.slotFirstPage)
-        self.connect(self.ui.actionLastPage, SIGNAL("triggered()"), self.slotLastPage)
-        self.connect(self.ui.actionDeleteSelection, SIGNAL("triggered()"), self.slotDeleteSelection)
-        self.connect(self.ui.actionTrimMargins, SIGNAL("triggered()"), self.slotTrimMargins)
-        self.connect(self.ui.actionTrimMarginsAll, SIGNAL("triggered()"), self.slotTrimMarginsAll)
-        self.connect(self.ui.documentView, SIGNAL('customContextMenuRequested(const QPoint&)'), self.slotContextMenu)
-        self.connect(self.ui.editCurrentPage, SIGNAL('textEdited(const QString&)'), self.slotCurrentPageEdited)
-        self.connect(self.ui.radioSelAll, SIGNAL("toggled(bool)"), self.slotSelectionMode)
-        self.connect(self.ui.radioSelEvenOdd, SIGNAL("toggled(bool)"), self.slotSelectionMode)
-        self.connect(self.ui.radioSelIndividual, SIGNAL("toggled(bool)"), self.slotSelectionMode)
+        self.ui.actionOpenFile.triggered.connect(self.slotOpenFile)
+        self.ui.actionSelectFile.triggered.connect(self.slotSelectFile)
+        self.ui.actionKrop.triggered.connect(self.slotKrop)
+        self.ui.actionZoomIn.triggered.connect(self.slotZoomIn)
+        self.ui.actionZoomOut.triggered.connect(self.slotZoomOut)
+        self.ui.actionFitInView.toggled[bool].connect(self.slotFitInView)
+        self.ui.actionPreviousPage.triggered.connect(self.slotPreviousPage)
+        self.ui.actionNextPage.triggered.connect(self.slotNextPage)
+        self.ui.actionFirstPage.triggered.connect(self.slotFirstPage)
+        self.ui.actionLastPage.triggered.connect(self.slotLastPage)
+        self.ui.actionDeleteSelection.triggered.connect(self.slotDeleteSelection)
+        self.ui.actionTrimMargins.triggered.connect(self.slotTrimMargins)
+        self.ui.actionTrimMarginsAll.triggered.connect(self.slotTrimMarginsAll)
+        self.ui.documentView.customContextMenuRequested[QPoint].connect(self.slotContextMenu)
+        self.ui.editCurrentPage.textEdited[str].connect(self.slotCurrentPageEdited)
+        self.ui.radioSelAll.toggled[bool].connect(self.slotSelectionMode)
+        self.ui.radioSelEvenOdd.toggled[bool].connect(self.slotSelectionMode)
+        self.ui.radioSelIndividual.toggled[bool].connect(self.slotSelectionMode)
         # self.connect(self.ui.editSelExceptions, SIGNAL("editingFinished()"), self.slotSelExceptionsChanged)
-        self.connect(self.ui.editSelExceptions, SIGNAL('textEdited(const QString&)'), self.slotSelExceptionsEdited)
-        self.connect(self.ui.comboDevice, SIGNAL("currentIndexChanged(int)"), self.slotDeviceTypeChanged)
-        self.connect(self.ui.editAspectRatio, SIGNAL("editingFinished()"), self.slotAspectRatioChanged)
+        self.ui.editSelExceptions.textEdited[str].connect(self.slotSelExceptionsEdited)
+        self.ui.comboDevice.currentIndexChanged[int].connect(self.slotDeviceTypeChanged)
+        self.ui.editAspectRatio.editingFinished.connect(self.slotAspectRatioChanged)
 
         self.pdfScene = QGraphicsScene(self.ui.documentView)
         self.pdfScene.setBackgroundBrush(self.pdfScene.palette().dark())
@@ -197,11 +156,11 @@ class MainWindow(QKMainWindow):
     def readSettings(self):
         settings = QSettings()
         self.ui.editPadding.setText(
-                settings.value("trim/padding", 2).toString())
+            settings.value("trim/padding", 2, type=str))
         self.ui.editAllowedChanges.setText(
-                settings.value("trim/allowedchanges", 0).toString())
+                settings.value("trim/allowedchanges", 0, type=str))
         self.ui.editSensitivity.setText(
-                settings.value("trim/sensitivity", 5).toString())
+                settings.value("trim/sensitivity", 5, type=str))
 
         self.devicetypes.loadTypes(settings)
 
@@ -235,7 +194,7 @@ class MainWindow(QKMainWindow):
             self.updateControls()
 
     def slotOpenFile(self):
-        fileName = QFileDialog.getOpenFileName(self,
+        fileName, _ = QFileDialog.getOpenFileName(self,
              self.tr("Open PDF"), "", self.tr("PDF Files (*.pdf)"));
         self.openFile(fileName)
 

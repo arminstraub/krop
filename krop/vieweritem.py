@@ -13,16 +13,15 @@ the Free Software Foundation; either version 3 of the License, or
 (at your option) any later version.
 """
 
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+from PyQt5.QtCore import *
+from PyQt5.QtWidgets import QGraphicsItem
 
 try:
-    from popplerqt4 import Poppler
+    from popplerqt5 import Poppler
 except ImportError:
-    _msg = "Please install popplerqt4 first."\
+    _msg = "Please install popplerqt5 first."\
         "\n\tOn recent versions of Ubuntu, the following should do the trick:"\
-        "\n\tsudo apt-get install python-poppler-qt4"\
-        "\n\t(or, if using python3) sudo apt-get install python3-poppler-qt4"
+        "\n\tsudo apt install python3-poppler-qt5"
     raise RuntimeError(_msg)
 
 from krop.viewerselections import ViewerSelections

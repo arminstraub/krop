@@ -1,3 +1,6 @@
+krop (0.5.0)  2018-01-22 -- Pavel Zorin-Kranich
+  * Port to Qt 5
+
 krop (0.4.13)  2017-07-22 -- Armin Straub
 
   + Added the command line option --go, which outputs a PDF using the choices

@@ -6,12 +6,16 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>949</width>
-    <height>736</height>
+    <width>1000</width>
+    <height>786</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>krop: A tool to crop your PDFs</string>
+  </property>
+  <property name="windowIcon">
+   <iconset theme="edit-cut">
+    <normaloff>.</normaloff>.</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -50,7 +54,11 @@
             <item row="0" column="1">
              <widget class="QToolButton" name="buttonFileSelect">
               <property name="text">
-               <string/>
+               <string>...</string>
+              </property>
+              <property name="icon">
+               <iconset theme="document-open">
+                <normaloff>.</normaloff>.</iconset>
               </property>
               <property name="autoRaise">
                <bool>true</bool>
@@ -172,7 +180,7 @@ p, li { white-space: pre-wrap; margin: 0; }
             <item row="0" column="0" colspan="2">
              <widget class="QRadioButton" name="radioSelAll">
               <property name="text">
-               <string>all pages</string>
+               <string>all pa&amp;ges</string>
               </property>
               <property name="checked">
                <bool>true</bool>
@@ -189,7 +197,7 @@ p, li { white-space: pre-wrap; margin: 0; }
             <item row="2" column="0" colspan="2">
              <widget class="QRadioButton" name="radioSelIndividual">
               <property name="text">
-               <string>individual page</string>
+               <string>individ&amp;ual page</string>
               </property>
              </widget>
             </item>
@@ -452,7 +460,16 @@ p, li { white-space: pre-wrap; margin: 0; }
         <enum>QFrame::Raised</enum>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
-        <property name="margin">
+        <property name="leftMargin">
+         <number>1</number>
+        </property>
+        <property name="topMargin">
+         <number>1</number>
+        </property>
+        <property name="rightMargin">
+         <number>1</number>
+        </property>
+        <property name="bottomMargin">
          <number>1</number>
         </property>
         <item>
@@ -466,7 +483,13 @@ p, li { white-space: pre-wrap; margin: 0; }
          </widget>
         </item>
         <item>
-         <widget class="QFrame" name="frame_2">
+         <widget class="QFrame" name="frameCurrentPage">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="frameShape">
            <enum>QFrame::NoFrame</enum>
           </property>
@@ -474,75 +497,18 @@ p, li { white-space: pre-wrap; margin: 0; }
            <enum>QFrame::Raised</enum>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_2">
-           <property name="margin">
+           <property name="leftMargin">
             <number>0</number>
            </property>
-           <item>
-            <spacer name="horizontalSpacer">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeType">
-              <enum>QSizePolicy::Expanding</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <widget class="QPushButton" name="buttonFirst">
-             <property name="minimumSize">
-              <size>
-               <width>24</width>
-               <height>24</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>24</width>
-               <height>24</height>
-              </size>
-             </property>
-             <property name="focusPolicy">
-              <enum>Qt::NoFocus</enum>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="flat">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="buttonPrevious">
-             <property name="minimumSize">
-              <size>
-               <width>24</width>
-               <height>24</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>24</width>
-               <height>24</height>
-              </size>
-             </property>
-             <property name="focusPolicy">
-              <enum>Qt::NoFocus</enum>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="flat">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
            <item>
             <widget class="QLineEdit" name="editCurrentPage">
              <property name="sizePolicy">
@@ -618,72 +584,6 @@ p, li { white-space: pre-wrap; margin: 0; }
              </property>
             </widget>
            </item>
-           <item>
-            <widget class="QPushButton" name="buttonNext">
-             <property name="minimumSize">
-              <size>
-               <width>24</width>
-               <height>24</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>24</width>
-               <height>24</height>
-              </size>
-             </property>
-             <property name="focusPolicy">
-              <enum>Qt::NoFocus</enum>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="flat">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="buttonLast">
-             <property name="minimumSize">
-              <size>
-               <width>24</width>
-               <height>24</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>24</width>
-               <height>24</height>
-              </size>
-             </property>
-             <property name="focusPolicy">
-              <enum>Qt::NoFocus</enum>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="flat">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer2">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeType">
-              <enum>QSizePolicy::Expanding</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
           </layout>
          </widget>
         </item>
@@ -698,8 +598,8 @@ p, li { white-space: pre-wrap; margin: 0; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>949</width>
-     <height>30</height>
+     <width>1000</width>
+     <height>35</height>
     </rect>
    </property>
   </widget>
@@ -730,61 +630,132 @@ p, li { white-space: pre-wrap; margin: 0; }
    <addaction name="actionZoomIn"/>
    <addaction name="actionZoomOut"/>
    <addaction name="actionFitInView"/>
-   <addaction name="actionPreviousPage"/>
-   <addaction name="actionNextPage"/>
    <addaction name="actionTrimMarginsAll"/>
   </widget>
+  <widget class="QToolBar" name="navToolBar">
+   <property name="windowTitle">
+    <string>toolBar_2</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionFirstPage"/>
+   <addaction name="actionPreviousPage"/>
+   <addaction name="actionNextPage"/>
+   <addaction name="actionLastPage"/>
+  </widget>
   <action name="actionZoomIn">
+   <property name="icon">
+    <iconset theme="zoom-in">
+     <normaloff>.</normaloff>.</iconset>
+   </property>
    <property name="text">
     <string>Zoom In</string>
    </property>
+   <property name="toolTip">
+    <string>Zoom In (Ctrl++)</string>
+   </property>
    <property name="shortcut">
-    <string>Ctrl+=</string>
+    <string>Ctrl++</string>
    </property>
   </action>
   <action name="actionZoomOut">
+   <property name="icon">
+    <iconset theme="zoom-out">
+     <normaloff>.</normaloff>.</iconset>
+   </property>
    <property name="text">
     <string>Zoom Out</string>
+   </property>
+   <property name="toolTip">
+    <string>Zoom Out (Ctrl+-)</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+-</string>
    </property>
   </action>
   <action name="actionPreviousPage">
+   <property name="icon">
+    <iconset theme="go-previous">
+     <normaloff>.</normaloff>.</iconset>
+   </property>
    <property name="text">
     <string>Previous Page</string>
    </property>
+   <property name="toolTip">
+    <string>Previous Page (PgUp)</string>
+   </property>
    <property name="shortcut">
-    <string>Ctrl+Left</string>
+    <string>PgUp</string>
    </property>
   </action>
   <action name="actionNextPage">
+   <property name="icon">
+    <iconset theme="go-next">
+     <normaloff>.</normaloff>.</iconset>
+   </property>
    <property name="text">
     <string>Next Page</string>
    </property>
+   <property name="toolTip">
+    <string>Next Page (PgDown)</string>
+   </property>
    <property name="shortcut">
-    <string>Ctrl+Right</string>
+    <string>PgDown</string>
    </property>
   </action>
   <action name="actionOpenFile">
+   <property name="icon">
+    <iconset theme="document-open">
+     <normaloff>.</normaloff>.</iconset>
+   </property>
    <property name="text">
     <string>Open</string>
+   </property>
+   <property name="toolTip">
+    <string>Open (Ctrl+O)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
    </property>
   </action>
   <action name="actionFitInView">
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset theme="zoom-fit-best">
+     <normaloff>.</normaloff>.</iconset>
+   </property>
    <property name="text">
     <string>Fit In View</string>
+   </property>
+   <property name="toolTip">
+    <string>Fit In View (Ctrl+0)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+0</string>
    </property>
   </action>
   <action name="actionKrop">
    <property name="enabled">
     <bool>false</bool>
    </property>
+   <property name="icon">
+    <iconset theme="face-smile">
+     <normaloff>.</normaloff>.</iconset>
+   </property>
    <property name="text">
     <string>Krop!</string>
+   </property>
+   <property name="toolTip">
+    <string>Krop! (Ctrl+K)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+K</string>
    </property>
   </action>
   <action name="actionDeleteSelection">
@@ -793,13 +764,33 @@ p, li { white-space: pre-wrap; margin: 0; }
    </property>
   </action>
   <action name="actionFirstPage">
+   <property name="icon">
+    <iconset theme="go-first">
+     <normaloff>.</normaloff>.</iconset>
+   </property>
    <property name="text">
     <string>First Page</string>
    </property>
+   <property name="toolTip">
+    <string>First Page (Home)</string>
+   </property>
+   <property name="shortcut">
+    <string>Home</string>
+   </property>
   </action>
   <action name="actionLastPage">
+   <property name="icon">
+    <iconset theme="go-last">
+     <normaloff>.</normaloff>.</iconset>
+   </property>
    <property name="text">
     <string>Last Page</string>
+   </property>
+   <property name="toolTip">
+    <string>Last Page (End)</string>
+   </property>
+   <property name="shortcut">
+    <string>End</string>
    </property>
   </action>
   <action name="actionTrimMargins">
@@ -816,80 +807,23 @@ p, li { white-space: pre-wrap; margin: 0; }
    <property name="enabled">
     <bool>false</bool>
    </property>
+   <property name="icon">
+    <iconset theme="select-rectangular">
+     <normaloff>.</normaloff>.</iconset>
+   </property>
    <property name="text">
     <string>Trim Margins</string>
    </property>
    <property name="toolTip">
-    <string>Trim Margins</string>
+    <string>Trim Margins (Ctrl+T)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+T</string>
    </property>
   </action>
  </widget>
  <resources/>
  <connections>
-  <connection>
-   <sender>buttonPrevious</sender>
-   <signal>clicked()</signal>
-   <receiver>actionPreviousPage</receiver>
-   <slot>trigger()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>548</x>
-     <y>623</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonNext</sender>
-   <signal>clicked()</signal>
-   <receiver>actionNextPage</receiver>
-   <slot>trigger()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>750</x>
-     <y>623</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonFirst</sender>
-   <signal>clicked()</signal>
-   <receiver>actionFirstPage</receiver>
-   <slot>trigger()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>535</x>
-     <y>673</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonLast</sender>
-   <signal>clicked()</signal>
-   <receiver>actionLastPage</receiver>
-   <slot>trigger()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>724</x>
-     <y>673</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>buttonFileSelect</sender>
    <signal>clicked()</signal>

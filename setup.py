@@ -36,6 +36,7 @@ setup(
         version = version,
         author = 'Armin Straub',
         author_email = 'mail@arminstraub.com',
+        license = 'GPLv3+',
         url = 'http://arminstraub.com/software/krop',
         description = 'A tool to crop PDF files',
         long_description = read('README'),
@@ -51,4 +52,9 @@ setup(
             'Programming Language :: Python :: 3',
             'Environment :: X11 Applications :: Qt',
         ],
+        requires = [
+            'PyQt5',
+            'PyPDF2',
+            'popplerqt5',
+            ],
 )

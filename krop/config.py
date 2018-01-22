@@ -1,21 +1,5 @@
 try:
-    import sip
-    import PyQt4
+    import PyQt5
 except ImportError:
-    _msg = "Please install PyQt4 first."
+    _msg = "Please install PyQt5 first."
     raise RuntimeError(_msg)
-
-sip.setapi('QString', 2)
-sip.setapi('QVariant', 1)
-
-# use KDE unless not available or specified otherwise
-import sys
-if '--no-kde' in sys.argv:
-    KDE = False
-else:
-    try:
-        import PyKDE4
-        KDE = True
-        del PyKDE4
-    except ImportError:
-        KDE = False
