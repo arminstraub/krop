@@ -419,7 +419,7 @@ class Ui_MainWindow(object):
 "<p>If you have an eReader that is not good at scrolling documents, you can have each page automatically broken into parts to optimally fit the screen of your eReader.\n"
 "<p>Some examples can be found at: <a href=\'http://arminstraub.com/software/krop\'>arminstraub.com</a>\n"
 ""))
-        self.labelHelpLicense.setText(_translate("MainWindow", "Copyright (C) 2010-2017 Armin Straub\n"
+        self.labelHelpLicense.setText(_translate("MainWindow", "Copyright (C) 2010-2018 Armin Straub\n"
 "<br><a href=\'http://arminstraub.com\'>http://arminstraub.com</a>\n"
 "<p>This program is free software and available to you in the hope that it will be useful; but without any warranty. It is distributed under the terms of the GNU General Public License (GPLv3+). See the accompanying files for more information.\n"
 ""))

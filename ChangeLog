@@ -1,3 +1,10 @@
+krop (0.5.0)  2018-02-11 -- Armin Straub
+
+  + Support PyQt5.
+  + Use Ghostscript to optionally optimize the final PDF (thanks to Mathias
+  Rav for the idea and code).
+
+
 krop (0.4.13)  2017-07-22 -- Armin Straub
 
   + Added the command line option --go, which outputs a PDF using the choices

@@ -2,7 +2,7 @@
 # -*- coding: iso-8859-1 -*-
 
 """
-Copyright (C) 2014-2017 Armin Straub, http://arminstraub.com
+Copyright (C) 2014-2018 Armin Straub, http://arminstraub.com
 """
 
 """
