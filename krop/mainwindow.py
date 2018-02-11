@@ -15,6 +15,7 @@ the Free Software Foundation; either version 3 of the License, or
 
 import sys
 from os.path import exists, splitext
+from distutils.spawn import find_executable
 try:
     str_unicode = unicode
 except:
@@ -36,7 +37,7 @@ else:
 
 from krop.viewerselections import ViewerSelections, ViewerSelectionItem
 from krop.vieweritem import ViewerItem
-from krop.pdfcropper import PdfFile, PdfCropper
+from krop.pdfcropper import PdfFile, PdfCropper, optimizePdfGhostscript
 
 
 class DeviceType:
@@ -185,6 +186,12 @@ class MainWindow(QKMainWindow):
             self.ui.comboDevice.addItem(t.name)
         self.ui.comboDevice.addItem("Custom")
 
+        # disable Ghostscript option if gs is not available
+        # once support for Python2 is dropped, we can simply call shutil.which('gs')
+        if not find_executable('gs'):
+            self.ui.checkGhostscript.setChecked(False)
+            self.ui.checkGhostscript.setEnabled(False)
+
         self.ui.documentView.setScene(self.pdfScene)
 
 
@@ -204,6 +211,7 @@ class MainWindow(QKMainWindow):
                 settings.value("trim/allowedchanges", 0))
         self.ui.editSensitivity.setText(
                 settings.value("trim/sensitivity", 5))
+        self.ui.checkGhostscript.setChecked(settings.value("optimize", "") == "gs")
 
         self.devicetypes.loadTypes(settings)
 
@@ -215,6 +223,8 @@ class MainWindow(QKMainWindow):
                 self.ui.editAllowedChanges.text())
         settings.setValue("trim/sensitivity",
                 self.ui.editSensitivity.text())
+        settings.setValue("optimize", "gs" if
+                self.ui.checkGhostscript.isChecked() else "")
 
         self.devicetypes.saveTypes(settings)
 
@@ -299,7 +309,17 @@ class MainWindow(QKMainWindow):
             for nr in pages:
                 c = self.viewer.cropValues(nr)
                 cropper.addPageCropped(pdf, nr, c, rotate=rotation)
-            cropper.writeToFile(outputFileName)
+            if self.ui.checkGhostscript.isChecked():
+                import tempfile, os
+                with tempfile.NamedTemporaryFile(suffix='.pdf', delete=False) as fp:
+                    cropper.writeToStream(fp.file)
+                    # we close the file because it depends on the platform
+                    # whether it can be read a second time while still open
+                    fp.close()
+                    optimizePdfGhostscript(fp.name, outputFileName)
+                    os.remove(fp.name)
+            else:
+                cropper.writeToFile(outputFileName)
             QApplication.restoreOverrideCursor()
         except IOError as err:
             QApplication.restoreOverrideCursor()

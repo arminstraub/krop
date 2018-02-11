@@ -102,6 +102,11 @@ class PyPdfCropper(AbstractPdfCropper):
         if rotate != 0:
             page.rotateClockwise(rotate)
 
+def optimizePdfGhostscript(oldfilename, newfilename):
+    import subprocess
+    subprocess.check_call(('gs', '-sDEVICE=pdfwrite', '-sOutputFile=' + newfilename,
+        '-dNOPAUSE', '-dBATCH', oldfilename))
+
 PdfFile = PyPdfFile
 PdfCropper = PyPdfCropper
 
