@@ -124,6 +124,9 @@ p, li { white-space: pre-wrap; }
               <property name="text">
                <string>Use Ghostscript to reduce PDF file size</string>
               </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
              </widget>
             </item>
             <item>

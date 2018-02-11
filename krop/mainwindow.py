@@ -206,12 +206,12 @@ class MainWindow(QKMainWindow):
     def readSettings(self):
         settings = QSettings()
         self.ui.editPadding.setText(
-                settings.value("trim/padding", 2))
+                settings.value("trim/padding", "2"))
         self.ui.editAllowedChanges.setText(
-                settings.value("trim/allowedchanges", 0))
+                settings.value("trim/allowedchanges", "0"))
         self.ui.editSensitivity.setText(
-                settings.value("trim/sensitivity", 5))
-        self.ui.checkGhostscript.setChecked(settings.value("optimize", "") == "gs")
+                settings.value("trim/sensitivity", "5"))
+        self.ui.checkGhostscript.setChecked(settings.value("optimize", "gs") == "gs")
 
         self.devicetypes.loadTypes(settings)
 

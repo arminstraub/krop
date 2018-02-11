@@ -81,6 +81,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_9 = QtGui.QVBoxLayout(self.groupOptimization)
         self.verticalLayout_9.setObjectName(_fromUtf8("verticalLayout_9"))
         self.checkGhostscript = QtGui.QCheckBox(self.groupOptimization)
+        self.checkGhostscript.setChecked(True)
         self.checkGhostscript.setObjectName(_fromUtf8("checkGhostscript"))
         self.verticalLayout_9.addWidget(self.checkGhostscript)
         self.labelGhostscript = QtGui.QLabel(self.groupOptimization)
