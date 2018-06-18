@@ -1,9 +1,10 @@
-.TH krop 1 "October  6 2017"
+.TH krop 1
 .SH NAME
 krop \- tool to crop PDF files
 .SH SYNOPSIS
 .B krop
-.RI [ options ] " files" ...
+.RI [ options ]
+.RI [ file ]
 .br
 .SH DESCRIPTION
 This manual page documents briefly the
@@ -11,18 +12,54 @@ This manual page documents briefly the
 command.
 .PP
 \fBkrop\fP is a simple graphical tool to crop the pages of PDF files. It is written
-in Python and relies on PyQT, python-poppler-qt4 and pyPDF for its functionality.
+in Python and relies on PyQT, python-poppler-qt5 and PyPDF2 for its functionality.
 A unique feature of krop is its ability to automatically split pages into subpages
 to fit the limited screen size of devices such as eReaders. This is particularly
-useful, if your eReader does not support convenient scrolling
+useful, if your eReader does not support convenient scrolling.
 .SH OPTIONS
-These programs follow the usual GNU command line syntax, with long
-options starting with two dashes (`-').
 A summary of options is included below.
-For a complete description, see the Info files.
+For a complete description, use the \fB\-\-help\fP option.
+.SS "Arguments:"
+.TP
+.B file
+PDF file to open
+.SS "Options:"
 .TP
 .B \-h, \-\-help
-Show summary of options.
+show help, including all options, and exit
 .TP
 .B \-v, \-\-version
-Show version of program.
+show program's version number and exit
+.TP
+.B \-o OUTPUT, \-\-output OUTPUT
+where to save the cropped PDF
+.TP
+.B \-\-rotate {0,90,180,270}
+how much to rotate the cropped pdf clockwise (default: 0)
+.TP
+.B \-\-whichpages WHICHPAGES
+which pages (e.g. "1\-5" or "1,3\-") to include in cropped PDF (default: all)
+.TP
+.B \-\-initialpage INITIALPAGE
+which page to open initially (default: 1)
+.TP
+.B \-\-autotrim
+create a selection for the entire initial page minus blank margins
+.TP
+.B \-\-autotrim\-padding AUTOTRIM_PADDING
+how much padding to include when auto trimming (default: previous value)
+.TP
+.B \-\-go
+output PDF without opening the krop GUI (using the choices from \-\-autotrim, \-\-rotate and \-\-whichpages); if used in a script without X server access, you can run krop using xvfb\-run
+.TP
+.B \-\-selections {all,evenodd,individual}
+to which pages should selections apply
+.TP
+.B \-\-no\-kde
+do not use KDE libraries (default: use if available)
+.TP
+.B \-\-no\-qt5
+do not use PyQt5 instead of PyQt4 (default: use PyQt5 if available)
+.TP
+.B \-\-no\-PyPDF2
+do not use PyPDF2 instead of pyPdf (default: use PyPDF2 if available)

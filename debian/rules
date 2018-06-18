@@ -3,8 +3,8 @@ export DH_VERBOSE = 1
 export PYBUILD_NAME = krop
 
 %:
-	dh $@ --with python2 --buildsystem=pybuild
+	dh $@ --with python3 --buildsystem=pybuild
 
 override_dh_auto_install:
-	python setup.py install --root=debian/krop --install-layout=deb --install-lib=/usr/share/krop --install-scripts=/usr/share/krop
+	python3 setup.py install --root=debian/krop --install-layout=deb --install-lib=/usr/share/krop --install-scripts=/usr/share/krop
 	mv debian/krop/usr/share/krop/krop/krop debian/krop/usr/share/krop/krop.py

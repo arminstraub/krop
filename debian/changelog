@@ -1,3 +1,9 @@
+krop (0.5.1-1) unstable; urgency=medium
+
+  * New pre-release of krop. (Version 0.5.1 will be released at a later time.)
+
+ -- Armin Straub <mail@arminstraub.com>  Mon, 18 Jun 2018 14:07:37 -0500
+
 krop (0.5.0-1) unstable; urgency=medium
 
   * New release of krop.
