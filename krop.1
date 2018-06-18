@@ -1,0 +1,28 @@
+.TH krop 1 "October  6 2017"
+.SH NAME
+krop \- tool to crop PDF files
+.SH SYNOPSIS
+.B krop
+.RI [ options ] " files" ...
+.br
+.SH DESCRIPTION
+This manual page documents briefly the
+.B krop
+command.
+.PP
+\fBkrop\fP is a simple graphical tool to crop the pages of PDF files. It is written
+in Python and relies on PyQT, python-poppler-qt4 and pyPDF for its functionality.
+A unique feature of krop is its ability to automatically split pages into subpages
+to fit the limited screen size of devices such as eReaders. This is particularly
+useful, if your eReader does not support convenient scrolling
+.SH OPTIONS
+These programs follow the usual GNU command line syntax, with long
+options starting with two dashes (`-').
+A summary of options is included below.
+For a complete description, see the Info files.
+.TP
+.B \-h, \-\-help
+Show summary of options.
+.TP
+.B \-v, \-\-version
+Show version of program.
