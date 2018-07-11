@@ -2,7 +2,6 @@
 *Make yor PDF files fit in every e-book reader*
 
 
-
 Krop is a simple graphical tool to crop the pages of PDF files and can automatically split pages to fit the screen of e-book readers.
 
 ![Screenshot](http://arminstraub.com/images/krop/screenshot-nook.png)
@@ -16,7 +15,6 @@ cd krop-0.5.0
 python -m krop
 ```
 ¹ *Requires: **PyQT**, **python-poppler-qt5** and **PyPDF2** (Also works with python-poppler-qt4 and pyPdf)*
-
 
 
 
@@ -38,7 +36,6 @@ sudo gdebi krop_0.5.0-1_all.deb
 sudo apt-get install python-poppler-qt5 python-pypdf2
 sudo dpkg -i krop_0.5.0-1_all.deb
 ```
-
 
 
 ### Fedora
