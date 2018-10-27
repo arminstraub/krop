@@ -25,11 +25,6 @@ with open('ChangeLog') as f:
 with open('krop/version.py', 'w') as f:
     f.write("__version__ = '%s'\n" % (version,))
 
-# For reading long_description from README file (stolen from setup.py documentation)
-import os
-def read(fname):
-    return open(os.path.join(os.path.dirname(__file__), fname)).read()
-
 
 setup(
         name = 'krop',
@@ -38,7 +33,7 @@ setup(
         author_email = 'mail@arminstraub.com',
         url = 'http://arminstraub.com/software/krop',
         description = 'A tool to crop PDF files',
-        long_description = read('README'),
+        long_description = 'krop is a simple graphical tool to crop the pages of PDF files. It is written in Python and relies on PyQT, python-poppler-qt5 and PyPDF2 for its functionality. A unique feature of krop is its ability to automatically split pages into subpages to fit the limited screen size of devices such as eReaders. This is particularly useful, if your eReader does not support convenient scrolling.',
         keywords = 'pdf crop ereader',
         packages = ['krop'],
         scripts = ['bin/krop'],

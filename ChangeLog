@@ -1,6 +1,10 @@
-krop (0.5.1)  2018-06-18 -- Armin Straub
+krop (0.5.1)  2018-10-27 -- Armin Straub
 
-  * Add a manpage.
+  * Replace and extend the README file with a MarkDown version (thanks to
+  Eduardo Montenegro for doing this).
+  + Add a manpage.
+  * Fix a Qt5 related bug when selecting filename for saving (thanks to
+  Lin-Buo-Ren for reporting this).
 
 
 krop (0.5.0)  2018-02-11 -- Armin Straub
