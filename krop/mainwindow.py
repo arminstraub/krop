@@ -259,7 +259,11 @@ class MainWindow(QKMainWindow):
         fileName = QFileDialog.getSaveFileName(self,
                 self.tr("Save cropped PDF to ..."), "", self.tr("PDF Files (*.pdf)"))
                 # None, QFileDialog.DontConfirmOverwrite)
-        self.ui.editFile.setText(fileName)
+        try:
+            self.ui.editFile.setText(fileName)
+        except TypeError:
+            # new versions of Qt return a tuple (fileName, selectedFilter)
+            self.ui.editFile.setText(fileName[0])
 
     def showWarning(self, title, text):
         # if krop is called with parameter --go, then the main window is never
