@@ -37,7 +37,7 @@ sudo snap install krop --channel
 
 ### Debian, Ubuntu and derivatives
 
-Download the [debian package](http://arminstraub.com/downloads/krop/krop-0.5.1-1_all.deb) and install it:
+Download the [debian package](http://arminstraub.com/downloads/krop/krop_0.5.1-1_all.deb) and install it:
 
 ```
 sudo gdebi krop_0.5.1-1_all.deb
