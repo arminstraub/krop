@@ -2,16 +2,17 @@ import sys
 
 PYQT5 = False
 try:
-    import sip
     # use PyQt5 unless not available or specified otherwise
     if '--no-qt5' not in sys.argv:
         try:
-            import PyQt5
+            from PyQt5 import QtCore
+            import sip
             PYQT5 = True
         except ImportError:
             pass
     if not PYQT5:
-        import PyQt4
+        from PyQt4 import QtCore
+        import sip
 except ImportError:
     _msg = "Please install PyQt4 or PyQt5 first."
     raise RuntimeError(_msg)
