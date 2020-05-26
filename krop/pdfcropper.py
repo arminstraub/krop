@@ -33,6 +33,8 @@ if not usepypdf2:
             "\n\t(or, if using python3) sudo apt-get install python3-pypdf2"
         raise RuntimeError(_msg)
 
+class PdfEncryptedError(Exception):
+    pass
 
 class AbstractPdfFile:
     """Abstract class for loading a PDF document used in a corresponding
@@ -64,6 +66,12 @@ class PyPdfFile(AbstractPdfFile):
             self.reader = PdfFileReader(stream, strict=False)
         else:
             self.reader = PdfFileReader(stream)
+        if self.reader.isEncrypted:
+            try:
+                if not self.reader.decrypt(''):
+                    raise PdfEncryptedError
+            except:
+                raise PdfEncryptedError
     def getPage(self, nr):
         page = self.reader.getPage(nr-1)
 

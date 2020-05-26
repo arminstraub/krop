@@ -37,7 +37,7 @@ else:
 
 from krop.viewerselections import ViewerSelections, ViewerSelectionItem
 from krop.vieweritem import ViewerItem
-from krop.pdfcropper import PdfFile, PdfCropper, optimizePdfGhostscript
+from krop.pdfcropper import PdfFile, PdfCropper, PdfEncryptedError, optimizePdfGhostscript
 
 
 class DeviceType:
@@ -325,6 +325,13 @@ class MainWindow(QKMainWindow):
             else:
                 cropper.writeToFile(outputFileName)
             QApplication.restoreOverrideCursor()
+        except PdfEncryptedError as err:
+            QApplication.restoreOverrideCursor()
+            self.showWarning(self.tr("PDF is encrypted"),
+                    self.tr("This PDF needs to be decrypted before cropping. "
+                        "You could try to do that using qpdf:"
+                        "\nqpdf --password='hello' --decrypt encrypted.pdf decrypted.pdf"))
+            raise err
         except IOError as err:
             QApplication.restoreOverrideCursor()
             self.showWarning(self.tr("Could not write cropped PDF"),
