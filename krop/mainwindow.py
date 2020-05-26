@@ -210,25 +210,34 @@ class MainWindow(QKMainWindow):
 
     def readSettings(self):
         settings = QSettings()
+        geometry = settings.value("window/geometry", "")
+        if geometry:
+            self.restoreGeometry(geometry)
+        self.ui.actionFitInView.setChecked(settings.value("window/fitinview", "") == "true")
+
         self.ui.editPadding.setText(
                 settings.value("trim/padding", "2"))
         self.ui.editAllowedChanges.setText(
                 settings.value("trim/allowedchanges", "0"))
         self.ui.editSensitivity.setText(
                 settings.value("trim/sensitivity", "5"))
-        self.ui.checkGhostscript.setChecked(settings.value("optimize", "gs") == "gs")
+        self.ui.checkGhostscript.setChecked(settings.value("pdf/optimize", "gs") == "gs")
 
         self.devicetypes.loadTypes(settings)
 
     def writeSettings(self):
         settings = QSettings()
+        settings.setValue("window/geometry", self.saveGeometry())
+        settings.setValue("window/fitinview", "true" if
+                self.ui.actionFitInView.isChecked() else "false")
+
         settings.setValue("trim/padding",
                 self.ui.editPadding.text())
         settings.setValue("trim/allowedchanges",
                 self.ui.editAllowedChanges.text())
         settings.setValue("trim/sensitivity",
                 self.ui.editSensitivity.text())
-        settings.setValue("optimize", "gs" if
+        settings.setValue("pdf/optimize", "gs" if
                 self.ui.checkGhostscript.isChecked() else "")
 
         self.devicetypes.saveTypes(settings)

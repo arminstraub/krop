@@ -109,6 +109,7 @@ def main():
         QTimer.singleShot(0, window.close)
     else:
         window.show()
+        window.slotFitInView(window.ui.actionFitInView.isChecked())
 
     # using exec_ because exec is a reserved keyword before python 3
     sys.exit(app.exec_())
