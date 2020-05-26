@@ -15,7 +15,13 @@ the Free Software Foundation; either version 3 of the License, or
 
 import sys
 from os.path import exists, splitext
-from distutils.spawn import find_executable
+
+try:
+    from shutil import which
+except:
+    # shutil is not available in python2; instead we use the following:
+    from distutils.spawn import find_executable as which
+
 try:
     str_unicode = unicode
 except:
@@ -187,8 +193,7 @@ class MainWindow(QKMainWindow):
         self.ui.comboDevice.addItem("Custom")
 
         # disable Ghostscript option if gs is not available
-        # once support for Python2 is dropped, we can simply call shutil.which('gs')
-        if not find_executable('gs'):
+        if not which('gs'):
             self.ui.checkGhostscript.setChecked(False)
             self.ui.checkGhostscript.setEnabled(False)
 
