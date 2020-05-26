@@ -30,6 +30,7 @@ def main():
     parser.add_argument('-o', '--output', help='where to save the cropped PDF')
     parser.add_argument('--rotate', type=int, choices=[0,90,180,270], help='how much to rotate the cropped pdf clockwise (default: 0)')
     parser.add_argument('--whichpages', help='which pages (e.g. "1-5" or "1,3-") to include in cropped PDF (default: all)')
+    parser.add_argument('--optimize', choices=['gs', 'no'], help='whether to optimize the final PDF using ghostscript (default: as previously set)')
     parser.add_argument('--initialpage', help='which page to open initially (default: 1)')
     parser.add_argument('--autotrim', action='store_true', help='create a selection for the entire initial page minus blank margins')
     parser.add_argument('--autotrim-padding', help='how much padding to include when auto trimming (default: previous value)')
@@ -79,6 +80,8 @@ def main():
         window.ui.editWhichPages.setText(args.whichpages)
     if args.rotate is not None:
         window.ui.comboRotation.setCurrentIndex({0:0,90:2,180:3,270:1}[args.rotate])
+    if args.optimize is not None:
+        window.ui.checkGhostscript.setChecked(args.optimize == "gs")
     if args.selections is not None:
         if args.selections == 'all':
             window.ui.radioSelAll.setChecked(True)

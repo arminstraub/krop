@@ -3,6 +3,8 @@ krop (0.5.2)  2020-??-?? -- Armin Straub
   * Don't fail on PDFs that are encrypted with an empty password.
   * Fix compatibility with PyQt5 >=5.11 and PyQt4 >= 4.12.2 (thanks to Heiko
   Becker for fixing this).
+  + Added the command line option --optimize (thanks to Ondrej Tichacek for
+  suggesting this feature).
 
 
 krop (0.5.1)  2018-10-27 -- Armin Straub
