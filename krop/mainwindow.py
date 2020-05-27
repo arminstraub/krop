@@ -3,7 +3,7 @@
 """
 The main window of krop
 
-Copyright (C) 2010-2018 Armin Straub, http://arminstraub.com
+Copyright (C) 2010-2020 Armin Straub, http://arminstraub.com
 """
 
 """
@@ -517,6 +517,17 @@ class MainWindow(QKMainWindow):
             self.trimMarginsSelection(sel)
         self.pdfScene.update()
 
+    def createSelectionGrid(self, cols=1, rows=1):
+        for j in range(rows):
+            for i in range(cols):
+                sel = ViewerSelectionItem(self.viewer)
+                r = sel.boundingRect()
+                w = r.width()/cols
+                h = r.height()/rows
+                p0 = QPointF(r.left()+i*w, r.top()+j*h)
+                sel.setBoundingRect(p0, p0 + QPointF(w, h))
+        self.pdfScene.update()
+
     def slotTrimMargins(self):
         if self.selectedRect is not None:
             self.trimMarginsSelection(self.selectedRect)
@@ -526,6 +537,8 @@ class MainWindow(QKMainWindow):
         # calculate values for trimming
         img = self.viewer.getImage(self.viewer.currentPageIndex)
         r = sel.mapRectToImage(sel.rect).toRect()
+        # toRect rounds values, so we need to make sure that we are within the image
+        r = r.intersected(img.rect())
         rt = QRectF(self.doTrimMargins(img, QRect(r)))
         # adjust for padding
         dtop, dright, dbottom, dleft = self.getPadding()

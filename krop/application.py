@@ -3,7 +3,12 @@
 """
 krop: A tool to crop PDF files
 
-Copyright (C) 2010-2018 Armin Straub, http://arminstraub.com
+You can use command line arguments in addition to (or, to a degree, instead of) the graphical interface.
+
+For instance, to automatically undo 4 pages print onto a single page:
+    krop --go --grid=2x2 file.pdf
+
+Copyright (C) 2010-2020 Armin Straub, http://arminstraub.com
 """
 
 """
@@ -21,13 +26,14 @@ from krop.config import KDE
 
 def main():
     from argparse import ArgumentParser, RawTextHelpFormatter
-    parser = ArgumentParser(description=__doc__,
+    parser = ArgumentParser(prog='krop', description=__doc__,
             formatter_class=RawTextHelpFormatter)
 
     parser.add_argument('-v', '--version', action='version', version='%(prog)s ' + __version__)
 
     parser.add_argument('file', nargs='?', help='PDF file to open')
     parser.add_argument('-o', '--output', help='where to save the cropped PDF')
+    parser.add_argument('--grid', help='if set to 2x3, for instance, creates a 2x3 grid of selections on initial page; a single value like 2 is interpreted as 2x1')
     parser.add_argument('--rotate', type=int, choices=[0,90,180,270], help='how much to rotate the cropped pdf clockwise (default: 0)')
     parser.add_argument('--whichpages', help='which pages (e.g. "1-5" or "1,3-") to include in cropped PDF (default: all)')
     parser.add_argument('--optimize', choices=['gs', 'no'], help='whether to optimize the final PDF using ghostscript (default: as previously set)')
@@ -94,6 +100,19 @@ def main():
         window.slotCurrentPageEdited(args.initialpage)
     if args.autotrim_padding is not None:
         window.ui.editPadding.setText(args.autotrim_padding)
+
+    # args.grid is specified as 2x3 for 2 cols, 3 rows
+    if args.grid:
+        try:
+            colsrows = [int(x) for x in args.grid.split('x')]
+            c = colsrows[0]
+            # if no value for rows is specified, it defaults to 1
+            r = len(colsrows) > 1 and colsrows[1] or 1
+        except:
+            sys.stderr.write("Ignoring the parameter --grid because it is not of the expected form.\n")
+        else:
+            window.createSelectionGrid(c, r)
+
     if args.autotrim:
         window.slotTrimMarginsAll()
 

@@ -6,6 +6,8 @@ krop (0.5.2)  2020-??-?? -- Armin Straub
   + Added the command line option --optimize (thanks to Ondrej Tichacek for
   suggesting this feature).
   * Remember window geometry and fit in view setting.
+  + Introduced the command line option --grid to create a grid of selections
+  on the initial page.
 
 
 krop (0.5.1)  2018-10-27 -- Armin Straub
