@@ -69,7 +69,7 @@ class DeviceTypeManager:
         return self.types[index]
 
     def addDefaults(self):
-        self.addType("Generic (don't break pages into parts)", 0, 0)
+        self.addType("No fitting", 0, 0)
         self.addType("4:3 eReader", 4, 3)
         self.addType("4:3 eReader (widescreen)", 3, 4)
         self.addType("Nook 1st Ed.", 600, 730)

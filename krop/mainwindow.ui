@@ -60,11 +60,7 @@
             <item row="1" column="0" colspan="2">
              <widget class="QLabel" name="labelFileHelp">
               <property name="text">
-               <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This is where the cropped version of your pdf will be saved; once you choose &lt;span style=&quot; font-style:italic;&quot;&gt;Krop!&lt;/span&gt; in the menu.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>&lt;p&gt;This is where the cropped PDF will be saved after you choose &lt;i&gt;Krop!&lt;/i&gt; in the menu.&lt;/p&gt;</string>
               </property>
               <property name="wordWrap">
                <bool>true</bool>
@@ -77,7 +73,7 @@ p, li { white-space: pre-wrap; }
          <item>
           <widget class="QGroupBox" name="groupRotation">
            <property name="title">
-            <string>Rotate final PDF</string>
+            <string>Extra operations on the final PDF</string>
            </property>
            <property name="flat">
             <bool>false</bool>
@@ -87,7 +83,7 @@ p, li { white-space: pre-wrap; }
              <widget class="QComboBox" name="comboRotation">
               <item>
                <property name="text">
-                <string>no rotation</string>
+                <string>don't rotate</string>
                </property>
               </item>
               <item>
@@ -107,25 +103,19 @@ p, li { white-space: pre-wrap; }
               </item>
              </widget>
             </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="groupOptimization">
-           <property name="title">
-            <string>Optimize final PDF</string>
-           </property>
-           <property name="flat">
-            <bool>false</bool>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout_9">
             <item>
              <widget class="QCheckBox" name="checkGhostscript">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="toolTip">
-               <string>&lt;p&gt;In order to use this option, Ghostscript must be installed and available as &lt;i&gt;gs&lt;/i&gt;. (Whether it actually improves file size depends on the PDF file.)&lt;/p&gt;</string>
+               <string>&lt;p&gt;In order to use this option, Ghostscript must be installed and available as &lt;i&gt;gs&lt;/i&gt;. Whether this option actually improves the file size depends on the PDF file.&lt;/p&gt;</string>
               </property>
               <property name="text">
-               <string>Use Ghostscript to reduce PDF file size</string>
+               <string>Use Ghostscript to optimize</string>
               </property>
               <property name="checked">
                <bool>true</bool>
@@ -147,15 +137,9 @@ p, li { white-space: pre-wrap; }
             <item>
              <widget class="QLabel" name="labelWhichPagesEg">
               <property name="text">
-               <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; margin: 0; }
-&lt;/style&gt;&lt;/head&gt;
-&lt;body&gt;
-&lt;p&gt;&lt;i&gt;Eg:&lt;/i&gt; 1-5 for the first 5 pages&lt;/p&gt;
-&lt;p&gt;&lt;i&gt;Eg:&lt;/i&gt; 2- for all but the first page&lt;/p&gt;
-&lt;p&gt;&lt;i&gt;Eg:&lt;/i&gt; 1,4-5,7- to omit pages 2,3,6&lt;/p&gt;
-&lt;/body&gt;&lt;/html&gt;</string>
+               <string>&lt;p&gt;&lt;i&gt;Eg:&lt;/i&gt; 1-5 for the first 5 pages
+&lt;br&gt;&lt;i&gt;Eg:&lt;/i&gt; 2- for all but the first page
+&lt;br&gt;&lt;i&gt;Eg:&lt;/i&gt; 1,4-5,7- to omit pages 2,3,6&lt;/p&gt;</string>
               </property>
               <property name="wordWrap">
                <bool>true</bool>
@@ -286,7 +270,7 @@ p, li { white-space: pre-wrap; margin: 0; }
             <item row="2" column="0" colspan="2">
              <widget class="QLabel" name="labelDeviceHelp">
               <property name="text">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Eg:&lt;/span&gt; 600:730 (ratio of width to height)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>&lt;p&gt;&lt;i&gt;Eg:&lt;/i&gt; 600:730 (ratio of width to height)&lt;/p&gt;</string>
               </property>
               <property name="wordWrap">
                <bool>true</bool>
@@ -311,7 +295,7 @@ p, li { white-space: pre-wrap; margin: 0; }
                <string>&lt;p&gt;If selected, all pages will be inspected (which can be very slow!) in order to determine the margins for auto trimming. Otherwise, only the current page is inspected.&lt;/p&gt;</string>
               </property>
               <property name="text">
-               <string>Use all pages for trimming (slow!)</string>
+               <string>Use all pages (slow!)</string>
               </property>
               <property name="checked">
                <bool>true</bool>
@@ -335,7 +319,7 @@ p, li { white-space: pre-wrap; margin: 0; }
             <item row="2" column="0" colspan="2">
              <widget class="QLabel" name="labelTrimMarginsEg">
               <property name="text">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Eg:&lt;/span&gt; 2 or 5,2 or 5,2,5,5 (interpreted as in CSS)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>&lt;p&gt;&lt;i&gt;Eg:&lt;/i&gt; 2 or 5,2 or 5,2,5,5 (interpreted as in CSS)&lt;/p&gt;</string>
               </property>
               <property name="wordWrap">
                <bool>true</bool>
@@ -421,17 +405,17 @@ p, li { white-space: pre-wrap; margin: 0; }
            </property>
            <property name="text">
             <string>&lt;h3&gt;Getting started&lt;/h3&gt;
-&lt;p&gt;Using your mouse, create one or more selections on the pdf document. These are the regions that will be included into the cropped file.
-&lt;p&gt;When you are done, click Krop! in the menu to create a cropped version of your document.
+&lt;p&gt;Using your mouse, create one or more selections on the pdf document. These are the regions that will be included into the cropped file.&lt;/p&gt;
+&lt;p&gt;When you are done, click &lt;i&gt;Krop!&lt;/i&gt; in the menu to create a cropped version of your document.&lt;/p&gt;
 &lt;h3&gt;Hints&lt;/h3&gt;
-&lt;p&gt;Right-click a selection to delete it.
-&lt;p&gt;You can choose to create individual selections for each page.
-&lt;p&gt;If you have an eReader that is not good at scrolling documents, you can have each page automatically broken into parts to optimally fit the screen of your eReader.
-&lt;p&gt;Some examples can be found at: &lt;a href='http://arminstraub.com/software/krop'&gt;arminstraub.com&lt;/a&gt;
+&lt;p&gt;Right-click a selection to delete it.&lt;/p&gt;
+&lt;p&gt;You can choose to create individual selections for each page.&lt;/p&gt;
+&lt;p&gt;You can automatically trim the margins of your selections.&lt;/p&gt;
+&lt;p&gt;Examples and more information can be found at: &lt;a href='http://arminstraub.com/software/krop'&gt;arminstraub.com&lt;/a&gt;&lt;/p&gt;
 </string>
            </property>
            <property name="textFormat">
-            <enum>Qt::RichText</enum>
+            <enum>Qt::AutoText</enum>
            </property>
            <property name="wordWrap">
             <bool>true</bool>
@@ -463,13 +447,12 @@ p, li { white-space: pre-wrap; margin: 0; }
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Copyright (C) 2010-2018 Armin Straub
-&lt;br&gt;&lt;a href='http://arminstraub.com'&gt;http://arminstraub.com&lt;/a&gt;
-&lt;p&gt;This program is free software and available to you in the hope that it will be useful; but without any warranty. It is distributed under the terms of the GNU General Public License (GPLv3+). See the accompanying files for more information.
-</string>
+            <string>&lt;p&gt;Copyright (C) 2010-2020 Armin Straub
+&lt;br&gt;&lt;a href='http://arminstraub.com'&gt;http://arminstraub.com&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;This program is free software and available to you in the hope that it will be useful; but without any warranty. It is distributed under the terms of the GNU General Public License (GPLv3+). See the accompanying files for more information.&lt;/p&gt;</string>
            </property>
            <property name="textFormat">
-            <enum>Qt::RichText</enum>
+            <enum>Qt::AutoText</enum>
            </property>
            <property name="wordWrap">
             <bool>true</bool>

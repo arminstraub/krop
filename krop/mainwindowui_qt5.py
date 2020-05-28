@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Thu May 28 15:30:38 2020
+# Created: Thu May 28 16:12:11 2020
 #      by: PyQt5 UI code generator 5.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -61,17 +61,16 @@ class Ui_MainWindow(object):
         self.comboRotation.addItem("")
         self.comboRotation.addItem("")
         self.verticalLayout_8.addWidget(self.comboRotation)
-        self.verticalLayout_4.addWidget(self.groupRotation)
-        self.groupOptimization = QtWidgets.QGroupBox(self.tabBasic)
-        self.groupOptimization.setFlat(False)
-        self.groupOptimization.setObjectName("groupOptimization")
-        self.verticalLayout_9 = QtWidgets.QVBoxLayout(self.groupOptimization)
-        self.verticalLayout_9.setObjectName("verticalLayout_9")
-        self.checkGhostscript = QtWidgets.QCheckBox(self.groupOptimization)
+        self.checkGhostscript = QtWidgets.QCheckBox(self.groupRotation)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.checkGhostscript.sizePolicy().hasHeightForWidth())
+        self.checkGhostscript.setSizePolicy(sizePolicy)
         self.checkGhostscript.setChecked(True)
         self.checkGhostscript.setObjectName("checkGhostscript")
-        self.verticalLayout_9.addWidget(self.checkGhostscript)
-        self.verticalLayout_4.addWidget(self.groupOptimization)
+        self.verticalLayout_8.addWidget(self.checkGhostscript)
+        self.verticalLayout_4.addWidget(self.groupRotation)
         self.groupWhichPages = QtWidgets.QGroupBox(self.tabBasic)
         self.groupWhichPages.setObjectName("groupWhichPages")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.groupWhichPages)
@@ -189,7 +188,7 @@ class Ui_MainWindow(object):
         self.labelHelp.setSizePolicy(sizePolicy)
         self.labelHelp.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.labelHelp.setBaseSize(QtCore.QSize(0, 0))
-        self.labelHelp.setTextFormat(QtCore.Qt.RichText)
+        self.labelHelp.setTextFormat(QtCore.Qt.AutoText)
         self.labelHelp.setWordWrap(True)
         self.labelHelp.setOpenExternalLinks(True)
         self.labelHelp.setObjectName("labelHelp")
@@ -202,7 +201,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.labelHelpLicense.sizePolicy().hasHeightForWidth())
         self.labelHelpLicense.setSizePolicy(sizePolicy)
-        self.labelHelpLicense.setTextFormat(QtCore.Qt.RichText)
+        self.labelHelpLicense.setTextFormat(QtCore.Qt.AutoText)
         self.labelHelpLicense.setWordWrap(True)
         self.labelHelpLicense.setOpenExternalLinks(True)
         self.labelHelpLicense.setObjectName("labelHelpLicense")
@@ -364,29 +363,18 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "krop: A tool to crop your PDFs"))
         self.groupBox.setTitle(_translate("MainWindow", "Save to"))
-        self.labelFileHelp.setText(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'Ubuntu\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This is where the cropped version of your pdf will be saved; once you choose <span style=\" font-style:italic;\">Krop!</span> in the menu.</p></body></html>"))
-        self.groupRotation.setTitle(_translate("MainWindow", "Rotate final PDF"))
-        self.comboRotation.setItemText(0, _translate("MainWindow", "no rotation"))
+        self.labelFileHelp.setText(_translate("MainWindow", "<p>This is where the cropped PDF will be saved after you choose <i>Krop!</i> in the menu.</p>"))
+        self.groupRotation.setTitle(_translate("MainWindow", "Extra operations on the final PDF"))
+        self.comboRotation.setItemText(0, _translate("MainWindow", "don\'t rotate"))
         self.comboRotation.setItemText(1, _translate("MainWindow", "rotate left (90° counterclockwise)"))
         self.comboRotation.setItemText(2, _translate("MainWindow", "rotate right (90° clockwise)"))
         self.comboRotation.setItemText(3, _translate("MainWindow", "upside down"))
-        self.groupOptimization.setTitle(_translate("MainWindow", "Optimize final PDF"))
-        self.checkGhostscript.setToolTip(_translate("MainWindow", "<p>In order to use this option, Ghostscript must be installed and available as <i>gs</i>. (Whether it actually improves file size depends on the PDF file.)</p>"))
-        self.checkGhostscript.setText(_translate("MainWindow", "Use Ghostscript to reduce PDF file size"))
+        self.checkGhostscript.setToolTip(_translate("MainWindow", "<p>In order to use this option, Ghostscript must be installed and available as <i>gs</i>. Whether this option actually improves the file size depends on the PDF file.</p>"))
+        self.checkGhostscript.setText(_translate("MainWindow", "Use Ghostscript to optimize"))
         self.groupWhichPages.setTitle(_translate("MainWindow", "Which pages to include"))
-        self.labelWhichPagesEg.setText(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; margin: 0; }\n"
-"</style></head>\n"
-"<body>\n"
-"<p><i>Eg:</i> 1-5 for the first 5 pages</p>\n"
-"<p><i>Eg:</i> 2- for all but the first page</p>\n"
-"<p><i>Eg:</i> 1,4-5,7- to omit pages 2,3,6</p>\n"
-"</body></html>"))
+        self.labelWhichPagesEg.setText(_translate("MainWindow", "<p><i>Eg:</i> 1-5 for the first 5 pages\n"
+"<br><i>Eg:</i> 2- for all but the first page\n"
+"<br><i>Eg:</i> 1,4-5,7- to omit pages 2,3,6</p>"))
         self.checkIncludePagesWithoutSelections.setToolTip(_translate("MainWindow", "<p>If checked, pages without selections will be included in the output unchanged. Otherwise, such pages will be removed from the output.</p>"))
         self.checkIncludePagesWithoutSelections.setText(_translate("MainWindow", "Include pages without selections"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabBasic), _translate("MainWindow", "Basic"))
@@ -400,29 +388,28 @@ class Ui_MainWindow(object):
         self.editSelExceptions.setToolTip(_translate("MainWindow", "<p>List pages which require individual selections.</p>"))
         self.groupDevice.setTitle(_translate("MainWindow", "Fit screen of device"))
         self.labelAspectRatio.setText(_translate("MainWindow", "Aspect ratio:"))
-        self.labelDeviceHelp.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-style:italic;\">Eg:</span> 600:730 (ratio of width to height)</p></body></html>"))
+        self.labelDeviceHelp.setText(_translate("MainWindow", "<p><i>Eg:</i> 600:730 (ratio of width to height)</p>"))
         self.groupTrimMargins.setToolTip(_translate("MainWindow", "<p>Right-click a selection to automatically trim it.</p>"))
         self.groupTrimMargins.setTitle(_translate("MainWindow", "Settings for trimming margins"))
         self.checkTrimUseAllPages.setToolTip(_translate("MainWindow", "<p>If selected, all pages will be inspected (which can be very slow!) in order to determine the margins for auto trimming. Otherwise, only the current page is inspected.</p>"))
-        self.checkTrimUseAllPages.setText(_translate("MainWindow", "Use all pages for trimming (slow!)"))
+        self.checkTrimUseAllPages.setText(_translate("MainWindow", "Use all pages (slow!)"))
         self.labelPadding.setText(_translate("MainWindow", "Padding:"))
-        self.labelTrimMarginsEg.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-style:italic;\">Eg:</span> 2 or 5,2 or 5,2,5,5 (interpreted as in CSS)</p></body></html>"))
+        self.labelTrimMarginsEg.setText(_translate("MainWindow", "<p><i>Eg:</i> 2 or 5,2 or 5,2,5,5 (interpreted as in CSS)</p>"))
         self.labelAllowedChanges.setText(_translate("MainWindow", "Allowed changes:"))
         self.labelSensitivity.setText(_translate("MainWindow", "Color sensitivity:"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabAdvanced), _translate("MainWindow", "Advanced"))
         self.labelHelp.setText(_translate("MainWindow", "<h3>Getting started</h3>\n"
-"<p>Using your mouse, create one or more selections on the pdf document. These are the regions that will be included into the cropped file.\n"
-"<p>When you are done, click Krop! in the menu to create a cropped version of your document.\n"
+"<p>Using your mouse, create one or more selections on the pdf document. These are the regions that will be included into the cropped file.</p>\n"
+"<p>When you are done, click <i>Krop!</i> in the menu to create a cropped version of your document.</p>\n"
 "<h3>Hints</h3>\n"
-"<p>Right-click a selection to delete it.\n"
-"<p>You can choose to create individual selections for each page.\n"
-"<p>If you have an eReader that is not good at scrolling documents, you can have each page automatically broken into parts to optimally fit the screen of your eReader.\n"
-"<p>Some examples can be found at: <a href=\'http://arminstraub.com/software/krop\'>arminstraub.com</a>\n"
+"<p>Right-click a selection to delete it.</p>\n"
+"<p>You can choose to create individual selections for each page.</p>\n"
+"<p>You can automatically trim the margins of your selections.</p>\n"
+"<p>Examples and more information can be found at: <a href=\'http://arminstraub.com/software/krop\'>arminstraub.com</a></p>\n"
 ""))
-        self.labelHelpLicense.setText(_translate("MainWindow", "Copyright (C) 2010-2018 Armin Straub\n"
-"<br><a href=\'http://arminstraub.com\'>http://arminstraub.com</a>\n"
-"<p>This program is free software and available to you in the hope that it will be useful; but without any warranty. It is distributed under the terms of the GNU General Public License (GPLv3+). See the accompanying files for more information.\n"
-""))
+        self.labelHelpLicense.setText(_translate("MainWindow", "<p>Copyright (C) 2010-2020 Armin Straub\n"
+"<br><a href=\'http://arminstraub.com\'>http://arminstraub.com</a></p>\n"
+"<p>This program is free software and available to you in the hope that it will be useful; but without any warranty. It is distributed under the terms of the GNU General Public License (GPLv3+). See the accompanying files for more information.</p>"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabHelp), _translate("MainWindow", "Help"))
         self.label.setText(_translate("MainWindow", "of"))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
