@@ -44,6 +44,7 @@ else:
 from krop.viewerselections import ViewerSelections, ViewerSelectionItem
 from krop.vieweritem import ViewerItem
 from krop.pdfcropper import PdfFile, PdfCropper, PdfEncryptedError, optimizePdfGhostscript
+from krop.autotrim import autoTrimMargins
 
 
 class DeviceType:
@@ -482,6 +483,17 @@ class MainWindow(QKMainWindow):
             self.selectedRect = None
             self.pdfScene.update()
 
+    def createSelectionGrid(self, cols=1, rows=1):
+        for j in range(rows):
+            for i in range(cols):
+                sel = ViewerSelectionItem(self.viewer)
+                r = sel.boundingRect()
+                w = r.width()/cols
+                h = r.height()/rows
+                p0 = QPointF(r.left()+i*w, r.top()+j*h)
+                sel.setBoundingRect(p0, p0 + QPointF(w, h))
+        self.pdfScene.update()
+
     def getPadding(self):
         """Return [top, right, bottom, left] tuple specifying padding for trimming margins."""
         try:
@@ -525,17 +537,6 @@ class MainWindow(QKMainWindow):
             self.trimMarginsSelection(sel)
         self.pdfScene.update()
 
-    def createSelectionGrid(self, cols=1, rows=1):
-        for j in range(rows):
-            for i in range(cols):
-                sel = ViewerSelectionItem(self.viewer)
-                r = sel.boundingRect()
-                w = r.width()/cols
-                h = r.height()/rows
-                p0 = QPointF(r.left()+i*w, r.top()+j*h)
-                sel.setBoundingRect(p0, p0 + QPointF(w, h))
-        self.pdfScene.update()
-
     def slotTrimMargins(self):
         if self.selectedRect is not None:
             self.trimMarginsSelection(self.selectedRect)
@@ -557,35 +558,9 @@ class MainWindow(QKMainWindow):
         sel.setBoundingRect(rt.topLeft(), rt.bottomRight())
 
     def doTrimMargins(self, img, r):
-        def pixAt(x, y):
-            return qGray(img.pixel(x, y))
-        def isFilled(L):
-            changes = 0
-            y = L[0]
-            for x in L:
-                if abs(x-y) > sensitivity:
-                    changes += 1
-                y = x
-            return changes > allowedchanges
         sensitivity = float(self.ui.editSensitivity.text())
         allowedchanges = float(self.ui.editAllowedChanges.text())
-        while r.height() > 10:
-            L = [ pixAt(x, r.top()) for x in range(r.left(), r.right()) ]
-            if isFilled(L): break
-            r.setTop(r.top()+1)
-        while r.height() > 10:
-            L = [ pixAt(x, r.bottom()) for x in range(r.left(), r.right()) ]
-            if isFilled(L): break
-            r.setBottom(r.bottom()-1)
-        while r.width() > 10:
-            L = [ pixAt(r.left(), y) for y in range(r.top(), r.bottom()) ]
-            if isFilled(L): break
-            r.setLeft(r.left()+1)
-        while r.width() > 10:
-            L = [ pixAt(r.right(), y) for y in range(r.top(), r.bottom()) ]
-            if isFilled(L): break
-            r.setRight(r.right()-1)
-        return r
+        return autoTrimMargins(img, r, sensitivity, allowedchanges)
 
     def resizeEvent(self, event):
         self.slotFitInView(self.ui.actionFitInView.isChecked())
