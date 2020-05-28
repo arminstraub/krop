@@ -39,16 +39,23 @@
         </attribute>
         <layout class="QVBoxLayout" name="verticalLayout_4">
          <item>
-          <widget class="QGroupBox" name="groupBox">
+          <widget class="QGroupBox" name="groupSaveTo">
            <property name="title">
-            <string>Save to</string>
+            <string>Save cropped PDF to</string>
            </property>
            <layout class="QGridLayout" name="gridLayout">
             <item row="0" column="0">
-             <widget class="QLineEdit" name="editFile"/>
+             <widget class="QLineEdit" name="editFile">
+              <property name="toolTip">
+               <string>&lt;p&gt;This is where the cropped PDF will be saved after you choose &lt;i&gt;Krop!&lt;/i&gt; in the menu.&lt;/p&gt;</string>
+              </property>
+             </widget>
             </item>
             <item row="0" column="1">
              <widget class="QToolButton" name="buttonFileSelect">
+              <property name="toolTip">
+               <string>&lt;p&gt;This is where the cropped PDF will be saved after you choose &lt;i&gt;Krop!&lt;/i&gt; in the menu.&lt;/p&gt;</string>
+              </property>
               <property name="text">
                <string/>
               </property>
@@ -57,21 +64,11 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="0" colspan="2">
-             <widget class="QLabel" name="labelFileHelp">
-              <property name="text">
-               <string>&lt;p&gt;This is where the cropped PDF will be saved after you choose &lt;i&gt;Krop!&lt;/i&gt; in the menu.&lt;/p&gt;</string>
-              </property>
-              <property name="wordWrap">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
            </layout>
           </widget>
          </item>
          <item>
-          <widget class="QGroupBox" name="groupRotation">
+          <widget class="QGroupBox" name="groupPDFOperations">
            <property name="title">
             <string>Extra operations on the final PDF</string>
            </property>
@@ -163,26 +160,6 @@
           </widget>
          </item>
          <item>
-          <spacer name="verticalSpacer_3">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>484</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="tabAdvanced">
-        <attribute name="title">
-         <string>Advanced</string>
-        </attribute>
-        <layout class="QVBoxLayout" name="verticalLayout_6">
-         <item>
           <widget class="QGroupBox" name="groupSelectionMode">
            <property name="toolTip">
             <string>&lt;p&gt;Should all pages be cropped based on the same selections? Maybe you want to treat even and odd pages differently? For full control you can crop each page using individual selections.&lt;/p&gt;</string>
@@ -238,6 +215,26 @@
            </layout>
           </widget>
          </item>
+         <item>
+          <spacer name="verticalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>484</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tabAdvanced">
+        <attribute name="title">
+         <string>Advanced</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_6">
          <item>
           <widget class="QGroupBox" name="groupDevice">
            <property name="title">
