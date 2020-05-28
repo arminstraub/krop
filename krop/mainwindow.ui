@@ -162,6 +162,19 @@ p, li { white-space: pre-wrap; margin: 0; }
               </property>
              </widget>
             </item>
+            <item>
+             <widget class="QCheckBox" name="checkIncludePagesWithoutSelections">
+              <property name="toolTip">
+               <string>&lt;p&gt;If checked, pages without selections will be included in the output unchanged. Otherwise, such pages will be removed from the output.&lt;/p&gt;</string>
+              </property>
+              <property name="text">
+               <string>Include pages without selections</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
            </layout>
           </widget>
          </item>

@@ -3,7 +3,7 @@
 """
 Cropping functionality for krop.
 
-Copyright (C) 2010-2018 Armin Straub, http://arminstraub.com
+Copyright (C) 2010-2020 Armin Straub, http://arminstraub.com
 """
 
 """
@@ -88,10 +88,10 @@ class PyPdfCropper(AbstractPdfCropper):
         sys.setrecursionlimit(10000)
         self.output.write(stream)
         sys.setrecursionlimit(old_reclimit)
-    def addPageCropped(self, pdffile, pagenumber, croplist, rotate=0):
-        if not croplist:
-            return
+    def addPageCropped(self, pdffile, pagenumber, croplist, alwaysinclude, rotate=0):
         page = pdffile.reader.getPage(pagenumber)
+        if not croplist and alwaysinclude:
+            self.output.addPage(page)
         for c in croplist:
             newpage = copy.copy(page)
             self.cropPage(newpage, c, rotate)

@@ -76,22 +76,22 @@ class DeviceTypeManager:
         self.addType("Nook 1st Ed. (widescreen)", 730, 600)
   
     def saveTypes(self, settings):
-        settings.beginWriteArray("devicetypes")
+        settings.beginWriteArray("DeviceTypes")
         for i in range(len(self.types)):
             t = self.types[i]
             settings.setArrayIndex(i)
-            settings.setValue("name", t.name)
-            settings.setValue("width", t.width)
-            settings.setValue("height", t.height)
+            settings.setValue("Name", t.name)
+            settings.setValue("Width", t.width)
+            settings.setValue("Height", t.height)
         settings.endArray()
   
     def loadTypes(self, settings):
-        count = settings.beginReadArray("devicetypes")
+        count = settings.beginReadArray("DeviceTypes")
         for i in range(count):
             settings.setArrayIndex(i)
-            name = settings.value("name")
-            width = int(settings.value("width"))
-            height = int(settings.value("height"))
+            name = settings.value("Name")
+            width = int(settings.value("Width"))
+            height = int(settings.value("Height"))
             self.addType(name, width, height)
         settings.endArray()
         if count==0:
@@ -212,44 +212,48 @@ class MainWindow(QKMainWindow):
 
     def readSettings(self):
         settings = QSettings()
-        geometry = settings.value("window/geometry", "")
+        geometry = settings.value("Window/Geometry", "")
         if geometry:
             self.restoreGeometry(geometry)
-        splitter = settings.value("window/splitter", "")
+        splitter = settings.value("Window/Splitter", "")
         if splitter:
             self.ui.splitter.restoreState(splitter)
-        self.ui.actionFitInView.setChecked(settings.value("window/fitinview", "") == "true")
+        self.ui.actionFitInView.setChecked(settings.value("Window/FitInView", "") == "true")
 
-        self.ui.checkTrimUseAllPages.setChecked(settings.value("trim/useallpages", "") == "true")
+        self.ui.checkTrimUseAllPages.setChecked(settings.value("Trim/UseAllPages", "") == "true")
         self.ui.editPadding.setText(
-                settings.value("trim/padding", "2"))
+                settings.value("Trim/Padding", "2"))
         self.ui.editAllowedChanges.setText(
-                settings.value("trim/allowedchanges", "0"))
+                settings.value("Trim/AllowedChanges", "0"))
         self.ui.editSensitivity.setText(
-                settings.value("trim/sensitivity", "5"))
+                settings.value("Trim/Sensitivity", "5"))
 
-        self.ui.checkGhostscript.setChecked(settings.value("pdf/optimize", "gs") == "gs")
+        self.ui.checkGhostscript.setChecked(settings.value("PDF/Optimize", "gs") == "gs")
+        self.ui.checkIncludePagesWithoutSelections.setChecked(
+                settings.value("PDF/IncludePagesWithoutSelections", "") == "true")
 
         self.devicetypes.loadTypes(settings)
 
     def writeSettings(self):
         settings = QSettings()
-        settings.setValue("window/geometry", self.saveGeometry())
-        settings.setValue("window/splitter", self.ui.splitter.saveState())
-        settings.setValue("window/fitinview", "true" if
+        settings.setValue("Window/Geometry", self.saveGeometry())
+        settings.setValue("Window/Splitter", self.ui.splitter.saveState())
+        settings.setValue("Window/FitInView", "true" if
                 self.ui.actionFitInView.isChecked() else "false")
 
-        settings.setValue("trim/useallpages", "true" if
+        settings.setValue("Trim/UseAllPages", "true" if
                 self.ui.checkTrimUseAllPages.isChecked() else "false")
-        settings.setValue("trim/padding",
+        settings.setValue("Trim/Padding",
                 self.ui.editPadding.text())
-        settings.setValue("trim/allowedchanges",
+        settings.setValue("Trim/AllowedChanges",
                 self.ui.editAllowedChanges.text())
-        settings.setValue("trim/sensitivity",
+        settings.setValue("Trim/Sensitivity",
                 self.ui.editSensitivity.text())
 
-        settings.setValue("pdf/optimize", "gs" if
+        settings.setValue("PDF/Optimize", "gs" if
                 self.ui.checkGhostscript.isChecked() else "no")
+        settings.setValue("PDF/IncludePagesWithoutSelections", "true" if
+                self.ui.checkIncludePagesWithoutSelections.isChecked() else "false")
 
         self.devicetypes.saveTypes(settings)
 
@@ -321,7 +325,8 @@ class MainWindow(QKMainWindow):
         else:
             pages = self.str2pages(s)
 
-        # rotate
+        alwaysinclude = self.ui.checkIncludePagesWithoutSelections.isChecked()
+
         rotation = [0, 270, 90, 180][self.ui.comboRotation.currentIndex()]
 
         # Done when selecting filename.
@@ -337,7 +342,7 @@ class MainWindow(QKMainWindow):
             cropper = PdfCropper()
             for nr in pages:
                 c = self.viewer.cropValues(nr)
-                cropper.addPageCropped(pdf, nr, c, rotate=rotation)
+                cropper.addPageCropped(pdf, nr, c, alwaysinclude, rotation)
             if self.ui.checkGhostscript.isChecked():
                 import tempfile, os
                 with tempfile.NamedTemporaryFile(suffix='.pdf', delete=False) as fp:

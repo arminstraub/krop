@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Thu May 28 11:42:56 2020
+# Created: Thu May 28 15:30:38 2020
 #      by: PyQt5 UI code generator 5.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -83,6 +83,10 @@ class Ui_MainWindow(object):
         self.labelWhichPagesEg.setWordWrap(True)
         self.labelWhichPagesEg.setObjectName("labelWhichPagesEg")
         self.verticalLayout.addWidget(self.labelWhichPagesEg)
+        self.checkIncludePagesWithoutSelections = QtWidgets.QCheckBox(self.groupWhichPages)
+        self.checkIncludePagesWithoutSelections.setChecked(True)
+        self.checkIncludePagesWithoutSelections.setObjectName("checkIncludePagesWithoutSelections")
+        self.verticalLayout.addWidget(self.checkIncludePagesWithoutSelections)
         self.verticalLayout_4.addWidget(self.groupWhichPages)
         spacerItem = QtWidgets.QSpacerItem(20, 484, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_4.addItem(spacerItem)
@@ -383,6 +387,8 @@ class Ui_MainWindow(object):
 "<p><i>Eg:</i> 2- for all but the first page</p>\n"
 "<p><i>Eg:</i> 1,4-5,7- to omit pages 2,3,6</p>\n"
 "</body></html>"))
+        self.checkIncludePagesWithoutSelections.setToolTip(_translate("MainWindow", "<p>If checked, pages without selections will be included in the output unchanged. Otherwise, such pages will be removed from the output.</p>"))
+        self.checkIncludePagesWithoutSelections.setText(_translate("MainWindow", "Include pages without selections"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabBasic), _translate("MainWindow", "Basic"))
         self.groupSelectionMode.setToolTip(_translate("MainWindow", "<p>Should all pages be cropped based on the same selections? Maybe you want to treat even and odd pages differently? For full control you can crop each page using individual selections.</p>"))
         self.groupSelectionMode.setTitle(_translate("MainWindow", "Selections apply to"))
