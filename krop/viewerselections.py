@@ -3,7 +3,7 @@
 """
 User-created selections used in ViewerItem.
 
-Copyright (C) 2010-2018 Armin Straub, http://arminstraub.com
+Copyright (C) 2010-2020 Armin Straub, http://arminstraub.com
 """
 
 """
@@ -61,17 +61,6 @@ class ViewerSelections(object):
 
     selectionExceptions = property(getSelectionExceptions, setSelectionExceptions)
 
-    def selectionVisibleOnPage(self, selection, idx):
-        """Determines if this selection is visible on a given page."""
-        mode = self.selectionMode
-        selPageIndex = selection.pageIndex
-        if idx in self.selectionExceptions or selPageIndex in self.selectionExceptions or mode == ViewerSelections.individual:
-            return idx == selPageIndex
-        if mode == ViewerSelections.all:
-            return True
-        if mode == ViewerSelections.evenodd:
-            return (idx - selPageIndex) % 2 == 0
-
     @property
     def items(self):
         """Returns a list of the actual selections."""
@@ -84,10 +73,10 @@ class ViewerSelections(object):
     def updateSelectionVisibility(self):
         idx = self.viewer.currentPageIndex
         for s in self.items:
-            s.setVisible(self.selectionVisibleOnPage(s, idx))
+            s.setVisible(s.selectionVisibleOnPage(idx))
 
     def cropValues(self, idx):
-        return [ c for s in self.items if self.selectionVisibleOnPage(s, idx)
+        return [ c for s in self.items if s.selectionVisibleOnPage(idx)
                 for c in s.cropValues() ]
 
     def mousePressEvent(self, event):
@@ -152,6 +141,17 @@ class ViewerSelectionItem(QGraphicsItem):
     @property
     def aspectRatio(self):
         return self.viewer.selections.aspectRatio
+
+    def selectionVisibleOnPage(self, pageIndex):
+        """Determines if this selection is visible on a given page."""
+        mode = self.viewer.selections.selectionMode
+        exceptions = self.viewer.selections.selectionExceptions
+        if pageIndex in exceptions or self.pageIndex in exceptions or mode == ViewerSelections.individual:
+            return pageIndex == self.pageIndex
+        if mode == ViewerSelections.all:
+            return True
+        if mode == ViewerSelections.evenodd:
+            return (pageIndex - self.pageIndex) % 2 == 0
 
     def boundingRect(self):
         return self.rect

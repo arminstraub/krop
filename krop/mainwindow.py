@@ -220,12 +220,14 @@ class MainWindow(QKMainWindow):
             self.ui.splitter.restoreState(splitter)
         self.ui.actionFitInView.setChecked(settings.value("window/fitinview", "") == "true")
 
+        self.ui.checkTrimUseAllPages.setChecked(settings.value("trim/useallpages", "") == "true")
         self.ui.editPadding.setText(
                 settings.value("trim/padding", "2"))
         self.ui.editAllowedChanges.setText(
                 settings.value("trim/allowedchanges", "0"))
         self.ui.editSensitivity.setText(
                 settings.value("trim/sensitivity", "5"))
+
         self.ui.checkGhostscript.setChecked(settings.value("pdf/optimize", "gs") == "gs")
 
         self.devicetypes.loadTypes(settings)
@@ -237,14 +239,17 @@ class MainWindow(QKMainWindow):
         settings.setValue("window/fitinview", "true" if
                 self.ui.actionFitInView.isChecked() else "false")
 
+        settings.setValue("trim/useallpages", "true" if
+                self.ui.checkTrimUseAllPages.isChecked() else "false")
         settings.setValue("trim/padding",
                 self.ui.editPadding.text())
         settings.setValue("trim/allowedchanges",
                 self.ui.editAllowedChanges.text())
         settings.setValue("trim/sensitivity",
                 self.ui.editSensitivity.text())
+
         settings.setValue("pdf/optimize", "gs" if
-                self.ui.checkGhostscript.isChecked() else "")
+                self.ui.checkGhostscript.isChecked() else "no")
 
         self.devicetypes.saveTypes(settings)
 
@@ -312,7 +317,7 @@ class MainWindow(QKMainWindow):
         # which pages
         s = str(self.ui.editWhichPages.text())
         if not s:
-            pages = range(0, self.viewer.numPages())
+            pages = range(self.viewer.numPages())
         else:
             pages = self.str2pages(s)
 
@@ -543,24 +548,33 @@ class MainWindow(QKMainWindow):
             self.pdfScene.update()
 
     def trimMarginsSelection(self, sel):
-        # calculate values for trimming
-        img = self.viewer.getImage(self.viewer.currentPageIndex)
-        r = sel.mapRectToImage(sel.rect).toRect()
-        # toRect rounds values, so we need to make sure that we are within the image
-        r = r.intersected(img.rect())
-        rt = QRectF(self.doTrimMargins(img, QRect(r)))
-        # adjust for padding
-        dtop, dright, dbottom, dleft = self.getPadding()
-        rt.adjust(-dleft, -dtop, dright, dbottom)
-        rt = rt.intersected(QRectF(r)) # but don't overadjust
-        # set selection to new values
-        rt = sel.mapRectFromImage(rt)
-        sel.setBoundingRect(rt.topLeft(), rt.bottomRight())
-
-    def doTrimMargins(self, img, r):
         sensitivity = float(self.ui.editSensitivity.text())
         allowedchanges = float(self.ui.editAllowedChanges.text())
-        return autoTrimMargins(img, r, sensitivity, allowedchanges)
+
+        # if requested, use all pages for trimming; otherwise, just the current page
+        pages = [self.viewer.currentPageIndex]
+        if self.ui.checkTrimUseAllPages.isChecked():
+            pages = [i for i in range(self.viewer.numPages()) if sel.selectionVisibleOnPage(i)]
+
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        try:
+            # r is the original selection, rt is the trimmed version
+            r = sel.mapRectToImage(sel.rect)
+            rt = QRectF()
+            for idx in pages:
+                # calculate values for trimming
+                img = self.viewer.getImage(idx)
+                rt = rt.united(autoTrimMargins(img, r, sensitivity, allowedchanges))
+
+            # adjust for padding
+            dtop, dright, dbottom, dleft = self.getPadding()
+            rt.adjust(-dleft, -dtop, dright, dbottom)
+            rt = rt.intersected(r) # but don't overadjust
+            # set selection to new values
+            rt = sel.mapRectFromImage(rt)
+            sel.setBoundingRect(rt.topLeft(), rt.bottomRight())
+        finally:
+            QApplication.restoreOverrideCursor()
 
     def resizeEvent(self, event):
         self.slotFitInView(self.ui.actionFitInView.isChecked())

@@ -121,24 +121,13 @@ p, li { white-space: pre-wrap; }
            <layout class="QVBoxLayout" name="verticalLayout_9">
             <item>
              <widget class="QCheckBox" name="checkGhostscript">
+              <property name="toolTip">
+               <string>&lt;p&gt;In order to use this option, Ghostscript must be installed and available as &lt;i&gt;gs&lt;/i&gt;. (Whether it actually improves file size depends on the PDF file.)&lt;/p&gt;</string>
+              </property>
               <property name="text">
                <string>Use Ghostscript to reduce PDF file size</string>
               </property>
               <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="labelGhostscript">
-              <property name="text">
-               <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Noto Sans'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Ubuntu'; font-size:9pt;&quot;&gt;In order to use this option, Ghostscript must be installed and available as &lt;/span&gt;&lt;span style=&quot; font-family:'Ubuntu'; font-size:9pt; font-style:italic;&quot;&gt;gs&lt;/span&gt;&lt;span style=&quot; font-family:'Ubuntu'; font-size:9pt;&quot;&gt;. (Whether it actually improves file size depends on your PDF files.)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-              <property name="wordWrap">
                <bool>true</bool>
               </property>
              </widget>
@@ -198,6 +187,9 @@ p, li { white-space: pre-wrap; margin: 0; }
         <layout class="QVBoxLayout" name="verticalLayout_6">
          <item>
           <widget class="QGroupBox" name="groupSelectionMode">
+           <property name="toolTip">
+            <string>&lt;p&gt;Should all pages be cropped based on the same selections? Maybe you want to treat even and odd pages differently? For full control you can crop each page using individual selections.&lt;/p&gt;</string>
+           </property>
            <property name="title">
             <string>Selections apply to</string>
            </property>
@@ -229,30 +221,20 @@ p, li { white-space: pre-wrap; margin: 0; }
               </property>
              </widget>
             </item>
-            <item row="3" column="0" colspan="2">
-             <widget class="QLabel" name="labelSelHelp">
-              <property name="text">
-               <string>Should all pages be cropped based on the same selections? Maybe you want to treat even and odd pages differently? For full control you can crop each page using individual selections.</string>
-              </property>
-              <property name="wordWrap">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="0">
+            <item row="3" column="0">
              <widget class="QLabel" name="labelSelExceptions">
+              <property name="toolTip">
+               <string>&lt;p&gt;List pages which require individual selections.&lt;/p&gt;</string>
+              </property>
               <property name="text">
                <string>Exceptions:</string>
               </property>
              </widget>
             </item>
-            <item row="4" column="1">
-             <widget class="QLineEdit" name="editSelExceptions"/>
-            </item>
-            <item row="5" column="0" colspan="2">
-             <widget class="QLabel" name="labelSelExceptionsHelp">
-              <property name="text">
-               <string>List pages which require individual selections.</string>
+            <item row="3" column="1">
+             <widget class="QLineEdit" name="editSelExceptions">
+              <property name="toolTip">
+               <string>&lt;p&gt;List pages which require individual selections.&lt;/p&gt;</string>
               </property>
              </widget>
             </item>
@@ -303,38 +285,51 @@ p, li { white-space: pre-wrap; margin: 0; }
          </item>
          <item>
           <widget class="QGroupBox" name="groupTrimMargins">
+           <property name="toolTip">
+            <string>&lt;p&gt;Right-click a selection to automatically trim it.&lt;/p&gt;</string>
+           </property>
            <property name="title">
             <string>Settings for trimming margins</string>
            </property>
-           <layout class="QFormLayout" name="formLayout_2">
-            <property name="fieldGrowthPolicy">
-             <enum>QFormLayout::ExpandingFieldsGrow</enum>
-            </property>
-            <item row="0" column="0">
+           <layout class="QGridLayout" name="gridLayout_3">
+            <item row="0" column="0" colspan="2">
+             <widget class="QCheckBox" name="checkTrimUseAllPages">
+              <property name="toolTip">
+               <string>&lt;p&gt;If selected, all pages will be inspected (which can be very slow!) in order to determine the margins for auto trimming. Otherwise, only the current page is inspected.&lt;/p&gt;</string>
+              </property>
+              <property name="text">
+               <string>Use all pages for trimming (slow!)</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
              <widget class="QLabel" name="labelPadding">
               <property name="text">
                <string>Padding:</string>
               </property>
              </widget>
             </item>
-            <item row="0" column="1">
+            <item row="1" column="1">
              <widget class="QLineEdit" name="editPadding">
               <property name="text">
                <string/>
               </property>
              </widget>
             </item>
-            <item row="1" column="0" colspan="2">
+            <item row="2" column="0" colspan="2">
              <widget class="QLabel" name="labelTrimMarginsEg">
               <property name="text">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Eg:&lt;/span&gt; 2 or 5,2 or 5,2,5,5 (interpreted as in CSS)&lt;/p&gt;&lt;p&gt;Right-click a selection to automatically trim it.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Eg:&lt;/span&gt; 2 or 5,2 or 5,2,5,5 (interpreted as in CSS)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="wordWrap">
                <bool>true</bool>
               </property>
              </widget>
             </item>
-            <item row="2" column="0">
+            <item row="3" column="0">
              <widget class="QLabel" name="labelAllowedChanges">
               <property name="enabled">
                <bool>true</bool>
@@ -344,14 +339,14 @@ p, li { white-space: pre-wrap; margin: 0; }
               </property>
              </widget>
             </item>
-            <item row="2" column="1">
+            <item row="3" column="1">
              <widget class="QLineEdit" name="editAllowedChanges">
               <property name="enabled">
                <bool>true</bool>
               </property>
              </widget>
             </item>
-            <item row="3" column="0">
+            <item row="4" column="0">
              <widget class="QLabel" name="labelSensitivity">
               <property name="enabled">
                <bool>true</bool>
@@ -361,7 +356,7 @@ p, li { white-space: pre-wrap; margin: 0; }
               </property>
              </widget>
             </item>
-            <item row="3" column="1">
+            <item row="4" column="1">
              <widget class="QLineEdit" name="editSensitivity">
               <property name="enabled">
                <bool>true</bool>
@@ -735,7 +730,7 @@ p, li { white-space: pre-wrap; margin: 0; }
      <x>0</x>
      <y>0</y>
      <width>949</width>
-     <height>30</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>

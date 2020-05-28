@@ -7,6 +7,8 @@ You can use command line arguments in addition to (or, to a degree, instead of) 
 
 For instance, to automatically undo 4 pages print onto a single page:
     krop --go --grid=2x2 file.pdf
+To additionally trim each of these pages:
+    krop --go --grid=2x2 --trim --trim-use=all file.pdf
 
 Copyright (C) 2010-2020 Armin Straub, http://arminstraub.com
 """
@@ -33,15 +35,20 @@ def main():
 
     parser.add_argument('file', nargs='?', help='PDF file to open')
     parser.add_argument('-o', '--output', help='where to save the cropped PDF')
-    parser.add_argument('--grid', help='if set to 2x3, for instance, creates a 2x3 grid of selections on initial page; a single value like 2 is interpreted as 2x1')
-    parser.add_argument('--rotate', type=int, choices=[0,90,180,270], help='how much to rotate the cropped pdf clockwise (default: 0)')
     parser.add_argument('--whichpages', help='which pages (e.g. "1-5" or "1,3-") to include in cropped PDF (default: all)')
-    parser.add_argument('--optimize', choices=['gs', 'no'], help='whether to optimize the final PDF using ghostscript (default: as previously set)')
+    parser.add_argument('--rotate', type=int, choices=[0,90,180,270], help='how much to rotate the cropped pdf clockwise (default: 0)')
+    parser.add_argument('--optimize', choices=['gs', 'no'], help='whether to optimize the final PDF using ghostscript (default: previous choice)')
+
+    parser.add_argument('--grid', help='if set to 2x3, for instance, creates a 2x3 grid of selections on initial page; a single value like 2 is interpreted as 2x1')
     parser.add_argument('--initialpage', help='which page to open initially (default: 1)')
-    parser.add_argument('--autotrim', action='store_true', help='create a selection for the entire initial page minus blank margins')
-    parser.add_argument('--autotrim-padding', help='how much padding to include when auto trimming (default: previous value)')
-    parser.add_argument('--go', action='store_true', help='output PDF without opening the krop GUI (using the choices from --autotrim, --rotate and --whichpages); if used in a script without X server access, you can run krop using xvfb-run')
-    parser.add_argument('--selections', type=str, choices=['all','evenodd','individual'], help='to which pages should selections apply')
+    parser.add_argument('--selections', type=str, choices=['all', 'evenodd', 'individual'], help='to which pages should selections apply')
+
+    parser.add_argument('--trim', action='store_true', help='if specified, will auto trim initial selections')
+    parser.add_argument('--trim-use', type=str, choices=['initial', 'all'], help='whether to inspect only the initial page or all pages (slow!) when auto trimming (default: previous value)')
+    parser.add_argument('--trim-padding', help='how much padding to include when auto trimming (default: previous value)')
+
+    parser.add_argument('--go', action='store_true', help='output PDF without opening the krop GUI (using the choices supplied on the command line); if used in a script without X server access, you can run krop using xvfb-run')
+
     parser.add_argument('--no-kde', action='store_true', help='do not use KDE libraries (default: use if available)')
     parser.add_argument('--no-qt5', action='store_true', help='do not use PyQt5 instead of PyQt4 (default: use PyQt5 if available)')
     parser.add_argument('--no-PyPDF2', action='store_true', help='do not use PyPDF2 instead of pyPdf (default: use PyPDF2 if available)')
@@ -89,17 +96,19 @@ def main():
     if args.optimize is not None:
         window.ui.checkGhostscript.setChecked(args.optimize == "gs")
     if args.selections is not None:
-        if args.selections == 'all':
+        if args.selections == "all":
             window.ui.radioSelAll.setChecked(True)
-        elif args.selections == 'evenodd':
+        elif args.selections == "evenodd":
             window.ui.radioSelEvenOdd.setChecked(True)
-        elif args.selections == 'individual':
+        elif args.selections == "individual":
             window.ui.radioSelIndividual.setChecked(True)
     if args.initialpage is not None:
         window.ui.editCurrentPage.setText(args.initialpage)
         window.slotCurrentPageEdited(args.initialpage)
-    if args.autotrim_padding is not None:
-        window.ui.editPadding.setText(args.autotrim_padding)
+    if args.trim_use is not None:
+        window.ui.checkTrimUseAllPages.setChecked(args.trim_use == "all")
+    if args.trim_padding is not None:
+        window.ui.editPadding.setText(args.trim_padding)
 
     # args.grid is specified as 2x3 for 2 cols, 3 rows
     if args.grid:
@@ -113,7 +122,7 @@ def main():
         else:
             window.createSelectionGrid(c, r)
 
-    if args.autotrim:
+    if args.trim:
         window.slotTrimMarginsAll()
 
     # shut down on ctrl+c when pressed in terminal (not gracefully, though)
