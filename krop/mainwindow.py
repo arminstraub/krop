@@ -180,6 +180,7 @@ class MainWindow(QKMainWindow):
         self.ui.editSelExceptions.textEdited.connect(self.slotSelExceptionsEdited)
         self.ui.comboDevice.currentIndexChanged.connect(self.slotDeviceTypeChanged)
         self.ui.editAspectRatio.editingFinished.connect(self.slotAspectRatioChanged)
+        self.ui.splitter.splitterMoved.connect(self.slotSplitterMoved)
 
         self.pdfScene = QGraphicsScene(self.ui.documentView)
         self.pdfScene.setBackgroundBrush(self.pdfScene.palette().dark())
@@ -213,6 +214,9 @@ class MainWindow(QKMainWindow):
         geometry = settings.value("window/geometry", "")
         if geometry:
             self.restoreGeometry(geometry)
+        splitter = settings.value("window/splitter", "")
+        if splitter:
+            self.ui.splitter.restoreState(splitter)
         self.ui.actionFitInView.setChecked(settings.value("window/fitinview", "") == "true")
 
         self.ui.editPadding.setText(
@@ -228,6 +232,7 @@ class MainWindow(QKMainWindow):
     def writeSettings(self):
         settings = QSettings()
         settings.setValue("window/geometry", self.saveGeometry())
+        settings.setValue("window/splitter", self.ui.splitter.saveState())
         settings.setValue("window/fitinview", "true" if
                 self.ui.actionFitInView.isChecked() else "false")
 
@@ -372,6 +377,9 @@ class MainWindow(QKMainWindow):
         if checked:
             self.ui.documentView.fitInView(self.pdfScene.sceneRect(),
                     Qt.KeepAspectRatio)
+
+    def slotSplitterMoved(self, pos, idx):
+        self.slotFitInView(self.ui.actionFitInView.isChecked())
 
     def slotPreviousPage(self):
         self.viewer.previousPage()
