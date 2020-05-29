@@ -234,42 +234,35 @@
         <attribute name="title">
          <string>Advanced</string>
         </attribute>
-        <layout class="QVBoxLayout" name="verticalLayout_6">
+        <layout class="QVBoxLayout" name="verticalLayout_5">
          <item>
-          <widget class="QGroupBox" name="groupDevice">
-           <property name="title">
-            <string>Fit screen of device</string>
+          <widget class="QGroupBox" name="groupCurrentSel">
+           <property name="enabled">
+            <bool>false</bool>
            </property>
-           <layout class="QFormLayout" name="formLayout">
-            <property name="fieldGrowthPolicy">
-             <enum>QFormLayout::ExpandingFieldsGrow</enum>
-            </property>
-            <item row="0" column="0" colspan="2">
-             <widget class="QComboBox" name="comboDevice">
-              <property name="editable">
-               <bool>false</bool>
-              </property>
-              <property name="sizeAdjustPolicy">
-               <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="labelAspectRatio">
+           <property name="title">
+            <string>Current Selection</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_4">
+            <item row="0" column="0">
+             <widget class="QLabel" name="labelSelAspectRatio">
               <property name="text">
                <string>Aspect ratio:</string>
               </property>
              </widget>
             </item>
-            <item row="1" column="1">
-             <widget class="QLineEdit" name="editAspectRatio"/>
+            <item row="0" column="1">
+             <widget class="QLineEdit" name="editSelAspectRatio"/>
             </item>
-            <item row="2" column="0" colspan="2">
-             <widget class="QLabel" name="labelDeviceHelp">
-              <property name="text">
-               <string>&lt;p&gt;&lt;i&gt;Eg:&lt;/i&gt; 600:730 (ratio of width to height)&lt;/p&gt;</string>
+            <item row="1" column="0" colspan="2">
+             <widget class="QCheckBox" name="checkSelLockAspectRatio">
+              <property name="toolTip">
+               <string/>
               </property>
-              <property name="wordWrap">
+              <property name="text">
+               <string>Lock aspect ratio</string>
+              </property>
+              <property name="checked">
                <bool>true</bool>
               </property>
              </widget>
@@ -353,6 +346,48 @@
             <item row="4" column="1">
              <widget class="QLineEdit" name="editSensitivity">
               <property name="enabled">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="groupDevice">
+           <property name="title">
+            <string>Fit screen of device</string>
+           </property>
+           <layout class="QFormLayout" name="formLayout">
+            <property name="fieldGrowthPolicy">
+             <enum>QFormLayout::ExpandingFieldsGrow</enum>
+            </property>
+            <item row="0" column="0" colspan="2">
+             <widget class="QComboBox" name="comboDevice">
+              <property name="editable">
+               <bool>false</bool>
+              </property>
+              <property name="sizeAdjustPolicy">
+               <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="labelAspectRatio">
+              <property name="text">
+               <string>Aspect ratio:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLineEdit" name="editAspectRatio"/>
+            </item>
+            <item row="2" column="0" colspan="2">
+             <widget class="QLabel" name="labelDeviceHelp">
+              <property name="text">
+               <string>&lt;p&gt;&lt;i&gt;Eg:&lt;/i&gt; 600:730 (ratio of width to height)&lt;/p&gt;</string>
+              </property>
+              <property name="wordWrap">
                <bool>true</bool>
               </property>
              </widget>

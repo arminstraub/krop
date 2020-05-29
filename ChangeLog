@@ -4,11 +4,12 @@ krop (0.6.0)  2020-??-?? -- Armin Straub
   + New option for whether to include pages without selections in the output.
   + Introduced the command line option --grid to create a grid of selections
   on the initial page.
+  + Added the command line option --optimize (thanks to Ondrej Tichacek for
+  suggesting this feature).
+  * Keep track of current selection and highlight it visually.
   * Don't fail on PDFs that are encrypted with an empty password.
   * Fix compatibility with PyQt5 >=5.11 and PyQt4 >= 4.12.2 (thanks to Heiko
   Becker for fixing this).
-  + Added the command line option --optimize (thanks to Ondrej Tichacek for
-  suggesting this feature).
   * Remember window geometry and fit in view setting.
 
 

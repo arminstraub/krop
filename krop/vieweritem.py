@@ -3,7 +3,7 @@
 """
 Viewer for krop used to display PDF files.
 
-Copyright (C) 2010-2018 Armin Straub, http://arminstraub.com
+Copyright (C) 2010-2020 Armin Straub, http://arminstraub.com
 """
 
 """
@@ -38,10 +38,11 @@ from krop.viewerselections import ViewerSelections
 class AbstractViewerItem(QGraphicsItem):
     """Abstract class for displaying a PDF document and for allowing the user
     to create selections."""
-    def __init__(self):
+    def __init__(self, mainwindow):
         QGraphicsItem.__init__(self)
         self.selections = ViewerSelections(self)
         self.reset()
+        self.mainwindow = mainwindow
 
     def reset(self):
         self._currentPageIndex = 0

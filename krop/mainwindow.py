@@ -41,7 +41,7 @@ if PYQT5:
 else:
     from krop.mainwindowui_qt4 import Ui_MainWindow
 
-from krop.viewerselections import ViewerSelections, ViewerSelectionItem
+from krop.viewerselections import ViewerSelections
 from krop.vieweritem import ViewerItem
 from krop.pdfcropper import PdfFile, PdfCropper, PdfEncryptedError, optimizePdfGhostscript
 from krop.autotrim import autoTrimMargins
@@ -107,8 +107,7 @@ class MainWindow(QKMainWindow):
 
         self.devicetypes = DeviceTypeManager()
 
-        self.selectedRect = None
-        self._viewer = ViewerItem()
+        self._viewer = ViewerItem(self)
 
         self.ui=Ui_MainWindow()
         self.ui.setupUi(self)
@@ -209,6 +208,15 @@ class MainWindow(QKMainWindow):
     @property
     def selections(self):
         return self.viewer.selections
+
+    def currentSelectionUpdated(self):
+        try:
+            r = self.selections.currentSelection.boundingRect()
+            self.ui.editSelAspectRatio.setText("{} : {}".format(r.width(), r.height()))
+            self.ui.groupCurrentSel.setEnabled(True)
+        except:
+            self.ui.groupCurrentSel.setEnabled(False)
+
 
     def readSettings(self):
         settings = QSettings()
@@ -479,7 +487,7 @@ class MainWindow(QKMainWindow):
     def slotContextMenu(self, pos):
         item = self.ui.documentView.itemAt(pos)
         try:
-            self.selectedRect = item.selection
+            self.selections.currentSelection = item.selection
             popMenu = QMenu()
             popMenu.addAction(self.ui.actionDeleteSelection)
             popMenu.addAction(self.ui.actionTrimMargins)
@@ -488,15 +496,13 @@ class MainWindow(QKMainWindow):
             pass
 
     def slotDeleteSelection(self):
-        if self.selectedRect is not None:
-            self.pdfScene.removeItem(self.selectedRect)
-            self.selectedRect = None
-            self.pdfScene.update()
+        if self.selections.currentSelection is not None:
+            self.selections.deleteSelection(self.selections.currentSelection)
 
     def createSelectionGrid(self, cols=1, rows=1):
         for j in range(rows):
             for i in range(cols):
-                sel = ViewerSelectionItem(self.viewer)
+                sel = self.selections.addSelection()
                 r = sel.boundingRect()
                 w = r.width()/cols
                 h = r.height()/rows
@@ -543,13 +549,13 @@ class MainWindow(QKMainWindow):
                 self.trimMarginsSelection(sel)
         # if there is no selections, then create one
         if noSelections and not self.viewer.isEmpty():
-            sel = ViewerSelectionItem(self.viewer)
+            sel = self.selections.addSelection()
             self.trimMarginsSelection(sel)
         self.pdfScene.update()
 
     def slotTrimMargins(self):
-        if self.selectedRect is not None:
-            self.trimMarginsSelection(self.selectedRect)
+        if self.selections.currentSelection is not None:
+            self.trimMarginsSelection(self.selections.currentSelection)
             self.pdfScene.update()
 
     def trimMarginsSelection(self, sel):

@@ -28,11 +28,53 @@ class ViewerSelections(object):
 
     def __init__(self, viewer):
         self.viewer = viewer
+        self._selections = []
+        self._currentSelection = None
         self._aspectRatio = None
         self._selectionMode = ViewerSelections.all
         self._selectionExceptions = [] # list of page numbers which require individual selections
-        self.activepdfrect = None
         self.lastPos = None
+
+    @property
+    def items(self):
+        """Returns a list of the selections."""
+        # the list equals self.viewer.childItems() except for the ordering:
+        # we preserve the order in which the selections were created, whereas
+        # childItems() gets reordered when stackBefore (or setZValue are
+        # called)
+        return self._selections
+
+    def addSelection(self, rect=None):
+        s = ViewerSelectionItem(self.viewer, rect)
+        self._selections.append(s)
+        s.setAsCurrent()
+        return s
+
+    def deleteSelection(self, s):
+        if s is self.currentSelection:
+            self.currentSelection = None
+        self._selections.remove(s)
+        s.scene().removeItem(s)
+
+    def deleteSelections(self):
+        for s in self.items:
+            self.deleteSelection(s)
+
+    def getCurrentSelection(self):
+        return self._currentSelection
+
+    def setCurrentSelection(self, currentSelection):
+        self._currentSelection = currentSelection
+        for s in self.items:
+            if s is not currentSelection:
+                s.stackBefore(currentSelection)
+        self.viewer.scene().update()
+        self.currentSelectionUpdated()
+
+    currentSelection = property(getCurrentSelection, setCurrentSelection)
+
+    def currentSelectionUpdated(self):
+        self.viewer.mainwindow.currentSelectionUpdated()
 
     def getAspectRatio(self):
         return self._aspectRatio
@@ -61,15 +103,6 @@ class ViewerSelections(object):
 
     selectionExceptions = property(getSelectionExceptions, setSelectionExceptions)
 
-    @property
-    def items(self):
-        """Returns a list of the actual selections."""
-        return self.viewer.childItems()
-
-    def deleteSelections(self):
-        for s in self.items:
-            s.scene().removeItem(s)
-
     def updateSelectionVisibility(self):
         idx = self.viewer.currentPageIndex
         for s in self.items:
@@ -83,20 +116,23 @@ class ViewerSelections(object):
         if event.button() == Qt.LeftButton:
             pos = event.pos()
             rect = QRectF(pos, QSizeF())
-            pdfrect = ViewerSelectionItem(self.viewer, rect)
-            self.activepdfrect = pdfrect
+            self.currentSelection = self.addSelection(rect)
             self.lastPos = pos
 
     def mouseMoveEvent(self, event):
         if self.lastPos is not None:
             pos2 = event.pos()
-            self.activepdfrect.setBoundingRect(self.lastPos, pos2)
+            self.currentSelection.setBoundingRect(self.lastPos, pos2)
 
     def mouseReleaseEvent(self, event):
         self.lastPos = None
 
 
 class ViewerSelectionItem(QGraphicsItem):
+
+    handleColor = QColor(0,0,128)
+    handleColorCurrent = QColor(0,128,0)
+
     """An individual user-created selection"""
     def __init__(self, parent, rect=None):
         QGraphicsItem.__init__(self, parent)
@@ -109,7 +145,6 @@ class ViewerSelectionItem(QGraphicsItem):
         self.minHeight = 1
         self.pageIndex = self.viewer.currentPageIndex
         self.lastPos = None
-        self.handleColor = QColor(0,0,128)
         SelectionHandleItem(self, SelectionHandleItem.LeftHandle)
         SelectionHandleItem(self, SelectionHandleItem.RightHandle)
         SelectionHandleItem(self, SelectionHandleItem.TopHandle)
@@ -127,25 +162,32 @@ class ViewerSelectionItem(QGraphicsItem):
         return self.parentItem()
 
     @property
-    def selection(self):
-        return self
+    def selections(self):
+        return self.viewer.selections
+
+    def isCurrent(self):
+        return self is self.selections.currentSelection
+
+    def setAsCurrent(self):
+        self.selections.currentSelection = self
 
     @property
     def orderIndex(self):
         nr = 1
-        for c in self.viewer.selections.items:
-            if c == self: break
-            if c.isVisible(): nr += 1
-        return nr
+        for c in self.selections.items:
+            if c is self:
+                return nr
+            if c.isVisible():
+                nr += 1
 
     @property
     def aspectRatio(self):
-        return self.viewer.selections.aspectRatio
+        return self.selections.aspectRatio
 
     def selectionVisibleOnPage(self, pageIndex):
         """Determines if this selection is visible on a given page."""
-        mode = self.viewer.selections.selectionMode
-        exceptions = self.viewer.selections.selectionExceptions
+        mode = self.selections.selectionMode
+        exceptions = self.selections.selectionExceptions
         if pageIndex in exceptions or self.pageIndex in exceptions or mode == ViewerSelections.individual:
             return pageIndex == self.pageIndex
         if mode == ViewerSelections.all:
@@ -202,6 +244,7 @@ class ViewerSelectionItem(QGraphicsItem):
         # enlarge
         self.prepareGeometryChange()
         self.rect = self.mapRectFromParent(nrect)
+        self.selections.currentSelectionUpdated()
         return [nrect.left()-orect.left(), nrect.top()-orect.top(),
                 nrect.right()-orect.right(), nrect.bottom()-orect.bottom() ]
 
@@ -285,6 +328,7 @@ class ViewerSelectionItem(QGraphicsItem):
             pos = event.pos()
             self.lastPos = pos
             self.setCursor(Qt.ClosedHandCursor)
+            self.setAsCurrent()
 
     def mouseMoveEvent(self, event):
         if self.lastPos:
@@ -311,6 +355,7 @@ class ViewerSelectionItem(QGraphicsItem):
 
 
 class SelectionHandleItem(QGraphicsItem):
+
     LeftHandle = 1
     RightHandle = 2
     TopHandle = 3
@@ -327,8 +372,6 @@ class SelectionHandleItem(QGraphicsItem):
         # arrow center (0 means centered on boundary)
         self.ac = self.ah
 
-        self.handleColor = parent.handleColor
-
         if self.role==SelectionHandleItem.LeftHandle or self.role==SelectionHandleItem.RightHandle:
             self.setCursor(Qt.SizeHorCursor)
         elif self.role==SelectionHandleItem.TopHandle or self.role==SelectionHandleItem.BottomHandle:
@@ -337,6 +380,12 @@ class SelectionHandleItem(QGraphicsItem):
     @property
     def selection(self):
         return self.parentItem()
+
+    @property
+    def handleColor(self):
+        if self.selection.isCurrent():
+            return self.selection.handleColorCurrent
+        return self.selection.handleColor
 
     def boundingRect(self):
         rect = self.selection.boundingRect()
@@ -381,6 +430,7 @@ class SelectionHandleItem(QGraphicsItem):
         if event.button() == Qt.LeftButton:
             pos = event.pos()
             self.lastPos = pos
+            self.selection.setAsCurrent()
 
     def mouseMoveEvent(self, event):
         if self.lastPos:
@@ -414,13 +464,17 @@ class SelectionCornerHandleItem(QGraphicsItem):
         # size (half, that is)
         self.bs = 4
 
-        self.handleColor = parent.handleColor
-
         self.setCursor((Qt.SizeFDiagCursor, Qt.SizeBDiagCursor)[(lr+tb)%2])
 
     @property
     def selection(self):
         return self.parentItem()
+
+    @property
+    def handleColor(self):
+        if self.selection.isCurrent():
+            return self.selection.handleColorCurrent
+        return self.selection.handleColor
 
     def corner(self, rect):
         c = rect.getCoords()
@@ -448,6 +502,7 @@ class SelectionCornerHandleItem(QGraphicsItem):
         if event.button() == Qt.LeftButton:
             pos = event.pos()
             self.lastPos = pos
+            self.selection.setAsCurrent()
 
     def mouseMoveEvent(self, event):
         if self.lastPos:
