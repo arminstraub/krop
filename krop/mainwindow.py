@@ -157,6 +157,10 @@ class MainWindow(QKMainWindow):
             self.ui.buttonNext.setFlat(False)
             self.ui.buttonLast.setFlat(False)
 
+        # we need to add the action to a widget in order for keyboard shortcuts to work
+        self.addAction(self.ui.actionDeleteSelection)
+        self.addAction(self.ui.actionFirstPage)
+        self.addAction(self.ui.actionLastPage)
 
         self.ui.actionOpenFile.triggered.connect(self.slotOpenFile)
         self.ui.actionSelectFile.triggered.connect(self.slotSelectFile)
@@ -200,6 +204,7 @@ class MainWindow(QKMainWindow):
             self.ui.checkGhostscript.setEnabled(False)
 
         self.ui.documentView.setScene(self.pdfScene)
+        self.ui.documentView.setFocus()
 
 
     @property

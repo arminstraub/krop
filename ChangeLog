@@ -6,6 +6,8 @@ krop (0.6.0)  2020-??-?? -- Armin Straub
   on the initial page.
   + Added the command line option --optimize (thanks to Ondrej Tichacek for
   suggesting this feature).
+  + Implemented several keyboard shortcuts including Shift+Arrow to move
+  current selection and Delete to remove it.
   * Keep track of current selection and highlight it visually.
   * Don't fail on PDFs that are encrypted with an empty password.
   * Fix compatibility with PyQt5 >=5.11 and PyQt4 >= 4.12.2 (thanks to Heiko

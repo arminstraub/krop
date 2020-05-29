@@ -440,7 +440,7 @@
 &lt;p&gt;Using your mouse, create one or more selections on the pdf document. These are the regions that will be included into the cropped file.&lt;/p&gt;
 &lt;p&gt;When you are done, click &lt;i&gt;Krop!&lt;/i&gt; in the menu to create a cropped version of your document.&lt;/p&gt;
 &lt;h3&gt;Hints&lt;/h3&gt;
-&lt;p&gt;Right-click a selection to delete it.&lt;/p&gt;
+&lt;p&gt;Right-click a selection to delete it. Or simply press the Delete key.&lt;/p&gt;
 &lt;p&gt;You can choose to create individual selections for each page.&lt;/p&gt;
 &lt;p&gt;You can automatically trim the margins of your selections.&lt;/p&gt;
 &lt;p&gt;Examples and more information can be found at: &lt;a href='http://arminstraub.com/software/krop'&gt;arminstraub.com&lt;/a&gt;&lt;/p&gt;
@@ -814,7 +814,7 @@
     <string>Previous Page</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Left</string>
+    <string>PgUp</string>
    </property>
   </action>
   <action name="actionNextPage">
@@ -822,12 +822,15 @@
     <string>Next Page</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Right</string>
+    <string>PgDown</string>
    </property>
   </action>
   <action name="actionOpenFile">
    <property name="text">
     <string>Open</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
    </property>
   </action>
   <action name="actionFitInView">
@@ -850,15 +853,24 @@
    <property name="text">
     <string>Delete Selection</string>
    </property>
+   <property name="shortcut">
+    <string>Del</string>
+   </property>
   </action>
   <action name="actionFirstPage">
    <property name="text">
     <string>First Page</string>
    </property>
+   <property name="shortcut">
+    <string>Home</string>
+   </property>
   </action>
   <action name="actionLastPage">
    <property name="text">
     <string>Last Page</string>
+   </property>
+   <property name="shortcut">
+    <string>End</string>
    </property>
   </action>
   <action name="actionTrimMargins">

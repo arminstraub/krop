@@ -51,13 +51,11 @@ class ViewerSelections(object):
         return s
 
     def deleteSelection(self, s):
-        if s is self.currentSelection:
-            if self.items:
-                self.currentSelection = self.items[-1]
-            else:
-                self.currentSelection = None
         self._selections.remove(s)
         s.scene().removeItem(s)
+        if s is self.currentSelection:
+            self.currentSelection = None
+            self.autoSetCurrentSelection()
 
     def deleteSelections(self):
         for s in self.items:
@@ -72,10 +70,25 @@ class ViewerSelections(object):
             for s in self.items:
                 if s is not currentSelection:
                     s.stackBefore(currentSelection)
+            currentSelection.setFocus()
         self.viewer.scene().update()
         self.currentSelectionUpdated()
 
     currentSelection = property(getCurrentSelection, setCurrentSelection)
+
+    def autoSetCurrentSelection(self):
+        s = self.currentSelection
+        idx = self.viewer.currentPageIndex
+        # check if currentSelection is visible
+        if s and not s.selectionVisibleOnPage(idx):
+            s = None
+        # if currentSelection is None, we auto select if possible
+        if s is None:
+            for i in reversed(self.items):
+                if i.selectionVisibleOnPage(idx):
+                    s = i
+                    break
+        self.currentSelection = s
 
     def currentSelectionUpdated(self):
         self.viewer.mainwindow.currentSelectionUpdated()
@@ -111,6 +124,7 @@ class ViewerSelections(object):
         idx = self.viewer.currentPageIndex
         for s in self.items:
             s.setVisible(s.selectionVisibleOnPage(idx))
+        self.autoSetCurrentSelection()
 
     def cropValues(self, idx):
         return [ c for s in self.items if s.selectionVisibleOnPage(idx)
@@ -140,6 +154,7 @@ class ViewerSelectionItem(QGraphicsItem):
     """An individual user-created selection"""
     def __init__(self, parent, rect=None):
         QGraphicsItem.__init__(self, parent)
+        self.setFlag(QGraphicsItem.ItemIsFocusable)
 
         if rect is None:
             rect = self.mapRectFromParent(self.viewer.irect)
@@ -227,6 +242,20 @@ class ViewerSelectionItem(QGraphicsItem):
                 nrect.right()-orect.right(),
                 nrect.bottom()-orect.bottom())
 
+    def moveBoundingRect(self, dx, dy):
+        """similar to adjustBoundingRect but never changes the size of the boundingRect"""
+        orect = self.mapRectToParent(self.rect)
+        prect = self.viewer.irect
+        if dx < 0:
+            dx = max(dx, prect.left() - orect.left())
+        if dx > 0:
+            dx = min(dx, prect.right() - orect.right())
+        if dy < 0:
+            dy = max(dy, prect.top() - orect.top())
+        if dy > 0:
+            dy = min(dy, prect.bottom() - orect.bottom())
+        self.adjustBoundingRect(dx, dy, dx, dy)
+
     def adjustBoundingRect(self, dx1, dy1, dx2, dy2):
         orect = self.mapRectToParent(self.rect)
         nrect = orect.adjusted(dx1, dy1, dx2, dy2)
@@ -240,6 +269,9 @@ class ViewerSelectionItem(QGraphicsItem):
             nrect.setTop(prect.top())
         if nrect.bottom() > prect.bottom():
             nrect.setBottom(prect.bottom())
+        # similar but not quite the same...
+        # nrect = nrect.normalized().intersected(prect)
+
         # ensure minimum size
         extra = self.minWidth - nrect.width()
         if extra > 0:
@@ -372,6 +404,25 @@ class ViewerSelectionItem(QGraphicsItem):
     def mouseReleaseEvent(self, event):
         self.lastPos = None
         self.setCursor(Qt.OpenHandCursor)
+
+    def keyPressEvent(self, event):
+        accepted = False
+        if event.modifiers() == Qt.ShiftModifier:
+            accepted = True
+            if event.key() == Qt.Key_Left:
+                self.moveBoundingRect(-1, 0)
+            elif event.key() == Qt.Key_Right:
+                self.moveBoundingRect(1, 0)
+            elif event.key() == Qt.Key_Down:
+                self.moveBoundingRect(0, 1)
+            elif event.key() == Qt.Key_Up:
+                self.moveBoundingRect(0, -1)
+            else:
+                accepted = False
+        if accepted:
+            event.accept()
+        else:
+            event.ignore()
 
 
 class SelectionHandleItem(QGraphicsItem):

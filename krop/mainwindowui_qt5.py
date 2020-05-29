@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Fri May 29 11:33:44 2020
+# Created: Fri May 29 14:39:09 2020
 #      by: PyQt5 UI code generator 5.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -419,7 +419,7 @@ class Ui_MainWindow(object):
 "<p>Using your mouse, create one or more selections on the pdf document. These are the regions that will be included into the cropped file.</p>\n"
 "<p>When you are done, click <i>Krop!</i> in the menu to create a cropped version of your document.</p>\n"
 "<h3>Hints</h3>\n"
-"<p>Right-click a selection to delete it.</p>\n"
+"<p>Right-click a selection to delete it. Or simply press the Delete key.</p>\n"
 "<p>You can choose to create individual selections for each page.</p>\n"
 "<p>You can automatically trim the margins of your selections.</p>\n"
 "<p>Examples and more information can be found at: <a href=\'http://arminstraub.com/software/krop\'>arminstraub.com</a></p>\n"
@@ -435,15 +435,19 @@ class Ui_MainWindow(object):
         self.actionZoomOut.setText(_translate("MainWindow", "Zoom Out"))
         self.actionZoomOut.setShortcut(_translate("MainWindow", "Ctrl+-"))
         self.actionPreviousPage.setText(_translate("MainWindow", "Previous Page"))
-        self.actionPreviousPage.setShortcut(_translate("MainWindow", "Ctrl+Left"))
+        self.actionPreviousPage.setShortcut(_translate("MainWindow", "PgUp"))
         self.actionNextPage.setText(_translate("MainWindow", "Next Page"))
-        self.actionNextPage.setShortcut(_translate("MainWindow", "Ctrl+Right"))
+        self.actionNextPage.setShortcut(_translate("MainWindow", "PgDown"))
         self.actionOpenFile.setText(_translate("MainWindow", "Open"))
+        self.actionOpenFile.setShortcut(_translate("MainWindow", "Ctrl+O"))
         self.actionFitInView.setText(_translate("MainWindow", "Fit In View"))
         self.actionKrop.setText(_translate("MainWindow", "Krop!"))
         self.actionDeleteSelection.setText(_translate("MainWindow", "Delete Selection"))
+        self.actionDeleteSelection.setShortcut(_translate("MainWindow", "Del"))
         self.actionFirstPage.setText(_translate("MainWindow", "First Page"))
+        self.actionFirstPage.setShortcut(_translate("MainWindow", "Home"))
         self.actionLastPage.setText(_translate("MainWindow", "Last Page"))
+        self.actionLastPage.setShortcut(_translate("MainWindow", "End"))
         self.actionTrimMargins.setText(_translate("MainWindow", "Trim Margins"))
         self.actionSelectFile.setText(_translate("MainWindow", "Select File"))
         self.actionTrimMarginsAll.setText(_translate("MainWindow", "Trim Margins"))
