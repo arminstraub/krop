@@ -354,7 +354,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QGroupBox" name="groupDevice">
+          <widget class="QGroupBox" name="groupDistribute">
            <property name="title">
             <string>Fit screen of device</string>
            </property>
@@ -363,7 +363,7 @@
              <enum>QFormLayout::ExpandingFieldsGrow</enum>
             </property>
             <item row="0" column="0" colspan="2">
-             <widget class="QComboBox" name="comboDevice">
+             <widget class="QComboBox" name="comboDistributeDevice">
               <property name="editable">
                <bool>false</bool>
               </property>
@@ -373,17 +373,17 @@
              </widget>
             </item>
             <item row="1" column="0">
-             <widget class="QLabel" name="labelAspectRatio">
+             <widget class="QLabel" name="labelDistributeAspectRatio">
               <property name="text">
                <string>Aspect ratio:</string>
               </property>
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QLineEdit" name="editAspectRatio"/>
+             <widget class="QLineEdit" name="editDistributeAspectRatio"/>
             </item>
             <item row="2" column="0" colspan="2">
-             <widget class="QLabel" name="labelDeviceHelp">
+             <widget class="QLabel" name="labelDistributeHelp">
               <property name="text">
                <string>&lt;p&gt;&lt;i&gt;Eg:&lt;/i&gt; 600:730 (ratio of width to height)&lt;/p&gt;</string>
               </property>

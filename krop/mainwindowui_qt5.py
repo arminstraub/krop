@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Fri May 29 08:40:50 2020
+# Created: Fri May 29 10:47:07 2020
 #      by: PyQt5 UI code generator 5.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -165,27 +165,27 @@ class Ui_MainWindow(object):
         self.editSensitivity.setObjectName("editSensitivity")
         self.gridLayout_3.addWidget(self.editSensitivity, 4, 1, 1, 1)
         self.verticalLayout_5.addWidget(self.groupTrimMargins)
-        self.groupDevice = QtWidgets.QGroupBox(self.tabAdvanced)
-        self.groupDevice.setObjectName("groupDevice")
-        self.formLayout = QtWidgets.QFormLayout(self.groupDevice)
+        self.groupDistribute = QtWidgets.QGroupBox(self.tabAdvanced)
+        self.groupDistribute.setObjectName("groupDistribute")
+        self.formLayout = QtWidgets.QFormLayout(self.groupDistribute)
         self.formLayout.setFieldGrowthPolicy(QtWidgets.QFormLayout.ExpandingFieldsGrow)
         self.formLayout.setObjectName("formLayout")
-        self.comboDevice = QtWidgets.QComboBox(self.groupDevice)
-        self.comboDevice.setEditable(False)
-        self.comboDevice.setSizeAdjustPolicy(QtWidgets.QComboBox.AdjustToContentsOnFirstShow)
-        self.comboDevice.setObjectName("comboDevice")
-        self.formLayout.setWidget(0, QtWidgets.QFormLayout.SpanningRole, self.comboDevice)
-        self.labelAspectRatio = QtWidgets.QLabel(self.groupDevice)
-        self.labelAspectRatio.setObjectName("labelAspectRatio")
-        self.formLayout.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.labelAspectRatio)
-        self.editAspectRatio = QtWidgets.QLineEdit(self.groupDevice)
-        self.editAspectRatio.setObjectName("editAspectRatio")
-        self.formLayout.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.editAspectRatio)
-        self.labelDeviceHelp = QtWidgets.QLabel(self.groupDevice)
-        self.labelDeviceHelp.setWordWrap(True)
-        self.labelDeviceHelp.setObjectName("labelDeviceHelp")
-        self.formLayout.setWidget(2, QtWidgets.QFormLayout.SpanningRole, self.labelDeviceHelp)
-        self.verticalLayout_5.addWidget(self.groupDevice)
+        self.comboDistributeDevice = QtWidgets.QComboBox(self.groupDistribute)
+        self.comboDistributeDevice.setEditable(False)
+        self.comboDistributeDevice.setSizeAdjustPolicy(QtWidgets.QComboBox.AdjustToContentsOnFirstShow)
+        self.comboDistributeDevice.setObjectName("comboDistributeDevice")
+        self.formLayout.setWidget(0, QtWidgets.QFormLayout.SpanningRole, self.comboDistributeDevice)
+        self.labelDistributeAspectRatio = QtWidgets.QLabel(self.groupDistribute)
+        self.labelDistributeAspectRatio.setObjectName("labelDistributeAspectRatio")
+        self.formLayout.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.labelDistributeAspectRatio)
+        self.editDistributeAspectRatio = QtWidgets.QLineEdit(self.groupDistribute)
+        self.editDistributeAspectRatio.setObjectName("editDistributeAspectRatio")
+        self.formLayout.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.editDistributeAspectRatio)
+        self.labelDistributeHelp = QtWidgets.QLabel(self.groupDistribute)
+        self.labelDistributeHelp.setWordWrap(True)
+        self.labelDistributeHelp.setObjectName("labelDistributeHelp")
+        self.formLayout.setWidget(2, QtWidgets.QFormLayout.SpanningRole, self.labelDistributeHelp)
+        self.verticalLayout_5.addWidget(self.groupDistribute)
         spacerItem1 = QtWidgets.QSpacerItem(20, 339, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_5.addItem(spacerItem1)
         self.tabWidget.addTab(self.tabAdvanced, "")
@@ -411,9 +411,9 @@ class Ui_MainWindow(object):
         self.labelTrimMarginsEg.setText(_translate("MainWindow", "<p><i>Eg:</i> 2 or 5,2 or 5,2,5,5 (interpreted as in CSS)</p>"))
         self.labelAllowedChanges.setText(_translate("MainWindow", "Allowed changes:"))
         self.labelSensitivity.setText(_translate("MainWindow", "Color sensitivity:"))
-        self.groupDevice.setTitle(_translate("MainWindow", "Fit screen of device"))
-        self.labelAspectRatio.setText(_translate("MainWindow", "Aspect ratio:"))
-        self.labelDeviceHelp.setText(_translate("MainWindow", "<p><i>Eg:</i> 600:730 (ratio of width to height)</p>"))
+        self.groupDistribute.setTitle(_translate("MainWindow", "Fit screen of device"))
+        self.labelDistributeAspectRatio.setText(_translate("MainWindow", "Aspect ratio:"))
+        self.labelDistributeHelp.setText(_translate("MainWindow", "<p><i>Eg:</i> 600:730 (ratio of width to height)</p>"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabAdvanced), _translate("MainWindow", "Advanced"))
         self.labelHelp.setText(_translate("MainWindow", "<h3>Getting started</h3>\n"
 "<p>Using your mouse, create one or more selections on the pdf document. These are the regions that will be included into the cropped file.</p>\n"

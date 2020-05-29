@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Fri May 29 08:40:49 2020
+# Created: Fri May 29 10:47:06 2020
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -179,27 +179,27 @@ class Ui_MainWindow(object):
         self.editSensitivity.setObjectName(_fromUtf8("editSensitivity"))
         self.gridLayout_3.addWidget(self.editSensitivity, 4, 1, 1, 1)
         self.verticalLayout_5.addWidget(self.groupTrimMargins)
-        self.groupDevice = QtGui.QGroupBox(self.tabAdvanced)
-        self.groupDevice.setObjectName(_fromUtf8("groupDevice"))
-        self.formLayout = QtGui.QFormLayout(self.groupDevice)
+        self.groupDistribute = QtGui.QGroupBox(self.tabAdvanced)
+        self.groupDistribute.setObjectName(_fromUtf8("groupDistribute"))
+        self.formLayout = QtGui.QFormLayout(self.groupDistribute)
         self.formLayout.setFieldGrowthPolicy(QtGui.QFormLayout.ExpandingFieldsGrow)
         self.formLayout.setObjectName(_fromUtf8("formLayout"))
-        self.comboDevice = QtGui.QComboBox(self.groupDevice)
-        self.comboDevice.setEditable(False)
-        self.comboDevice.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContentsOnFirstShow)
-        self.comboDevice.setObjectName(_fromUtf8("comboDevice"))
-        self.formLayout.setWidget(0, QtGui.QFormLayout.SpanningRole, self.comboDevice)
-        self.labelAspectRatio = QtGui.QLabel(self.groupDevice)
-        self.labelAspectRatio.setObjectName(_fromUtf8("labelAspectRatio"))
-        self.formLayout.setWidget(1, QtGui.QFormLayout.LabelRole, self.labelAspectRatio)
-        self.editAspectRatio = QtGui.QLineEdit(self.groupDevice)
-        self.editAspectRatio.setObjectName(_fromUtf8("editAspectRatio"))
-        self.formLayout.setWidget(1, QtGui.QFormLayout.FieldRole, self.editAspectRatio)
-        self.labelDeviceHelp = QtGui.QLabel(self.groupDevice)
-        self.labelDeviceHelp.setWordWrap(True)
-        self.labelDeviceHelp.setObjectName(_fromUtf8("labelDeviceHelp"))
-        self.formLayout.setWidget(2, QtGui.QFormLayout.SpanningRole, self.labelDeviceHelp)
-        self.verticalLayout_5.addWidget(self.groupDevice)
+        self.comboDistributeDevice = QtGui.QComboBox(self.groupDistribute)
+        self.comboDistributeDevice.setEditable(False)
+        self.comboDistributeDevice.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContentsOnFirstShow)
+        self.comboDistributeDevice.setObjectName(_fromUtf8("comboDistributeDevice"))
+        self.formLayout.setWidget(0, QtGui.QFormLayout.SpanningRole, self.comboDistributeDevice)
+        self.labelDistributeAspectRatio = QtGui.QLabel(self.groupDistribute)
+        self.labelDistributeAspectRatio.setObjectName(_fromUtf8("labelDistributeAspectRatio"))
+        self.formLayout.setWidget(1, QtGui.QFormLayout.LabelRole, self.labelDistributeAspectRatio)
+        self.editDistributeAspectRatio = QtGui.QLineEdit(self.groupDistribute)
+        self.editDistributeAspectRatio.setObjectName(_fromUtf8("editDistributeAspectRatio"))
+        self.formLayout.setWidget(1, QtGui.QFormLayout.FieldRole, self.editDistributeAspectRatio)
+        self.labelDistributeHelp = QtGui.QLabel(self.groupDistribute)
+        self.labelDistributeHelp.setWordWrap(True)
+        self.labelDistributeHelp.setObjectName(_fromUtf8("labelDistributeHelp"))
+        self.formLayout.setWidget(2, QtGui.QFormLayout.SpanningRole, self.labelDistributeHelp)
+        self.verticalLayout_5.addWidget(self.groupDistribute)
         spacerItem1 = QtGui.QSpacerItem(20, 339, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
         self.verticalLayout_5.addItem(spacerItem1)
         self.tabWidget.addTab(self.tabAdvanced, _fromUtf8(""))
@@ -424,9 +424,9 @@ class Ui_MainWindow(object):
         self.labelTrimMarginsEg.setText(_translate("MainWindow", "<p><i>Eg:</i> 2 or 5,2 or 5,2,5,5 (interpreted as in CSS)</p>", None))
         self.labelAllowedChanges.setText(_translate("MainWindow", "Allowed changes:", None))
         self.labelSensitivity.setText(_translate("MainWindow", "Color sensitivity:", None))
-        self.groupDevice.setTitle(_translate("MainWindow", "Fit screen of device", None))
-        self.labelAspectRatio.setText(_translate("MainWindow", "Aspect ratio:", None))
-        self.labelDeviceHelp.setText(_translate("MainWindow", "<p><i>Eg:</i> 600:730 (ratio of width to height)</p>", None))
+        self.groupDistribute.setTitle(_translate("MainWindow", "Fit screen of device", None))
+        self.labelDistributeAspectRatio.setText(_translate("MainWindow", "Aspect ratio:", None))
+        self.labelDistributeHelp.setText(_translate("MainWindow", "<p><i>Eg:</i> 600:730 (ratio of width to height)</p>", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabAdvanced), _translate("MainWindow", "Advanced", None))
         self.labelHelp.setText(_translate("MainWindow", "<h3>Getting started</h3>\n"
 "<p>Using your mouse, create one or more selections on the pdf document. These are the regions that will be included into the cropped file.</p>\n"

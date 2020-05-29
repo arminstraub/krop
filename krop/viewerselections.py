@@ -30,7 +30,7 @@ class ViewerSelections(object):
         self.viewer = viewer
         self._selections = []
         self._currentSelection = None
-        self._aspectRatio = None
+        self._distributeAspectRatio = None
         self._selectionMode = ViewerSelections.all
         self._selectionExceptions = [] # list of page numbers which require individual selections
         self.lastPos = None
@@ -76,14 +76,14 @@ class ViewerSelections(object):
     def currentSelectionUpdated(self):
         self.viewer.mainwindow.currentSelectionUpdated()
 
-    def getAspectRatio(self):
-        return self._aspectRatio
+    def getDistributeAspectRatio(self):
+        return self._distributeAspectRatio
 
-    def setAspectRatio(self, aspectRatio):
-        self._aspectRatio = aspectRatio
+    def setDistributeAspectRatio(self, distributeAspectRatio):
+        self._distributeAspectRatio = distributeAspectRatio
         self.viewer.update()
 
-    aspectRatio = property(getAspectRatio, setAspectRatio)
+    distributeAspectRatio = property(getDistributeAspectRatio, setDistributeAspectRatio)
 
     def getSelectionMode(self):
         return self._selectionMode
@@ -181,8 +181,8 @@ class ViewerSelectionItem(QGraphicsItem):
                 nr += 1
 
     @property
-    def aspectRatio(self):
-        return self.selections.aspectRatio
+    def distributeAspectRatio(self):
+        return self.selections.distributeAspectRatio
 
     def selectionVisibleOnPage(self, pageIndex):
         """Determines if this selection is visible on a given page."""
@@ -249,7 +249,7 @@ class ViewerSelectionItem(QGraphicsItem):
                 nrect.right()-orect.right(), nrect.bottom()-orect.bottom() ]
 
     def distributeRect(self):
-        r = self.aspectRatio
+        r = self.distributeAspectRatio
         if r is None:
             return [ self.rect ]
         x0,y0,x1,y1 = self.rect.getCoords()

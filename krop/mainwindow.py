@@ -178,8 +178,8 @@ class MainWindow(QKMainWindow):
         self.ui.radioSelIndividual.toggled.connect(self.slotSelectionMode)
         #  self.ui.editSelExceptions.editingFinished.connect(self.slotSelExceptionsChanged)
         self.ui.editSelExceptions.textEdited.connect(self.slotSelExceptionsEdited)
-        self.ui.comboDevice.currentIndexChanged.connect(self.slotDeviceTypeChanged)
-        self.ui.editAspectRatio.editingFinished.connect(self.slotAspectRatioChanged)
+        self.ui.comboDistributeDevice.currentIndexChanged.connect(self.slotDeviceTypeChanged)
+        self.ui.editDistributeAspectRatio.editingFinished.connect(self.slotDistributeAspectRatioChanged)
         self.ui.splitter.splitterMoved.connect(self.slotSplitterMoved)
 
         self.pdfScene = QGraphicsScene(self.ui.documentView)
@@ -190,8 +190,8 @@ class MainWindow(QKMainWindow):
 
         # populate combobox with device types
         for t in self.devicetypes:
-            self.ui.comboDevice.addItem(t.name)
-        self.ui.comboDevice.addItem("Custom")
+            self.ui.comboDistributeDevice.addItem(t.name)
+        self.ui.comboDistributeDevice.addItem("Custom")
 
         # disable Ghostscript option if gs is not available
         if not which('gs'):
@@ -457,12 +457,12 @@ class MainWindow(QKMainWindow):
         except ValueError:
             pass
 
-    def aspectRatioChanged(self, aspectRatio):
-        self.selections.aspectRatio = aspectRatio
+    def distributeAspectRatioChanged(self, aspectRatio):
+        self.selections.distributeAspectRatio = aspectRatio
 
-    def readAspectRatio(self):
+    def readDistributeAspectRatio(self):
         try:
-            a = self.ui.editAspectRatio.text().split(":")
+            a = self.ui.editDistributeAspectRatio.text().split(":")
             if len(a) == 1:
                 w, h = a[0], 1
             else:
@@ -474,15 +474,15 @@ class MainWindow(QKMainWindow):
             aspectRatio = None
         return aspectRatio
 
-    def slotAspectRatioChanged(self):
-        self.aspectRatioChanged(self.readAspectRatio())
+    def slotDistributeAspectRatioChanged(self):
+        self.distributeAspectRatioChanged(self.readDistributeAspectRatio())
 
     def slotDeviceTypeChanged(self, index):
         t = self.devicetypes.getType(index)
         ar = t and "%s : %s" % (t.width, t.height) or "w : h"
-        self.ui.editAspectRatio.setEnabled(t is None)
-        self.ui.editAspectRatio.setText(ar)
-        self.slotAspectRatioChanged()
+        self.ui.editDistributeAspectRatio.setEnabled(t is None)
+        self.ui.editDistributeAspectRatio.setText(ar)
+        self.slotDistributeAspectRatioChanged()
 
     def slotContextMenu(self, pos):
         item = self.ui.documentView.itemAt(pos)
