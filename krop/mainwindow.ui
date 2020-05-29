@@ -255,7 +255,7 @@
              <widget class="QLineEdit" name="editSelAspectRatio"/>
             </item>
             <item row="1" column="0" colspan="2">
-             <widget class="QCheckBox" name="checkSelLockAspectRatio">
+             <widget class="QCheckBox" name="checkSelAspectRatioLocked">
               <property name="toolTip">
                <string/>
               </property>
@@ -263,7 +263,7 @@
                <string>Lock aspect ratio</string>
               </property>
               <property name="checked">
-               <bool>true</bool>
+               <bool>false</bool>
               </property>
              </widget>
             </item>

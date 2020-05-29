@@ -52,7 +52,10 @@ class ViewerSelections(object):
 
     def deleteSelection(self, s):
         if s is self.currentSelection:
-            self.currentSelection = None
+            if self.items:
+                self.currentSelection = self.items[-1]
+            else:
+                self.currentSelection = None
         self._selections.remove(s)
         s.scene().removeItem(s)
 
@@ -65,9 +68,10 @@ class ViewerSelections(object):
 
     def setCurrentSelection(self, currentSelection):
         self._currentSelection = currentSelection
-        for s in self.items:
-            if s is not currentSelection:
-                s.stackBefore(currentSelection)
+        if currentSelection:
+            for s in self.items:
+                if s is not currentSelection:
+                    s.stackBefore(currentSelection)
         self.viewer.scene().update()
         self.currentSelectionUpdated()
 
@@ -141,6 +145,7 @@ class ViewerSelectionItem(QGraphicsItem):
             rect = self.mapRectFromParent(self.viewer.irect)
 
         self.rect = rect
+        self._aspectRatioLocked = False
         self.minWidth = 1
         self.minHeight = 1
         self.pageIndex = self.viewer.currentPageIndex
@@ -156,6 +161,11 @@ class ViewerSelectionItem(QGraphicsItem):
         self.adjustBoundingRect(0,0,0,0)
 
         self.setCursor(Qt.OpenHandCursor)
+
+    @property
+    def selection(self):
+        # this is used in mainwindow.slotContextMenu
+        return self
 
     @property
     def viewer(self):
@@ -179,6 +189,16 @@ class ViewerSelectionItem(QGraphicsItem):
                 return nr
             if c.isVisible():
                 nr += 1
+
+    def getAspectRatioLocked(self):
+        return self._aspectRatioLocked
+
+    def setAspectRatioLocked(self, locked):
+        self._aspectRatioLocked = locked
+        #TODO
+        self.viewer.update()
+
+    aspectRatioLocked = property(getAspectRatioLocked, setAspectRatioLocked)
 
     @property
     def distributeAspectRatio(self):

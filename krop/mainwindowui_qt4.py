@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Fri May 29 10:47:06 2020
+# Created: Fri May 29 11:33:43 2020
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -137,11 +137,11 @@ class Ui_MainWindow(object):
         self.editSelAspectRatio = QtGui.QLineEdit(self.groupCurrentSel)
         self.editSelAspectRatio.setObjectName(_fromUtf8("editSelAspectRatio"))
         self.gridLayout_4.addWidget(self.editSelAspectRatio, 0, 1, 1, 1)
-        self.checkSelLockAspectRatio = QtGui.QCheckBox(self.groupCurrentSel)
-        self.checkSelLockAspectRatio.setToolTip(_fromUtf8(""))
-        self.checkSelLockAspectRatio.setChecked(True)
-        self.checkSelLockAspectRatio.setObjectName(_fromUtf8("checkSelLockAspectRatio"))
-        self.gridLayout_4.addWidget(self.checkSelLockAspectRatio, 1, 0, 1, 2)
+        self.checkSelAspectRatioLocked = QtGui.QCheckBox(self.groupCurrentSel)
+        self.checkSelAspectRatioLocked.setToolTip(_fromUtf8(""))
+        self.checkSelAspectRatioLocked.setChecked(False)
+        self.checkSelAspectRatioLocked.setObjectName(_fromUtf8("checkSelAspectRatioLocked"))
+        self.gridLayout_4.addWidget(self.checkSelAspectRatioLocked, 1, 0, 1, 2)
         self.verticalLayout_5.addWidget(self.groupCurrentSel)
         self.groupTrimMargins = QtGui.QGroupBox(self.tabAdvanced)
         self.groupTrimMargins.setObjectName(_fromUtf8("groupTrimMargins"))
@@ -415,7 +415,7 @@ class Ui_MainWindow(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabBasic), _translate("MainWindow", "Basic", None))
         self.groupCurrentSel.setTitle(_translate("MainWindow", "Current Selection", None))
         self.labelSelAspectRatio.setText(_translate("MainWindow", "Aspect ratio:", None))
-        self.checkSelLockAspectRatio.setText(_translate("MainWindow", "Lock aspect ratio", None))
+        self.checkSelAspectRatioLocked.setText(_translate("MainWindow", "Lock aspect ratio", None))
         self.groupTrimMargins.setToolTip(_translate("MainWindow", "<p>Right-click a selection to automatically trim it.</p>", None))
         self.groupTrimMargins.setTitle(_translate("MainWindow", "Settings for trimming margins", None))
         self.checkTrimUseAllPages.setToolTip(_translate("MainWindow", "<p>If selected, all pages will be inspected (which can be very slow!) in order to determine the margins for auto trimming. Otherwise, only the current page is inspected.</p>", None))

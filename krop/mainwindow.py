@@ -178,6 +178,7 @@ class MainWindow(QKMainWindow):
         self.ui.radioSelIndividual.toggled.connect(self.slotSelectionMode)
         #  self.ui.editSelExceptions.editingFinished.connect(self.slotSelExceptionsChanged)
         self.ui.editSelExceptions.textEdited.connect(self.slotSelExceptionsEdited)
+        self.ui.checkSelAspectRatioLocked.stateChanged.connect(self.slotSelAspectRatioLockedChanged)
         self.ui.comboDistributeDevice.currentIndexChanged.connect(self.slotDeviceTypeChanged)
         self.ui.editDistributeAspectRatio.editingFinished.connect(self.slotDistributeAspectRatioChanged)
         self.ui.splitter.splitterMoved.connect(self.slotSplitterMoved)
@@ -210,13 +211,19 @@ class MainWindow(QKMainWindow):
         return self.viewer.selections
 
     def currentSelectionUpdated(self):
-        try:
-            r = self.selections.currentSelection.boundingRect()
+        sel = self.selections.currentSelection
+        if sel:
+            r = sel.boundingRect()
             self.ui.editSelAspectRatio.setText("{} : {}".format(r.width(), r.height()))
             self.ui.groupCurrentSel.setEnabled(True)
-        except:
+            self.ui.checkSelAspectRatioLocked.setChecked(sel.aspectRatioLocked)
+        else:
             self.ui.groupCurrentSel.setEnabled(False)
 
+    def slotSelAspectRatioLockedChanged(self, state):
+        sel = self.selections.currentSelection
+        if sel:
+            sel.aspectRatioLocked = self.ui.checkSelAspectRatioLocked.isChecked()
 
     def readSettings(self):
         settings = QSettings()
@@ -488,12 +495,12 @@ class MainWindow(QKMainWindow):
         item = self.ui.documentView.itemAt(pos)
         try:
             self.selections.currentSelection = item.selection
-            popMenu = QMenu()
-            popMenu.addAction(self.ui.actionDeleteSelection)
-            popMenu.addAction(self.ui.actionTrimMargins)
-            popMenu.exec_(self.ui.documentView.mapToGlobal(pos))
         except AttributeError:
-            pass
+            return
+        popMenu = QMenu()
+        popMenu.addAction(self.ui.actionDeleteSelection)
+        popMenu.addAction(self.ui.actionTrimMargins)
+        popMenu.exec_(self.ui.documentView.mapToGlobal(pos))
 
     def slotDeleteSelection(self):
         if self.selections.currentSelection is not None:
