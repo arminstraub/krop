@@ -57,6 +57,7 @@ class AspectRatioTypeManager:
 
     def __init__(self):
         self.types = []
+        self.defaultsUsed = False
 
     def __iter__(self):
         return iter(self.types)
@@ -76,7 +77,14 @@ class AspectRatioTypeManager:
         pass
   
     def saveTypes(self, settings):
-        settings.beginWriteArray(self.settingsCaption())
+        c = self.settingsCaption()
+        # if the defaults have been used, we still write them to the config
+        # file, making it easier for the user to edit/add, but we append
+        # Defaults to the caption so that these get automatically overriden by
+        # future versions of krop (which may have updated defaults)
+        if self.defaultsUsed:
+            c += "Defaults"
+        settings.beginWriteArray(c)
         for i in range(len(self.types)):
             t = self.types[i]
             settings.setArrayIndex(i)
@@ -95,6 +103,7 @@ class AspectRatioTypeManager:
             self.addType(name, width, height)
         settings.endArray()
         if count==0:
+            self.defaultsUsed = True
             self.addDefaults()
 
 class SelAspectRatioTypeManager(AspectRatioTypeManager):
@@ -634,21 +643,25 @@ class MainWindow(QKMainWindow):
 
         QApplication.setOverrideCursor(Qt.WaitCursor)
         try:
-            # r is the original selection, rt is the trimmed version
-            r = sel.mapRectToImage(sel.rect)
-            rt = QRectF()
+            # orect is the original selection, nrect is the trimmed version
+            orect = sel.mapRectToImage(sel.rect)
+            nrect = QRectF()
             for idx in pages:
                 # calculate values for trimming
                 img = self.viewer.getImage(idx)
-                rt = rt.united(autoTrimMargins(img, r, sensitivity, allowedchanges))
+                nrect = nrect.united(autoTrimMargins(img, orect, sensitivity, allowedchanges))
 
-            # adjust for padding
+            # adjust for padding ...
             dtop, dright, dbottom, dleft = self.getPadding()
-            rt.adjust(-dleft, -dtop, dright, dbottom)
-            rt = rt.intersected(r) # but don't overadjust
+            nrect.adjust(-dleft, -dtop, dright, dbottom)
+            # ... but don't overadjust
+            nrect = nrect.intersected(orect)
+
+            # take fixed aspect ratio into account
+
             # set selection to new values
-            rt = sel.mapRectFromImage(rt)
-            sel.setBoundingRect(rt.topLeft(), rt.bottomRight())
+            nrect = sel.mapRectFromImage(nrect)
+            sel.setBoundingRect(nrect.topLeft(), nrect.bottomRight())
         finally:
             QApplication.restoreOverrideCursor()
 
