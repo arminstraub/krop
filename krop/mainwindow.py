@@ -90,8 +90,8 @@ class AspectRatioTypeManager:
         for i in range(count):
             settings.setArrayIndex(i)
             name = settings.value("Name")
-            width = int(settings.value("Width"))
-            height = int(settings.value("Height"))
+            width = float(settings.value("Width"))
+            height = float(settings.value("Height"))
             self.addType(name, width, height)
         settings.endArray()
         if count==0:
@@ -104,7 +104,12 @@ class SelAspectRatioTypeManager(AspectRatioTypeManager):
 
     def addDefaults(self):
         self.addType("Flexible aspect ratio", 0, 0)
-        self.addType("Letter", 216, 279)
+        self.addType("A4/A5 etc.", 1, 1.414)
+        self.addType("A4/A5 etc. (landscape)", 1.414, 1)
+        self.addType("Letter", 8.5, 11)
+        self.addType("Letter (landscape)", 11, 8.5)
+        self.addType("Legal", 8.5, 14)
+        self.addType("Legal (landscape)", 14, 8.5)
 
 class DeviceTypeManager(AspectRatioTypeManager):
 
@@ -304,7 +309,7 @@ class MainWindow(QKMainWindow):
         settings.setValue("PDF/IncludePagesWithoutSelections", "true" if
                 self.ui.checkIncludePagesWithoutSelections.isChecked() else "false")
 
-        #TODO
+        self.selAspectRatioTypes.saveTypes(settings)
         self.deviceTypes.saveTypes(settings)
 
     def openFile(self, fileName):
