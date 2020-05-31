@@ -658,6 +658,25 @@ class MainWindow(QKMainWindow):
             nrect = nrect.intersected(orect)
 
             # take fixed aspect ratio into account
+            if sel.aspectRatio:
+                r, w, h = sel.aspectRatio, nrect.width(), nrect.height()
+                nw, nh = max(w, h*r), max(h, w/r)
+                if nw > w:
+                    d1 = (nw - w) / 2
+                    if nrect.left() - orect.left() < d1:
+                        d1 = nrect.left() - orect.left()
+                    elif orect.right() - nrect.right() < d1:
+                        d1 = nw - w - orect.right() + nrect.right()
+                    d2 = nw - w - d1
+                    nrect.adjust(-d1, 0, d2, 0)
+                elif nh > h:
+                    d1 = (nh - h) / 2
+                    if nrect.top() - orect.top() < d1:
+                        d1 = nrect.top() - orect.top()
+                    elif orect.bottom() - nrect.bottom() < d1:
+                        d1 = nh - h - orect.bottom() + nrect.bottom()
+                    d2 = nh - h - d1
+                    nrect.adjust(0, -d1, 0, d2)
 
             # set selection to new values
             nrect = sel.mapRectFromImage(nrect)
