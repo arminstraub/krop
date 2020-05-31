@@ -16,8 +16,8 @@ the Free Software Foundation; either version 3 of the License, or
 from krop.qt import *
 
 
-def autoTrimMargins(img, r, sensitivity, allowedchanges):
-    """Given a QImage img and a QRectF r, automatically trims the margins of
+def autoTrimMargins(img, r, minr, sensitivity, allowedchanges):
+    """Given a QImage img and a QRect r, automatically trims the margins of
     that rectangle according to the parameters."""
 
     def pixAt(x, y):
@@ -37,28 +37,29 @@ def autoTrimMargins(img, r, sensitivity, allowedchanges):
         return True
 
     # rounding r to QRect might overshoot the picture by a pixel
-    r = QRectF(r).toRect().intersected(img.rect())
+    r = r.intersected(img.rect())
 
-    while r.height() > 0:
+    # we shouldn't trim r to something smaller than minr
+    while r.height() > 0 and (minr is None or r.top() < minr.top()):
         L = [ pixAt(x, r.top()) for x in range(r.left(), r.right()) ]
         if not isTrimmable(L):
             break
         r.setTop(r.top()+1)
-    while r.height() > 0:
+    while r.height() > 0 and (minr is None or r.bottom() > minr.bottom()):
         L = [ pixAt(x, r.bottom()) for x in range(r.left(), r.right()) ]
         if not isTrimmable(L):
             break
         r.setBottom(r.bottom()-1)
-    while r.width() > 0:
+    while r.width() > 0 and (minr is None or r.left() < minr.left()):
         L = [ pixAt(r.left(), y) for y in range(r.top(), r.bottom()) ]
         if not isTrimmable(L):
             break
         r.setLeft(r.left()+1)
-    while r.width() > 0:
+    while r.width() > 0 and (minr is None or r.right() > minr.right()):
         L = [ pixAt(r.right(), y) for y in range(r.top(), r.bottom()) ]
         if not isTrimmable(L):
             break
         r.setRight(r.right()-1)
 
-    return QRectF(r)
+    return r
 

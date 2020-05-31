@@ -644,12 +644,15 @@ class MainWindow(QKMainWindow):
         QApplication.setOverrideCursor(Qt.WaitCursor)
         try:
             # orect is the original selection, nrect is the trimmed version
-            orect = sel.mapRectToImage(sel.rect)
-            nrect = QRectF()
+            orect = sel.mapRectToImage(sel.rect).toRect()
+            nrect = None
             for idx in pages:
                 # calculate values for trimming
                 img = self.viewer.getImage(idx)
-                nrect = nrect.united(autoTrimMargins(img, orect, sensitivity, allowedchanges))
+                nrect = autoTrimMargins(img, orect, nrect, sensitivity, allowedchanges)
+
+            orect = QRectF(orect)
+            nrect = QRectF(nrect)
 
             # adjust for padding ...
             dtop, dright, dbottom, dleft = self.getPadding()
