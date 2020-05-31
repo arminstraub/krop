@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Fri May 29 14:39:09 2020
+# Created: Sat May 30 11:10:49 2020
 #      by: PyQt5 UI code generator 5.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -117,17 +117,17 @@ class Ui_MainWindow(object):
         self.groupCurrentSel.setObjectName("groupCurrentSel")
         self.gridLayout_4 = QtWidgets.QGridLayout(self.groupCurrentSel)
         self.gridLayout_4.setObjectName("gridLayout_4")
-        self.labelSelAspectRatio = QtWidgets.QLabel(self.groupCurrentSel)
-        self.labelSelAspectRatio.setObjectName("labelSelAspectRatio")
-        self.gridLayout_4.addWidget(self.labelSelAspectRatio, 0, 0, 1, 1)
+        self.comboSelAspectRatioType = QtWidgets.QComboBox(self.groupCurrentSel)
+        self.comboSelAspectRatioType.setEditable(False)
+        self.comboSelAspectRatioType.setSizeAdjustPolicy(QtWidgets.QComboBox.AdjustToContentsOnFirstShow)
+        self.comboSelAspectRatioType.setObjectName("comboSelAspectRatioType")
+        self.gridLayout_4.addWidget(self.comboSelAspectRatioType, 0, 0, 1, 2)
         self.editSelAspectRatio = QtWidgets.QLineEdit(self.groupCurrentSel)
         self.editSelAspectRatio.setObjectName("editSelAspectRatio")
-        self.gridLayout_4.addWidget(self.editSelAspectRatio, 0, 1, 1, 1)
-        self.checkSelAspectRatioLocked = QtWidgets.QCheckBox(self.groupCurrentSel)
-        self.checkSelAspectRatioLocked.setToolTip("")
-        self.checkSelAspectRatioLocked.setChecked(False)
-        self.checkSelAspectRatioLocked.setObjectName("checkSelAspectRatioLocked")
-        self.gridLayout_4.addWidget(self.checkSelAspectRatioLocked, 1, 0, 1, 2)
+        self.gridLayout_4.addWidget(self.editSelAspectRatio, 1, 1, 1, 1)
+        self.labelSelAspectRatio = QtWidgets.QLabel(self.groupCurrentSel)
+        self.labelSelAspectRatio.setObjectName("labelSelAspectRatio")
+        self.gridLayout_4.addWidget(self.labelSelAspectRatio, 1, 0, 1, 1)
         self.verticalLayout_5.addWidget(self.groupCurrentSel)
         self.groupTrimMargins = QtWidgets.QGroupBox(self.tabAdvanced)
         self.groupTrimMargins.setObjectName("groupTrimMargins")
@@ -364,7 +364,7 @@ class Ui_MainWindow(object):
         self.toolBar.addAction(self.actionTrimMarginsAll)
 
         self.retranslateUi(MainWindow)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(1)
         self.buttonPrevious.clicked.connect(self.actionPreviousPage.trigger)
         self.buttonNext.clicked.connect(self.actionNextPage.trigger)
         self.buttonFirst.clicked.connect(self.actionFirstPage.trigger)
@@ -402,7 +402,6 @@ class Ui_MainWindow(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabBasic), _translate("MainWindow", "Basic"))
         self.groupCurrentSel.setTitle(_translate("MainWindow", "Current Selection"))
         self.labelSelAspectRatio.setText(_translate("MainWindow", "Aspect ratio:"))
-        self.checkSelAspectRatioLocked.setText(_translate("MainWindow", "Lock aspect ratio"))
         self.groupTrimMargins.setToolTip(_translate("MainWindow", "<p>Right-click a selection to automatically trim it.</p>"))
         self.groupTrimMargins.setTitle(_translate("MainWindow", "Settings for trimming margins"))
         self.checkTrimUseAllPages.setToolTip(_translate("MainWindow", "<p>If selected, all pages will be inspected (which can be very slow!) in order to determine the margins for auto trimming. Otherwise, only the current page is inspected.</p>"))

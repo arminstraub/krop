@@ -160,7 +160,8 @@ class ViewerSelectionItem(QGraphicsItem):
             rect = self.mapRectFromParent(self.viewer.irect)
 
         self.rect = rect
-        self._aspectRatioLocked = False
+        self._aspectRatioData = None
+        self._aspectRatio = None
         self.minWidth = 1
         self.minHeight = 1
         self.pageIndex = self.viewer.currentPageIndex
@@ -173,9 +174,10 @@ class ViewerSelectionItem(QGraphicsItem):
         SelectionCornerHandleItem(self, 0, 1)
         SelectionCornerHandleItem(self, 1, 0)
         SelectionCornerHandleItem(self, 1, 1)
-        self.adjustBoundingRect(0,0,0,0)
+        self.adjustBoundingRect()
 
         self.setCursor(Qt.OpenHandCursor)
+
 
     @property
     def selection(self):
@@ -190,11 +192,13 @@ class ViewerSelectionItem(QGraphicsItem):
     def selections(self):
         return self.viewer.selections
 
+
     def isCurrent(self):
         return self is self.selections.currentSelection
 
     def setAsCurrent(self):
         self.selections.currentSelection = self
+
 
     @property
     def orderIndex(self):
@@ -205,19 +209,35 @@ class ViewerSelectionItem(QGraphicsItem):
             if c.isVisible():
                 nr += 1
 
-    def getAspectRatioLocked(self):
-        return self._aspectRatioLocked
 
-    def setAspectRatioLocked(self, locked):
-        self._aspectRatioLocked = locked
-        #TODO
-        self.viewer.update()
+    @property
+    def aspectRatio(self):
+        return self._aspectRatio
 
-    aspectRatioLocked = property(getAspectRatioLocked, setAspectRatioLocked)
+    def getAspectRatioData(self):
+        return self._aspectRatioData or [0, ""]
+
+    def setAspectRatioData(self, data):
+        index, s = data
+        # index=0: flexible
+        if index == 0:
+            self._aspectRatio = None
+            data[1] = ""
+        else:
+            self._aspectRatio = aspectRatioFromStr(s)
+        self._aspectRatioData = data
+        self.adjustBoundingRect()
+        for c in self.childItems():
+            if isinstance(c, SelectionHandleItem):
+                c.setVisible(self._aspectRatio is None)
+
+    aspectRatioData= property(getAspectRatioData, setAspectRatioData)
+
 
     @property
     def distributeAspectRatio(self):
         return self.selections.distributeAspectRatio
+
 
     def selectionVisibleOnPage(self, pageIndex):
         """Determines if this selection is visible on a given page."""
@@ -229,6 +249,7 @@ class ViewerSelectionItem(QGraphicsItem):
             return True
         if mode == ViewerSelections.evenodd:
             return (pageIndex - self.pageIndex) % 2 == 0
+
 
     def boundingRect(self):
         return self.rect
@@ -242,25 +263,13 @@ class ViewerSelectionItem(QGraphicsItem):
                 nrect.right()-orect.right(),
                 nrect.bottom()-orect.bottom())
 
-    def moveBoundingRect(self, dx, dy):
-        """similar to adjustBoundingRect but never changes the size of the boundingRect"""
-        orect = self.mapRectToParent(self.rect)
-        prect = self.viewer.irect
-        if dx < 0:
-            dx = max(dx, prect.left() - orect.left())
-        if dx > 0:
-            dx = min(dx, prect.right() - orect.right())
-        if dy < 0:
-            dy = max(dy, prect.top() - orect.top())
-        if dy > 0:
-            dy = min(dy, prect.bottom() - orect.bottom())
-        self.adjustBoundingRect(dx, dy, dx, dy)
 
-    def adjustBoundingRect(self, dx1, dy1, dx2, dy2):
+    def adjustBoundingRect(self, dx1=0, dy1=0, dx2=0, dy2=0):
         orect = self.mapRectToParent(self.rect)
-        nrect = orect.adjusted(dx1, dy1, dx2, dy2)
-        # make sure we are still inside the parent
         prect = self.viewer.irect
+        nrect = orect.adjusted(dx1, dy1, dx2, dy2)
+
+        # make sure we are still inside the parent
         if nrect.left() < prect.left():
             nrect.setLeft(prect.left())
         if nrect.right() > prect.right():
@@ -291,14 +300,56 @@ class ViewerSelectionItem(QGraphicsItem):
             else:
                 nrect.setTop(nrect.top()-extra/2)
                 nrect.setBottom(nrect.bottom()+extra/2)
+
+        # enforce aspectRatio r = w/h if set
+        if self.aspectRatio:
+            r, w, h = self.aspectRatio, nrect.width(), nrect.height()
+            nw, nh = min(w, h*r), min(h, w/r)
+            if dx1==0 and dx2!=0:
+                # move right side
+                nrect.adjust(0, 0, nw-w, 0)
+            elif dx2==0 and dx1!=0:
+                # move left side
+                nrect.adjust(w-nw, 0, 0, 0)
+            else:
+                # center horizontally
+                nrect.adjust((w-nw)/2, 0, -(w-nw)/2, 0)
+            if dy1==0 and dy2!=0:
+                # move bottom side
+                nrect.adjust(0, 0, 0, nh-h)
+            elif dy2==0 and dy1!=0:
+                # move top side
+                nrect.adjust(0, h-nh, 0, 0)
+            else:
+                # center vertically
+                nrect.adjust(0, (h-nh)/2, 0, -(h-nh)/2)
+
         # store parent rect for comparison (when cropping later)
         self.parentrect = self.mapRectFromParent(self.viewer.irect)
-        # enlarge
+
+        # change size of boundingRect
         self.prepareGeometryChange()
         self.rect = self.mapRectFromParent(nrect)
         self.selections.currentSelectionUpdated()
+
         return [nrect.left()-orect.left(), nrect.top()-orect.top(),
                 nrect.right()-orect.right(), nrect.bottom()-orect.bottom() ]
+
+
+    def moveBoundingRect(self, dx, dy):
+        """moves boundingRect but never changes its size"""
+        orect = self.mapRectToParent(self.rect)
+        prect = self.viewer.irect
+        if dx < 0:
+            dx = max(dx, prect.left() - orect.left())
+        if dx > 0:
+            dx = min(dx, prect.right() - orect.right())
+        if dy < 0:
+            dy = max(dy, prect.top() - orect.top())
+        if dy > 0:
+            dy = min(dy, prect.bottom() - orect.bottom())
+        self.adjustBoundingRect(dx, dy, dx, dy)
+
 
     def distributeRect(self):
         r = self.distributeAspectRatio
@@ -584,3 +635,16 @@ class SelectionCornerHandleItem(QGraphicsItem):
     def mouseReleaseEvent(self, event):
         self.lastPos = None
 
+
+def aspectRatioFromStr(s):
+    try:
+        a = [float(x) for x in s.split(":")]
+        if len(a) == 1:
+            aspectRatio = a[0]
+        else:
+            aspectRatio = a[0] / a[1]
+        if aspectRatio <= 0:
+            aspectRatio = None
+    except:
+        aspectRatio = None
+    return aspectRatio

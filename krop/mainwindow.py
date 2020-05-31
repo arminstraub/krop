@@ -41,27 +41,28 @@ if PYQT5:
 else:
     from krop.mainwindowui_qt4 import Ui_MainWindow
 
-from krop.viewerselections import ViewerSelections
+from krop.viewerselections import ViewerSelections, aspectRatioFromStr
 from krop.vieweritem import ViewerItem
 from krop.pdfcropper import PdfFile, PdfCropper, PdfEncryptedError, optimizePdfGhostscript
 from krop.autotrim import autoTrimMargins
 
 
-class DeviceType:
+class AspectRatioType:
     def __init__(self, name, width, height):
         self.name = name
         self.width = width
         self.height = height
 
-class DeviceTypeManager:
+class AspectRatioTypeManager:
 
-    types = []
+    def __init__(self):
+        self.types = []
 
     def __iter__(self):
         return iter(self.types)
 
     def addType(self, name, width, height):
-        self.types.append(DeviceType(name, width, height))
+        self.types.append(AspectRatioType(name, width, height))
 
     def getType(self, index):
         if index >= len(self.types):
@@ -69,14 +70,13 @@ class DeviceTypeManager:
         return self.types[index]
 
     def addDefaults(self):
-        self.addType("No fitting", 0, 0)
-        self.addType("4:3 eReader", 4, 3)
-        self.addType("4:3 eReader (widescreen)", 3, 4)
-        self.addType("Nook 1st Ed.", 600, 730)
-        self.addType("Nook 1st Ed. (widescreen)", 730, 600)
+        pass
+
+    def settingsCaption(self):
+        pass
   
     def saveTypes(self, settings):
-        settings.beginWriteArray("DeviceTypes")
+        settings.beginWriteArray(self.settingsCaption())
         for i in range(len(self.types)):
             t = self.types[i]
             settings.setArrayIndex(i)
@@ -86,7 +86,7 @@ class DeviceTypeManager:
         settings.endArray()
   
     def loadTypes(self, settings):
-        count = settings.beginReadArray("DeviceTypes")
+        count = settings.beginReadArray(self.settingsCaption())
         for i in range(count):
             settings.setArrayIndex(i)
             name = settings.value("Name")
@@ -97,6 +97,27 @@ class DeviceTypeManager:
         if count==0:
             self.addDefaults()
 
+class SelAspectRatioTypeManager(AspectRatioTypeManager):
+
+    def settingsCaption(self):
+        return "SelAspectRatios"
+
+    def addDefaults(self):
+        self.addType("Flexible aspect ratio", 0, 0)
+        self.addType("Letter", 216, 279)
+
+class DeviceTypeManager(AspectRatioTypeManager):
+
+    def settingsCaption(self):
+        return "DeviceTypes"
+
+    def addDefaults(self):
+        self.addType("No fitting", 0, 0)
+        self.addType("4:3 eReader", 4, 3)
+        self.addType("4:3 eReader (widescreen)", 3, 4)
+        self.addType("Nook 1st Ed.", 600, 730)
+        self.addType("Nook 1st Ed. (widescreen)", 730, 600)
+
 
 class MainWindow(QKMainWindow):
 
@@ -105,7 +126,8 @@ class MainWindow(QKMainWindow):
     def __init__(self):
         QKMainWindow.__init__(self)
 
-        self.devicetypes = DeviceTypeManager()
+        self.selAspectRatioTypes = SelAspectRatioTypeManager()
+        self.deviceTypes = DeviceTypeManager()
 
         self._viewer = ViewerItem(self)
 
@@ -182,7 +204,8 @@ class MainWindow(QKMainWindow):
         self.ui.radioSelIndividual.toggled.connect(self.slotSelectionMode)
         #  self.ui.editSelExceptions.editingFinished.connect(self.slotSelExceptionsChanged)
         self.ui.editSelExceptions.textEdited.connect(self.slotSelExceptionsEdited)
-        self.ui.checkSelAspectRatioLocked.stateChanged.connect(self.slotSelAspectRatioLockedChanged)
+        self.ui.comboSelAspectRatioType.currentIndexChanged.connect(self.slotSelAspectRatioTypeChanged)
+        self.ui.editSelAspectRatio.editingFinished.connect(self.slotSelAspectRatioChanged)
         self.ui.comboDistributeDevice.currentIndexChanged.connect(self.slotDeviceTypeChanged)
         self.ui.editDistributeAspectRatio.editingFinished.connect(self.slotDistributeAspectRatioChanged)
         self.ui.splitter.splitterMoved.connect(self.slotSplitterMoved)
@@ -193,8 +216,12 @@ class MainWindow(QKMainWindow):
 
         self.readSettings()
 
+        # populate combobox with aspect ratio types
+        for t in self.selAspectRatioTypes:
+            self.ui.comboSelAspectRatioType.addItem(t.name)
+        self.ui.comboSelAspectRatioType.addItem("Custom")
         # populate combobox with device types
-        for t in self.devicetypes:
+        for t in self.deviceTypes:
             self.ui.comboDistributeDevice.addItem(t.name)
         self.ui.comboDistributeDevice.addItem("Custom")
 
@@ -219,16 +246,17 @@ class MainWindow(QKMainWindow):
         sel = self.selections.currentSelection
         if sel:
             r = sel.boundingRect()
-            self.ui.editSelAspectRatio.setText("{} : {}".format(r.width(), r.height()))
             self.ui.groupCurrentSel.setEnabled(True)
-            self.ui.checkSelAspectRatioLocked.setChecked(sel.aspectRatioLocked)
+            index, s = sel.aspectRatioData
+            self.ui.comboSelAspectRatioType.setCurrentIndex(index)
+            self.ui.editSelAspectRatio.setText(s)
+            if index == 0:
+                w, h = int(r.width()), int(r.height())
+                self.ui.editSelAspectRatio.setText("{} : {}".format(w, h))
         else:
+            self.ui.comboSelAspectRatioType.setCurrentIndex(0)
+            self.ui.editSelAspectRatio.setText("")
             self.ui.groupCurrentSel.setEnabled(False)
-
-    def slotSelAspectRatioLockedChanged(self, state):
-        sel = self.selections.currentSelection
-        if sel:
-            sel.aspectRatioLocked = self.ui.checkSelAspectRatioLocked.isChecked()
 
     def readSettings(self):
         settings = QSettings()
@@ -252,7 +280,8 @@ class MainWindow(QKMainWindow):
         self.ui.checkIncludePagesWithoutSelections.setChecked(
                 settings.value("PDF/IncludePagesWithoutSelections", "") == "true")
 
-        self.devicetypes.loadTypes(settings)
+        self.selAspectRatioTypes.loadTypes(settings)
+        self.deviceTypes.loadTypes(settings)
 
     def writeSettings(self):
         settings = QSettings()
@@ -275,7 +304,8 @@ class MainWindow(QKMainWindow):
         settings.setValue("PDF/IncludePagesWithoutSelections", "true" if
                 self.ui.checkIncludePagesWithoutSelections.isChecked() else "false")
 
-        self.devicetypes.saveTypes(settings)
+        #TODO
+        self.deviceTypes.saveTypes(settings)
 
     def openFile(self, fileName):
         if fileName:
@@ -469,28 +499,46 @@ class MainWindow(QKMainWindow):
         except ValueError:
             pass
 
+
+    def slotSelAspectRatioChanged(self):
+        sel = self.selections.currentSelection
+        if sel:
+            index = self.ui.comboSelAspectRatioType.currentIndex()
+            # index=0: flexible
+            # index=last: custom
+            s = self.ui.editSelAspectRatio.text()
+            sel.aspectRatioData = [index, s]
+
+    def slotSelAspectRatioTypeChanged(self, index):
+        sel = self.selections.currentSelection
+        t = self.selAspectRatioTypes.getType(index)
+        # index=0: flexible
+        # t=None: custom
+        # ar = t and "%s : %s" % (t.width, t.height) or "w : h"
+        ar = ""
+        if index == 0 or t is None:
+            if sel:
+                r = sel.boundingRect()
+                w, h = int(r.width()), int(r.height())
+                ar = "{} : {}".format(w, h)
+        elif t is not None:
+            ar = "{} : {}".format(t.width, t.height)
+        # self.ui.editSelAspectRatio.setEnabled(index == 0 or t is None)
+        self.ui.editSelAspectRatio.setEnabled(t is None)
+        self.ui.editSelAspectRatio.setText(ar)
+        if sel:
+            s = self.ui.editSelAspectRatio.text()
+            sel.aspectRatioData = [index, s]
+
+
     def distributeAspectRatioChanged(self, aspectRatio):
         self.selections.distributeAspectRatio = aspectRatio
 
-    def readDistributeAspectRatio(self):
-        try:
-            a = self.ui.editDistributeAspectRatio.text().split(":")
-            if len(a) == 1:
-                w, h = a[0], 1
-            else:
-                w, h = a[0], a[-1]
-            aspectRatio = float(w)/float(h)
-            if aspectRatio <= 0:
-                aspectRatio = None
-        except:
-            aspectRatio = None
-        return aspectRatio
-
     def slotDistributeAspectRatioChanged(self):
-        self.distributeAspectRatioChanged(self.readDistributeAspectRatio())
+        self.selections.distributeAspectRatio = aspectRatioFromStr(self.ui.editDistributeAspectRatio.text())
 
     def slotDeviceTypeChanged(self, index):
-        t = self.devicetypes.getType(index)
+        t = self.deviceTypes.getType(index)
         ar = t and "%s : %s" % (t.width, t.height) or "w : h"
         self.ui.editDistributeAspectRatio.setEnabled(t is None)
         self.ui.editDistributeAspectRatio.setText(ar)
