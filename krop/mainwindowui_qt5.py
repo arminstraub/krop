@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Sat May 30 11:10:49 2020
+# Created: Sun May 31 14:47:28 2020
 #      by: PyQt5 UI code generator 5.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -364,7 +364,7 @@ class Ui_MainWindow(object):
         self.toolBar.addAction(self.actionTrimMarginsAll)
 
         self.retranslateUi(MainWindow)
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(0)
         self.buttonPrevious.clicked.connect(self.actionPreviousPage.trigger)
         self.buttonNext.clicked.connect(self.actionNextPage.trigger)
         self.buttonFirst.clicked.connect(self.actionFirstPage.trigger)
@@ -401,6 +401,7 @@ class Ui_MainWindow(object):
         self.editSelExceptions.setToolTip(_translate("MainWindow", "<p>List pages which require individual selections.</p>"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabBasic), _translate("MainWindow", "Basic"))
         self.groupCurrentSel.setTitle(_translate("MainWindow", "Current Selection"))
+        self.comboSelAspectRatioType.setToolTip(_translate("MainWindow", "<p>If your favorite aspect ratio is missing here, you can add it by editing the config file.</p>"))
         self.labelSelAspectRatio.setText(_translate("MainWindow", "Aspect ratio:"))
         self.groupTrimMargins.setToolTip(_translate("MainWindow", "<p>Right-click a selection to automatically trim it.</p>"))
         self.groupTrimMargins.setTitle(_translate("MainWindow", "Settings for trimming margins"))
@@ -423,9 +424,9 @@ class Ui_MainWindow(object):
 "<p>You can automatically trim the margins of your selections.</p>\n"
 "<p>Examples and more information can be found at: <a href=\'http://arminstraub.com/software/krop\'>arminstraub.com</a></p>\n"
 ""))
+        self.labelHelpLicense.setToolTip(_translate("MainWindow", "<p>This program is free software and available to you in the hope that it will be useful; but without any warranty. It is distributed under the terms of the GNU General Public License (GPLv3+). See the accompanying files for more information.</p>"))
         self.labelHelpLicense.setText(_translate("MainWindow", "<p>Copyright (C) 2010-2020 Armin Straub\n"
-"<br><a href=\'http://arminstraub.com\'>http://arminstraub.com</a></p>\n"
-"<p>This program is free software and available to you in the hope that it will be useful; but without any warranty. It is distributed under the terms of the GNU General Public License (GPLv3+). See the accompanying files for more information.</p>"))
+"<br><a href=\'http://arminstraub.com\'>http://arminstraub.com</a></p>"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabHelp), _translate("MainWindow", "Help"))
         self.label.setText(_translate("MainWindow", "of"))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))

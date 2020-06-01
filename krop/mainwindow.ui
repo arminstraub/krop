@@ -31,7 +31,7 @@
         </sizepolicy>
        </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="tabBasic">
         <attribute name="title">
@@ -246,6 +246,9 @@
            <layout class="QGridLayout" name="gridLayout_4">
             <item row="0" column="0" colspan="2">
              <widget class="QComboBox" name="comboSelAspectRatioType">
+              <property name="toolTip">
+               <string>&lt;p&gt;If your favorite aspect ratio is missing here, you can add it by editing the config file.&lt;/p&gt;</string>
+              </property>
               <property name="editable">
                <bool>false</bool>
               </property>
@@ -475,10 +478,12 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="toolTip">
+            <string>&lt;p&gt;This program is free software and available to you in the hope that it will be useful; but without any warranty. It is distributed under the terms of the GNU General Public License (GPLv3+). See the accompanying files for more information.&lt;/p&gt;</string>
+           </property>
            <property name="text">
             <string>&lt;p&gt;Copyright (C) 2010-2020 Armin Straub
-&lt;br&gt;&lt;a href='http://arminstraub.com'&gt;http://arminstraub.com&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;This program is free software and available to you in the hope that it will be useful; but without any warranty. It is distributed under the terms of the GNU General Public License (GPLv3+). See the accompanying files for more information.&lt;/p&gt;</string>
+&lt;br&gt;&lt;a href='http://arminstraub.com'&gt;http://arminstraub.com&lt;/a&gt;&lt;/p&gt;</string>
            </property>
            <property name="textFormat">
             <enum>Qt::AutoText</enum>

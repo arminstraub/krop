@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Sat May 30 11:10:48 2020
+# Created: Sun May 31 14:47:27 2020
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -378,7 +378,7 @@ class Ui_MainWindow(object):
         self.toolBar.addAction(self.actionTrimMarginsAll)
 
         self.retranslateUi(MainWindow)
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(0)
         QtCore.QObject.connect(self.buttonPrevious, QtCore.SIGNAL(_fromUtf8("clicked()")), self.actionPreviousPage.trigger)
         QtCore.QObject.connect(self.buttonNext, QtCore.SIGNAL(_fromUtf8("clicked()")), self.actionNextPage.trigger)
         QtCore.QObject.connect(self.buttonFirst, QtCore.SIGNAL(_fromUtf8("clicked()")), self.actionFirstPage.trigger)
@@ -414,6 +414,7 @@ class Ui_MainWindow(object):
         self.editSelExceptions.setToolTip(_translate("MainWindow", "<p>List pages which require individual selections.</p>", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabBasic), _translate("MainWindow", "Basic", None))
         self.groupCurrentSel.setTitle(_translate("MainWindow", "Current Selection", None))
+        self.comboSelAspectRatioType.setToolTip(_translate("MainWindow", "<p>If your favorite aspect ratio is missing here, you can add it by editing the config file.</p>", None))
         self.labelSelAspectRatio.setText(_translate("MainWindow", "Aspect ratio:", None))
         self.groupTrimMargins.setToolTip(_translate("MainWindow", "<p>Right-click a selection to automatically trim it.</p>", None))
         self.groupTrimMargins.setTitle(_translate("MainWindow", "Settings for trimming margins", None))
@@ -436,9 +437,9 @@ class Ui_MainWindow(object):
 "<p>You can automatically trim the margins of your selections.</p>\n"
 "<p>Examples and more information can be found at: <a href=\'http://arminstraub.com/software/krop\'>arminstraub.com</a></p>\n"
 "", None))
+        self.labelHelpLicense.setToolTip(_translate("MainWindow", "<p>This program is free software and available to you in the hope that it will be useful; but without any warranty. It is distributed under the terms of the GNU General Public License (GPLv3+). See the accompanying files for more information.</p>", None))
         self.labelHelpLicense.setText(_translate("MainWindow", "<p>Copyright (C) 2010-2020 Armin Straub\n"
-"<br><a href=\'http://arminstraub.com\'>http://arminstraub.com</a></p>\n"
-"<p>This program is free software and available to you in the hope that it will be useful; but without any warranty. It is distributed under the terms of the GNU General Public License (GPLv3+). See the accompanying files for more information.</p>", None))
+"<br><a href=\'http://arminstraub.com\'>http://arminstraub.com</a></p>", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabHelp), _translate("MainWindow", "Help", None))
         self.label.setText(_translate("MainWindow", "of", None))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar", None))
