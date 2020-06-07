@@ -172,8 +172,8 @@ class MainWindow(QKMainWindow):
         self.ui.actionTrimMarginsAll.setIcon(QIcon.fromTheme('transform-crop'))
         # self.ui.actionTrimMarginsAll.setIcon(QIcon.fromTheme('select-rectangular'))
         # self.ui.actionTrimMarginsAll.setIcon(QIcon.fromTheme('edit-guides'))
-        self.ui.actionNewSelection.setIcon(QIcon.fromTheme('draw-rectangle'))
-        # self.ui.actionNewSelection.setIcon(QIcon.fromTheme('select-rectangular'))
+        self.ui.actionNewSelection.setIcon(QIcon.fromTheme('select-rectangular'))
+        # self.ui.actionNewSelection.setIcon(QIcon.fromTheme('draw-rectangle'))
         self.ui.actionDeleteSelection.setIcon(QIcon.fromTheme('edit-delete'))
 
         if QIcon.hasThemeIcon('document-open'):
