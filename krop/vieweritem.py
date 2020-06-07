@@ -54,6 +54,9 @@ class AbstractViewerItem(QGraphicsItem):
     def boundingRect(self):
         return self.brect
 
+    def isPortrait(self):
+        return self.irect.width() <= self.irect.height()
+
     def paint(self, painter, option, widget):
         img = self.getImage(self.currentPageIndex)
         if img is None:

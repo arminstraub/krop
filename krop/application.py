@@ -112,15 +112,7 @@ def main():
 
     # args.grid is specified as 2x3 for 2 cols, 3 rows
     if args.grid:
-        try:
-            colsrows = [int(x) for x in args.grid.split('x')]
-            c = colsrows[0]
-            # if no value for rows is specified, it defaults to 1
-            r = len(colsrows) > 1 and colsrows[1] or 1
-        except:
-            sys.stderr.write("Ignoring the parameter --grid because it is not of the expected form.\n")
-        else:
-            window.createSelectionGrid(c, r)
+        window.createSelectionGrid(args.grid)
 
     if args.trim:
         window.slotTrimMarginsAll()

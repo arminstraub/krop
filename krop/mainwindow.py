@@ -168,8 +168,13 @@ class MainWindow(QKMainWindow):
         self.ui.actionNextPage.setIcon(QIcon.fromTheme('go-next'))
         self.ui.actionFirstPage.setIcon(QIcon.fromTheme('go-first'))
         self.ui.actionLastPage.setIcon(QIcon.fromTheme('go-last'))
-        self.ui.actionTrimMarginsAll.setIcon(QIcon.fromTheme('select-rectangular'))
-        # self.ui.actionTrimMarginsAll.setIcon(QIcon.fromTheme('edit-select-all'))
+        self.ui.actionTrimMargins.setIcon(QIcon.fromTheme('transform-crop'))
+        self.ui.actionTrimMarginsAll.setIcon(QIcon.fromTheme('transform-crop'))
+        # self.ui.actionTrimMarginsAll.setIcon(QIcon.fromTheme('select-rectangular'))
+        # self.ui.actionTrimMarginsAll.setIcon(QIcon.fromTheme('edit-guides'))
+        self.ui.actionNewSelection.setIcon(QIcon.fromTheme('draw-rectangle'))
+        # self.ui.actionNewSelection.setIcon(QIcon.fromTheme('select-rectangular'))
+        self.ui.actionDeleteSelection.setIcon(QIcon.fromTheme('edit-delete'))
 
         if QIcon.hasThemeIcon('document-open'):
             self.ui.buttonFileSelect.setIcon(QIcon.fromTheme('document-open'))
@@ -194,6 +199,8 @@ class MainWindow(QKMainWindow):
             self.ui.buttonLast.setFlat(False)
 
         # we need to add the action to a widget in order for keyboard shortcuts to work
+        self.addAction(self.ui.actionNewSelection)
+        self.addAction(self.ui.actionNewSelectionGrid)
         self.addAction(self.ui.actionDeleteSelection)
         self.addAction(self.ui.actionFirstPage)
         self.addAction(self.ui.actionLastPage)
@@ -209,6 +216,8 @@ class MainWindow(QKMainWindow):
         self.ui.actionFirstPage.triggered.connect(self.slotFirstPage)
         self.ui.actionLastPage.triggered.connect(self.slotLastPage)
         self.ui.actionDeleteSelection.triggered.connect(self.slotDeleteSelection)
+        self.ui.actionNewSelection.triggered.connect(self.slotNewSelection)
+        self.ui.actionNewSelectionGrid.triggered.connect(self.slotNewSelectionGrid)
         self.ui.actionTrimMargins.triggered.connect(self.slotTrimMargins)
         self.ui.actionTrimMarginsAll.triggered.connect(self.slotTrimMarginsAll)
         self.ui.documentView.customContextMenuRequested.connect(self.slotContextMenu)
@@ -559,21 +568,65 @@ class MainWindow(QKMainWindow):
         self.slotDistributeAspectRatioChanged()
 
     def slotContextMenu(self, pos):
+        if self.viewer.isEmpty():
+            return
+
         item = self.ui.documentView.itemAt(pos)
+        menuForSelection= False
         try:
             self.selections.currentSelection = item.selection
+            menuForSelection= True
         except AttributeError:
-            return
+            pass
         popMenu = QMenu()
-        popMenu.addAction(self.ui.actionDeleteSelection)
-        popMenu.addAction(self.ui.actionTrimMargins)
+        popMenu.addAction(self.ui.actionNewSelection)
+        popMenu.addAction(self.ui.actionNewSelectionGrid)
+        if menuForSelection:
+            popMenu.addAction(self.ui.actionDeleteSelection)
+            popMenu.addAction(self.ui.actionTrimMargins)
+        else:
+            popMenu.addAction(self.ui.actionTrimMarginsAll)
         popMenu.exec_(self.ui.documentView.mapToGlobal(pos))
 
     def slotDeleteSelection(self):
         if self.selections.currentSelection is not None:
             self.selections.deleteSelection(self.selections.currentSelection)
 
-    def createSelectionGrid(self, cols=1, rows=1):
+    def slotNewSelection(self):
+        self.createSelectionGrid("1")
+
+    def slotNewSelectionGrid(self):
+        if not self.viewer.isEmpty():
+            default = "2x1"
+            if self.viewer.isPortrait():
+                default = "1x2"
+            grid, ok = QInputDialog.getText(self, self.tr('New Selection Grid...'),
+                    self.tr('Enter the dimensions of the grid:'), text=default)
+            if ok:
+                self.createSelectionGrid(grid)
+
+    def createSelectionGrid(self, grid):
+        if self.viewer.isEmpty():
+            return
+
+        try:
+            colsrows = [int(x) for x in grid.split('x')]
+            cols = colsrows[0]
+            # if only one value is specified, we determine the number of
+            # columns/rows according to whether the page is landscape or
+            # portrait
+            if len(colsrows) == 1:
+                if self.viewer.isPortrait():
+                    cols, rows = 1, cols
+                else:
+                    rows = 1
+            else:
+                rows = colsrows[1]
+        except:
+            self.showWarning(self.tr("Bad value for grid parameter"), self.tr("For creating a grid "
+                "of selections, you need to specify the dimensions of the grid in the form '2x3'."))
+            return
+
         for j in range(rows):
             for i in range(cols):
                 sel = self.selections.addSelection()

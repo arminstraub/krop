@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Sun May 31 14:47:28 2020
+# Created: Sat Jun  6 20:27:18 2020
 #      by: PyQt5 UI code generator 5.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -74,10 +74,6 @@ class Ui_MainWindow(object):
         self.editWhichPages = QtWidgets.QLineEdit(self.groupWhichPages)
         self.editWhichPages.setObjectName("editWhichPages")
         self.verticalLayout.addWidget(self.editWhichPages)
-        self.labelWhichPagesEg = QtWidgets.QLabel(self.groupWhichPages)
-        self.labelWhichPagesEg.setWordWrap(True)
-        self.labelWhichPagesEg.setObjectName("labelWhichPagesEg")
-        self.verticalLayout.addWidget(self.labelWhichPagesEg)
         self.checkIncludePagesWithoutSelections = QtWidgets.QCheckBox(self.groupWhichPages)
         self.checkIncludePagesWithoutSelections.setChecked(True)
         self.checkIncludePagesWithoutSelections.setObjectName("checkIncludePagesWithoutSelections")
@@ -144,26 +140,22 @@ class Ui_MainWindow(object):
         self.editPadding.setText("")
         self.editPadding.setObjectName("editPadding")
         self.gridLayout_3.addWidget(self.editPadding, 1, 1, 1, 1)
-        self.labelTrimMarginsEg = QtWidgets.QLabel(self.groupTrimMargins)
-        self.labelTrimMarginsEg.setWordWrap(True)
-        self.labelTrimMarginsEg.setObjectName("labelTrimMarginsEg")
-        self.gridLayout_3.addWidget(self.labelTrimMarginsEg, 2, 0, 1, 2)
         self.labelAllowedChanges = QtWidgets.QLabel(self.groupTrimMargins)
         self.labelAllowedChanges.setEnabled(True)
         self.labelAllowedChanges.setObjectName("labelAllowedChanges")
-        self.gridLayout_3.addWidget(self.labelAllowedChanges, 3, 0, 1, 1)
+        self.gridLayout_3.addWidget(self.labelAllowedChanges, 2, 0, 1, 1)
         self.editAllowedChanges = QtWidgets.QLineEdit(self.groupTrimMargins)
         self.editAllowedChanges.setEnabled(True)
         self.editAllowedChanges.setObjectName("editAllowedChanges")
-        self.gridLayout_3.addWidget(self.editAllowedChanges, 3, 1, 1, 1)
+        self.gridLayout_3.addWidget(self.editAllowedChanges, 2, 1, 1, 1)
         self.labelSensitivity = QtWidgets.QLabel(self.groupTrimMargins)
         self.labelSensitivity.setEnabled(True)
         self.labelSensitivity.setObjectName("labelSensitivity")
-        self.gridLayout_3.addWidget(self.labelSensitivity, 4, 0, 1, 1)
+        self.gridLayout_3.addWidget(self.labelSensitivity, 3, 0, 1, 1)
         self.editSensitivity = QtWidgets.QLineEdit(self.groupTrimMargins)
         self.editSensitivity.setEnabled(True)
         self.editSensitivity.setObjectName("editSensitivity")
-        self.gridLayout_3.addWidget(self.editSensitivity, 4, 1, 1, 1)
+        self.gridLayout_3.addWidget(self.editSensitivity, 3, 1, 1, 1)
         self.verticalLayout_5.addWidget(self.groupTrimMargins)
         self.groupDistribute = QtWidgets.QGroupBox(self.tabAdvanced)
         self.groupDistribute.setObjectName("groupDistribute")
@@ -208,17 +200,21 @@ class Ui_MainWindow(object):
         self.verticalLayout_3.addWidget(self.labelHelp)
         spacerItem2 = QtWidgets.QSpacerItem(20, 524, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_3.addItem(spacerItem2)
-        self.labelHelpLicense = QtWidgets.QLabel(self.tabHelp)
+        self.frameHelpCopyright = QtWidgets.QFrame(self.tabHelp)
+        self.frameHelpCopyright.setFrameShape(QtWidgets.QFrame.HLine)
+        self.frameHelpCopyright.setObjectName("frameHelpCopyright")
+        self.verticalLayout_3.addWidget(self.frameHelpCopyright)
+        self.labelHelpCopyright = QtWidgets.QLabel(self.tabHelp)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.labelHelpLicense.sizePolicy().hasHeightForWidth())
-        self.labelHelpLicense.setSizePolicy(sizePolicy)
-        self.labelHelpLicense.setTextFormat(QtCore.Qt.AutoText)
-        self.labelHelpLicense.setWordWrap(True)
-        self.labelHelpLicense.setOpenExternalLinks(True)
-        self.labelHelpLicense.setObjectName("labelHelpLicense")
-        self.verticalLayout_3.addWidget(self.labelHelpLicense)
+        sizePolicy.setHeightForWidth(self.labelHelpCopyright.sizePolicy().hasHeightForWidth())
+        self.labelHelpCopyright.setSizePolicy(sizePolicy)
+        self.labelHelpCopyright.setTextFormat(QtCore.Qt.AutoText)
+        self.labelHelpCopyright.setWordWrap(True)
+        self.labelHelpCopyright.setOpenExternalLinks(True)
+        self.labelHelpCopyright.setObjectName("labelHelpCopyright")
+        self.verticalLayout_3.addWidget(self.labelHelpCopyright)
         self.tabWidget.addTab(self.tabHelp, "")
         self.frame = QtWidgets.QFrame(self.splitter)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
@@ -319,7 +315,7 @@ class Ui_MainWindow(object):
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.toolBar = QtWidgets.QToolBar(MainWindow)
-        self.toolBar.setContextMenuPolicy(QtCore.Qt.PreventContextMenu)
+        self.toolBar.setContextMenuPolicy(QtCore.Qt.ActionsContextMenu)
         self.toolBar.setMovable(True)
         self.toolBar.setToolButtonStyle(QtCore.Qt.ToolButtonFollowStyle)
         self.toolBar.setFloatable(False)
@@ -354,6 +350,10 @@ class Ui_MainWindow(object):
         self.actionTrimMarginsAll = QtWidgets.QAction(MainWindow)
         self.actionTrimMarginsAll.setEnabled(False)
         self.actionTrimMarginsAll.setObjectName("actionTrimMarginsAll")
+        self.actionNewSelection = QtWidgets.QAction(MainWindow)
+        self.actionNewSelection.setObjectName("actionNewSelection")
+        self.actionNewSelectionGrid = QtWidgets.QAction(MainWindow)
+        self.actionNewSelectionGrid.setObjectName("actionNewSelectionGrid")
         self.toolBar.addAction(self.actionOpenFile)
         self.toolBar.addAction(self.actionKrop)
         self.toolBar.addAction(self.actionZoomIn)
@@ -386,7 +386,7 @@ class Ui_MainWindow(object):
         self.checkGhostscript.setToolTip(_translate("MainWindow", "<p>In order to use this option, Ghostscript must be installed and available as <i>gs</i>. Whether this option actually improves the file size depends on the PDF file.</p>"))
         self.checkGhostscript.setText(_translate("MainWindow", "Use Ghostscript to optimize"))
         self.groupWhichPages.setTitle(_translate("MainWindow", "Which pages to include"))
-        self.labelWhichPagesEg.setText(_translate("MainWindow", "<p><i>Eg:</i> 1-5 for the first 5 pages\n"
+        self.editWhichPages.setToolTip(_translate("MainWindow", "<p>Which pages to include in the output file.</p><p><i>Eg:</i> 1-5 for the first 5 pages\n"
 "<br><i>Eg:</i> 2- for all but the first page\n"
 "<br><i>Eg:</i> 1,4-5,7- to omit pages 2,3,6</p>"))
         self.checkIncludePagesWithoutSelections.setToolTip(_translate("MainWindow", "<p>If checked, pages without selections will be included in the output unchanged. Otherwise, such pages will be removed from the output.</p>"))
@@ -400,6 +400,7 @@ class Ui_MainWindow(object):
         self.labelSelExceptions.setText(_translate("MainWindow", "Exceptions:"))
         self.editSelExceptions.setToolTip(_translate("MainWindow", "<p>List pages which require individual selections.</p>"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabBasic), _translate("MainWindow", "Basic"))
+        self.groupCurrentSel.setToolTip(_translate("MainWindow", "<p>Click a selection to make it the current one. You can then set a fixed aspect ratio for this selection here.</p>"))
         self.groupCurrentSel.setTitle(_translate("MainWindow", "Current Selection"))
         self.comboSelAspectRatioType.setToolTip(_translate("MainWindow", "<p>If your favorite aspect ratio is missing here, you can add it by editing the config file.</p>"))
         self.labelSelAspectRatio.setText(_translate("MainWindow", "Aspect ratio:"))
@@ -407,10 +408,12 @@ class Ui_MainWindow(object):
         self.groupTrimMargins.setTitle(_translate("MainWindow", "Settings for trimming margins"))
         self.checkTrimUseAllPages.setToolTip(_translate("MainWindow", "<p>If selected, all pages will be inspected (which can be very slow!) in order to determine the margins for auto trimming. Otherwise, only the current page is inspected.</p>"))
         self.checkTrimUseAllPages.setText(_translate("MainWindow", "Use all pages (slow!)"))
+        self.labelPadding.setToolTip(_translate("MainWindow", "<p>How much padding to use when trimming.</p><p><i>Eg:</i> 2 or 5,2 or 5,2,5,5 (interpreted as in CSS)</p>"))
         self.labelPadding.setText(_translate("MainWindow", "Padding:"))
-        self.labelTrimMarginsEg.setText(_translate("MainWindow", "<p><i>Eg:</i> 2 or 5,2 or 5,2,5,5 (interpreted as in CSS)</p>"))
+        self.editPadding.setToolTip(_translate("MainWindow", "<p>How much padding to use when trimming.</p><p><i>Eg:</i> 2 or 5,2 or 5,2,5,5 (interpreted as in CSS)</p>"))
         self.labelAllowedChanges.setText(_translate("MainWindow", "Allowed changes:"))
         self.labelSensitivity.setText(_translate("MainWindow", "Color sensitivity:"))
+        self.groupDistribute.setToolTip(_translate("MainWindow", "<p>Use this option if you want to break up each selection into pieces that exactly fit a certain aspect ratio. This is useful for displaying files on devices that don\'t support scrolling well.</p>"))
         self.groupDistribute.setTitle(_translate("MainWindow", "Fit screen of device"))
         self.labelDistributeAspectRatio.setText(_translate("MainWindow", "Aspect ratio:"))
         self.labelDistributeHelp.setText(_translate("MainWindow", "<p><i>Eg:</i> 600:730 (ratio of width to height)</p>"))
@@ -419,13 +422,14 @@ class Ui_MainWindow(object):
 "<p>Using your mouse, create one or more selections on the pdf document. These are the regions that will be included into the cropped file.</p>\n"
 "<p>When you are done, click <i>Krop!</i> in the menu to create a cropped version of your document.</p>\n"
 "<h3>Hints</h3>\n"
+"<p>Right-click the page to create a selection for the full page (or a grid of selections).</p>\n"
 "<p>Right-click a selection to delete it. Or simply press the Delete key.</p>\n"
 "<p>You can choose to create individual selections for each page.</p>\n"
 "<p>You can automatically trim the margins of your selections.</p>\n"
 "<p>Examples and more information can be found at: <a href=\'http://arminstraub.com/software/krop\'>arminstraub.com</a></p>\n"
 ""))
-        self.labelHelpLicense.setToolTip(_translate("MainWindow", "<p>This program is free software and available to you in the hope that it will be useful; but without any warranty. It is distributed under the terms of the GNU General Public License (GPLv3+). See the accompanying files for more information.</p>"))
-        self.labelHelpLicense.setText(_translate("MainWindow", "<p>Copyright (C) 2010-2020 Armin Straub\n"
+        self.labelHelpCopyright.setToolTip(_translate("MainWindow", "<p>This program is free software and available to you in the hope that it will be useful; but without any warranty. It is distributed under the terms of the GNU General Public License (GPLv3+). See the accompanying files for more information.</p>"))
+        self.labelHelpCopyright.setText(_translate("MainWindow", "<p>Copyright (C) 2010-2020 Armin Straub\n"
 "<br><a href=\'http://arminstraub.com\'>http://arminstraub.com</a></p>"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabHelp), _translate("MainWindow", "Help"))
         self.label.setText(_translate("MainWindow", "of"))
@@ -452,4 +456,11 @@ class Ui_MainWindow(object):
         self.actionSelectFile.setText(_translate("MainWindow", "Select File"))
         self.actionTrimMarginsAll.setText(_translate("MainWindow", "Trim Margins"))
         self.actionTrimMarginsAll.setToolTip(_translate("MainWindow", "Trim Margins"))
+        self.actionTrimMarginsAll.setShortcut(_translate("MainWindow", "Ctrl+T"))
+        self.actionNewSelection.setText(_translate("MainWindow", "New Selection"))
+        self.actionNewSelection.setToolTip(_translate("MainWindow", "New Selection"))
+        self.actionNewSelection.setShortcut(_translate("MainWindow", "Ins"))
+        self.actionNewSelectionGrid.setText(_translate("MainWindow", "New Selection Grid..."))
+        self.actionNewSelectionGrid.setToolTip(_translate("MainWindow", "New Selection Grid..."))
+        self.actionNewSelectionGrid.setShortcut(_translate("MainWindow", "Shift+Ins"))
 

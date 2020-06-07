@@ -1,10 +1,12 @@
 krop (0.6.0)  2020-??-?? -- Armin Straub
 
   + Fixed aspect ratios, like letter size, can be chosen for selections.
+  + Selections (or a grid of selections) for the full page can now be created
+  using the context menu or by pressing Insert (or Shift+Insert). Also
+  introduced the command line option --grid to create a grid of selections on
+  the initial page.
   + Auto trimming margins can now inspect all pages.
   + New option for whether to include pages without selections in the output.
-  + Introduced the command line option --grid to create a grid of selections
-  on the initial page.
   + Added the command line option --optimize (thanks to Ondrej Tichacek for
   suggesting this feature).
   + Implemented several keyboard shortcuts including Shift+Arrow to move
