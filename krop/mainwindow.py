@@ -537,7 +537,6 @@ class MainWindow(QKMainWindow):
         t = self.selAspectRatioTypes.getType(index)
         # index=0: flexible
         # t=None: custom
-        # ar = t and "%s : %s" % (t.width, t.height) or "w : h"
         ar = ""
         if index == 0 or t is None:
             if sel:
@@ -546,7 +545,6 @@ class MainWindow(QKMainWindow):
                 ar = "{} : {}".format(w, h)
         elif t is not None:
             ar = "{} : {}".format(t.width, t.height)
-        # self.ui.editSelAspectRatio.setEnabled(index == 0 or t is None)
         self.ui.editSelAspectRatio.setEnabled(t is None)
         self.ui.editSelAspectRatio.setText(ar)
         if sel:
