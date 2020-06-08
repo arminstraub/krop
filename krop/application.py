@@ -39,7 +39,8 @@ def main():
     parser.add_argument('--rotate', type=int, choices=[0,90,180,270], help='how much to rotate the cropped pdf clockwise (default: 0)')
     parser.add_argument('--optimize', choices=['gs', 'no'], help='whether to optimize the final PDF using ghostscript (default: previous choice)')
 
-    parser.add_argument('--grid', help='if set to 2x3, for instance, creates a 2x3 grid of selections on initial page; a single value like 2 is interpreted as 2x1')
+    parser.add_argument('--grid', help='if set to 2x3, for instance, creates a 2x3 grid of selections on initial page; if only one number is specified, the number of columns/rows is determined according to whether the page is landscape or portrait')
+
     parser.add_argument('--initialpage', help='which page to open initially (default: 1)')
     parser.add_argument('--selections', type=str, choices=['all', 'evenodd', 'individual'], help='to which pages should selections apply')
     parser.add_argument('--exceptions', help='pages (e.g. "1-5" or "1,3-") which require individual selections')

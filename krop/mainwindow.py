@@ -622,7 +622,9 @@ class MainWindow(QKMainWindow):
                 rows = colsrows[1]
         except:
             self.showWarning(self.tr("Bad value for grid parameter"), self.tr("For creating a grid "
-                "of selections, you need to specify the dimensions of the grid in the form '2x3'."))
+                "of selections, you need to specify the dimensions of the grid in the form '2x3'. "
+                "You can also enter a single number, in which case the number of columns/rows is "
+                "determined according to whether the page is landscape or portrait."))
             return
 
         for j in range(rows):
