@@ -7,8 +7,8 @@ krop (0.6.0)  2020-??-?? -- Armin Straub
   the initial page.
   + Auto trimming margins can now inspect all pages.
   + New option for whether to include pages without selections in the output.
-  + Added the command line option --optimize (thanks to Ondrej Tichacek for
-  suggesting this feature).
+  + Added the command line options --optimize (thanks to Ondrej Tichacek for
+  suggesting this feature) and --exceptions.
   + Implemented several keyboard shortcuts including Shift+Arrow to move
   current selection and Delete to remove it.
   * Keep track of current selection and highlight it visually.

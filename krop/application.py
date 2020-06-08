@@ -42,6 +42,7 @@ def main():
     parser.add_argument('--grid', help='if set to 2x3, for instance, creates a 2x3 grid of selections on initial page; a single value like 2 is interpreted as 2x1')
     parser.add_argument('--initialpage', help='which page to open initially (default: 1)')
     parser.add_argument('--selections', type=str, choices=['all', 'evenodd', 'individual'], help='to which pages should selections apply')
+    parser.add_argument('--exceptions', help='pages (e.g. "1-5" or "1,3-") which require individual selections')
 
     parser.add_argument('--trim', action='store_true', help='if specified, will auto trim initial selections')
     parser.add_argument('--trim-use', type=str, choices=['initial', 'all'], help='whether to inspect only the initial page or all pages (slow!) when auto trimming (default: previous value)')
@@ -87,6 +88,7 @@ def main():
             # not necessary (or possible) in python3, which uses unicode
             pass
         window.openFile(fileName)
+
     if args.output is not None:
         window.ui.editFile.setText(args.output)
     if args.whichpages is not None:
@@ -102,6 +104,9 @@ def main():
             window.ui.radioSelEvenOdd.setChecked(True)
         elif args.selections == "individual":
             window.ui.radioSelIndividual.setChecked(True)
+    if args.exceptions is not None:
+        window.ui.editSelExceptions.setText(args.exceptions)
+        window.slotSelExceptionsChanged()
     if args.initialpage is not None:
         window.ui.editCurrentPage.setText(args.initialpage)
         window.slotCurrentPageEdited(args.initialpage)
