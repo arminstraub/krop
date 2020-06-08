@@ -1,13 +1,13 @@
 .TH krop 1
 .SH NAME
-krop \- tool to crop PDF files
+krop \- a tool to crop PDF files
 .SH SYNOPSIS
 .B krop
 .RI [ options ]
 .RI [ file ]
 .br
 .SH DESCRIPTION
-This manual page documents briefly the
+This manual page briefly documents the
 .B krop
 command.
 .PP
@@ -34,26 +34,38 @@ show program's version number and exit
 .B \-o OUTPUT, \-\-output OUTPUT
 where to save the cropped PDF
 .TP
+.B \-\-whichpages WHICHPAGES
+which pages (e.g. "1\-5" or "1,3\-") to include in cropped PDF (default: all)
+.TP
 .B \-\-rotate {0,90,180,270}
 how much to rotate the cropped pdf clockwise (default: 0)
 .TP
-.B \-\-whichpages WHICHPAGES
-which pages (e.g. "1\-5" or "1,3\-") to include in cropped PDF (default: all)
+.B \-\-optimize {gs,no}
+whether to optimize the final PDF using ghostscript (default: previous choice)
+.TP
+.B \-\-grid GRID
+if set to 2x3, for instance, creates a 2x3 grid of selections on initial page; if only one number is specified, the number of columns/rows is determined according to whether the page is landscape or portrait
 .TP
 .B \-\-initialpage INITIALPAGE
 which page to open initially (default: 1)
 .TP
-.B \-\-autotrim
-create a selection for the entire initial page minus blank margins
+.B \-\-selections {all,evenodd,individual}
+to which pages should selections apply
 .TP
-.B \-\-autotrim\-padding AUTOTRIM_PADDING
+.B \-\-exceptions EXCEPTIONS
+pages (e.g. "1\-5" or "1,3\-") which require individual selections
+.TP
+.B \-\-trim
+if specified, will auto trim initial selections
+.TP
+.B \-\-trim-use {initial,all}
+whether to inspect only the initial page or all pages (slow!) when auto trimming (default: previous value)
+.TP
+.B \-\-trim\-padding TRIM_PADDING
 how much padding to include when auto trimming (default: previous value)
 .TP
 .B \-\-go
-output PDF without opening the krop GUI (using the choices from \-\-autotrim, \-\-rotate and \-\-whichpages); if used in a script without X server access, you can run krop using xvfb\-run
-.TP
-.B \-\-selections {all,evenodd,individual}
-to which pages should selections apply
+output PDF without opening the krop GUI (using the choices supplied on the command line); if used in a script without X server access, you can run krop using xvfb\-run
 .TP
 .B \-\-no\-kde
 do not use KDE libraries (default: use if available)
