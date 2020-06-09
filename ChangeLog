@@ -1,4 +1,4 @@
-krop (0.6.0)  2020-??-?? -- Armin Straub
+krop (0.6.0)  2020-06-09 -- Armin Straub
 
   + Fixed aspect ratios, like letter size, can be chosen for selections.
   + Selections (or a grid of selections) for the full page can now be created
@@ -13,8 +13,6 @@ krop (0.6.0)  2020-??-?? -- Armin Straub
   current selection and Delete to remove it.
   * Keep track of current selection and highlight it visually.
   * Don't fail on PDFs that are encrypted with an empty password.
-  * Fix compatibility with PyQt5 >=5.11 and PyQt4 >= 4.12.2 (thanks to Heiko
-  Becker for fixing this).
   * Remember window geometry and fit in view setting.
 
 
