@@ -55,6 +55,8 @@ class AbstractPdfCropper:
         stream.close()
     def addPageCropped(self, pdffile, pagenumber, croplist, rotate=0):
         pass
+    def copyDocumentRoot(self, pdffile):
+        pass
 
 
 class PyPdfFile(AbstractPdfFile):
@@ -109,6 +111,15 @@ class PyPdfCropper(AbstractPdfCropper):
             box.upperRight = (x1, y1)
         if rotate != 0:
             page.rotateClockwise(rotate)
+
+    def copyDocumentRoot(self, pdffile):
+        # Sounds promising in PyPDF2 (see PdfFileWriter.cloneDocumentFromReader),
+        # but doesn't seem to produce a readable PDF:
+        # self.output.cloneReaderDocumentRoot(pdffile.reader)
+        # Instead, this copies at least the named destinations for links:
+        for dest in pdffile.reader.namedDestinations.values():
+            self.output.addNamedDestinationObject(dest)
+
 
 def optimizePdfGhostscript(oldfilename, newfilename):
     import subprocess

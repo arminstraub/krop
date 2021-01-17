@@ -413,6 +413,7 @@ class MainWindow(QKMainWindow):
             pdf = PdfFile()
             pdf.loadFromFile(inputFileName)
             cropper = PdfCropper()
+            cropper.copyDocumentRoot(pdf)
             for nr in pages:
                 c = self.viewer.cropValues(nr)
                 cropper.addPageCropped(pdf, nr, c, alwaysinclude, rotation)
