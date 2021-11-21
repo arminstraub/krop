@@ -376,6 +376,11 @@ class MainWindow(QKMainWindow):
             sys.stderr.write(self.tr('WARNING: ') + title + '\n' + text + '\n')
 
     def str2pages(self, s):
+        """
+        Converts a string of pages interval to a list of pages
+        :param str s: string that represents pages interval
+        :return pages: list of all pages in the interval
+        """
         pages = []
         intervals = [ [ n.strip() for n in i.split('-') ]
                 for i in s.split(',') ]
