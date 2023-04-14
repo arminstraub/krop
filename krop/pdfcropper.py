@@ -20,12 +20,12 @@ import sys
 usepypdf2 = '--no-PyPDF2' not in sys.argv
 if usepypdf2:
     try:
-        from PyPDF2 import PdfFileReader, PdfFileWriter
+        from PyPDF2 import PdfReader, PdfWriter
     except ImportError:
         usepypdf2 = False
 if not usepypdf2:
     try:
-        from pyPdf import PdfFileReader, PdfFileWriter
+        from pyPdf import PdfReader, PdfWriter
     except ImportError:
         _msg = "Please install PyPDF2 (or its predecessor pyPdf) first."\
             "\n\tOn recent versions of Ubuntu, the following should do the trick:"\
@@ -65,24 +65,24 @@ class PyPdfFile(AbstractPdfFile):
         self.reader = None
     def loadFromStream(self, stream):
         if usepypdf2:
-            self.reader = PdfFileReader(stream, strict=False)
+            self.reader = PdfReader(stream, strict=False)
         else:
-            self.reader = PdfFileReader(stream)
-        if self.reader.isEncrypted:
+            self.reader = PdfReader(stream)
+        if self.reader.is_encrypted:
             try:
                 if not self.reader.decrypt(''):
                     raise PdfEncryptedError
             except:
                 raise PdfEncryptedError
     def getPage(self, nr):
-        page = self.reader.getPage(nr-1)
+        page = self.reader.pages[nr-1]
 
 class PyPdfCropper(AbstractPdfCropper):
     """Implementation of PdfCropper using pyPdf"""
     def __init__(self):
-        self.output = PdfFileWriter()
+        self.output = PdfWriter()
     def writeToStream(self, stream):
-        # For certain large pdf files, PdfFileWriter.write() causes the error:
+        # For certain large pdf files, PdfWriter.write() causes the error:
         #  maximum recursion depth exceeded while calling a Python object
         # This issue is present in pyPdf as well as PyPDF2 1.23
         # We therefore temporarily increase the recursion limit.
@@ -91,34 +91,34 @@ class PyPdfCropper(AbstractPdfCropper):
         self.output.write(stream)
         sys.setrecursionlimit(old_reclimit)
     def addPageCropped(self, pdffile, pagenumber, croplist, alwaysinclude, rotate=0):
-        page = pdffile.reader.getPage(pagenumber)
+        page = pdffile.reader.pages[pagenumber]
         if not croplist and alwaysinclude:
-            self.output.addPage(page)
+            self.output.add_page(page)
         for c in croplist:
             newpage = copy.copy(page)
             self.cropPage(newpage, c, rotate)
-            self.output.addPage(newpage)
+            self.output.add_page(newpage)
     def cropPage(self, page, crop, rotate):
         # Note that the coordinate system is up-side down compared with Qt.
-        x0, y0 = page.cropBox.lowerLeft
-        x1, y1 = page.cropBox.upperRight
+        x0, y0 = page.cropbox.lower_left
+        x1, y1 = page.cropbox.upper_right
         x0, y0, x1, y1 = float(x0), float(y0), float(x1), float(y1)
         x0, x1 = x0+crop[0]*(x1-x0), x1-crop[2]*(x1-x0)
         y0, y1 = y0+crop[3]*(y1-y0), y1-crop[1]*(y1-y0)
         # Update the various PDF boxes
-        for box in (page.artBox, page.bleedBox, page.cropBox, page.mediaBox, page.trimBox):
-            box.lowerLeft = (x0, y0)
-            box.upperRight = (x1, y1)
+        for box in (page.artbox, page.bleedbox, page.cropbox, page.mediabox, page.trimbox):
+            box.lower_left = (x0, y0)
+            box.upper_right = (x1, y1)
         if rotate != 0:
-            page.rotateClockwise(rotate)
+            page.rotate_clockwise(rotate)
 
     def copyDocumentRoot(self, pdffile):
-        # Sounds promising in PyPDF2 (see PdfFileWriter.cloneDocumentFromReader),
+        # Sounds promising in PyPDF2 (see PdfWriter.cloneDocumentFromReader),
         # but doesn't seem to produce a readable PDF:
         # self.output.cloneReaderDocumentRoot(pdffile.reader)
         # Instead, this copies at least the named destinations for links:
-        for dest in pdffile.reader.namedDestinations.values():
-            self.output.addNamedDestinationObject(dest)
+        for dest in pdffile.reader.named_destinations.values():
+            self.output.add_named_destination_object(dest)
 
 
 def optimizePdfGhostscript(oldfilename, newfilename):
