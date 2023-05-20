@@ -1,6 +1,10 @@
-krop (0.6.1)  2021-00-00 -- Armin Straub
+krop (0.6.1)  2023-00-00 -- Armin Straub
 
   * Preserve links within a PDF (thanks to chrthi for doing this).
+  * Support the new version of pypdf in addition to its predecessor PyPDF2
+  (thanks to Emmanuel Rosa for the idea and initial code).
+  + Support pikepdf as an alternative to pypdf (thanks to Hongzhuo Liang for
+  the idea and initial code).
 
 krop (0.6.0)  2020-06-09 -- Armin Straub
 

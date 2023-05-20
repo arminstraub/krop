@@ -10,7 +10,11 @@ For instance, to automatically undo 4 pages print onto a single page:
 To additionally trim each of these pages:
     krop --go --grid=2x2 --trim --trim-use=all file.pdf
 
-Copyright (C) 2010-2020 Armin Straub, http://arminstraub.com
+Automatically crop the margins every single page individually:
+    krop --go --selections=individual --grid=1@all --trim file.pdf
+Omit the --go to further edit the selections in the graphical interface before cropping.
+
+Copyright (C) 2010-2023 Armin Straub, http://arminstraub.com
 """
 
 """
@@ -53,7 +57,8 @@ def main():
 
     parser.add_argument('--no-kde', action='store_true', help='do not use KDE libraries (default: use if available)')
     parser.add_argument('--no-qt5', action='store_true', help='do not use PyQt5 instead of PyQt4 (default: use PyQt5 if available)')
-    parser.add_argument('--no-PyPDF2', action='store_true', help='do not use PyPDF2 instead of pyPdf (default: use PyPDF2 if available)')
+    parser.add_argument('--use-pikepdf', action='store_true', help='use pikepdf instead of pypdf (default: use pypdf/PyPDF2 if available)')
+    parser.add_argument('--use-pypdf2', action='store_true', help='use PyPDF2 instead of pypdf (default: use pypdf if available)')
 
     args = parser.parse_args()
 
