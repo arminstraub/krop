@@ -3,7 +3,7 @@
 """
 Viewer for krop used to display PDF files.
 
-Copyright (C) 2010-2020 Armin Straub, http://arminstraub.com
+Copyright (C) 2010-2023 Armin Straub, http://arminstraub.com
 """
 
 """
@@ -13,24 +13,10 @@ the Free Software Foundation; either version 3 of the License, or
 (at your option) any later version.
 """
 
+import sys
+
 from krop.config import PYQT5
 from krop.qt import *
-
-if PYQT5:
-    try:
-        from popplerqt5 import Poppler
-    except ImportError:
-        _msg = "Please install popplerqt5 first."
-        raise RuntimeError(_msg)
-else:
-    try:
-        from popplerqt4 import Poppler
-    except ImportError:
-        _msg = "Please install popplerqt4 first."\
-            "\n\tOn recent versions of Ubuntu, the following should do the trick:"\
-            "\n\tsudo apt-get install python-poppler-qt4"\
-            "\n\t(or, if using python3) sudo apt-get install python3-poppler-qt4"
-        raise RuntimeError(_msg)
 
 from krop.viewerselections import ViewerSelections
 
@@ -143,8 +129,22 @@ class AbstractViewerItem(QGraphicsItem):
     def cacheImage(self, idx):        
         return None
 
+    def pageGetRotation(self, idx):        
+        return 0
+
     def cropValues(self, idx):
-        return self.selections.cropValues(idx)
+        def adjustForOrientation(cv):
+            if r == 90: # Landscape
+                return [ cv[1], cv[2], cv[3], cv[0] ]
+            elif r == 180: # UpsideDown
+                return [ cv[2], cv[3], cv[0], cv[1] ]
+            elif r == 270: # Seascape
+                return [ cv[3], cv[0], cv[1], cv[2] ]
+            else: # r == 0, Portrait
+                return cv
+        crop_values = self.selections.cropValues(idx)
+        r = self.pageGetRotation(idx)
+        return [ adjustForOrientation(cv) for cv in crop_values ]
 
 
 class PopplerViewerItem(AbstractViewerItem):
@@ -167,23 +167,101 @@ class PopplerViewerItem(AbstractViewerItem):
 
     def cacheImage(self, idx):        
         page = self._pdfdoc.page(idx)
-        return page.renderToImage(96.0, 96.0)
-        # return page.renderToImage()
+        return page.renderToImage(96.0, 96.0) # dpi = 96
+        # return page.renderToImage() # default dpi = 72
 
-    def cropValues(self, idx):
-        def adjustForOrientation(cv):
-            if o == page.Landscape:
-                return [ cv[1], cv[2], cv[3], cv[0] ]
-            elif o == page.UpsideDown:
-                return [ cv[2], cv[3], cv[0], cv[1] ]
-            elif o == page.Seascape:
-                return [ cv[3], cv[0], cv[1], cv[2] ]
-            else: # o == page.Portrait
-                return cv
+    def pageGetRotation(self, idx):        
         page = self._pdfdoc.page(idx)
         o = page.orientation()
-        return [ adjustForOrientation(cv)
-                for cv in self.selections.cropValues(idx) ]
+        if o == page.Landscape:
+            return 90
+        elif o == page.UpsideDown:
+            return 180
+        elif o == page.Seascape:
+            return 270
+        else: # o == page.Portrait
+            return 0
 
 
-ViewerItem = PopplerViewerItem
+class MuPDFViewerItem(AbstractViewerItem):
+    """Viewer implementation which uses PyMuPDF to display PDF documents."""
+    def reset(self):
+        AbstractViewerItem.reset(self)
+        self._pdfdoc = None
+
+    def doLoad(self, filename):
+        self._pdfdoc = fitz.open(filename)
+        # if self._pdfdoc:
+        #     self._pdfdoc.setRenderHint(Poppler.Document.Antialiasing and
+        #             Poppler.Document.TextAntialiasing)
+
+    def numPages(self):
+        if self._pdfdoc is None:    
+            return 0
+        else:
+            return len(self._pdfdoc)
+
+    def cacheImage(self, idx):        
+        page = self._pdfdoc[idx]
+        pix = page.get_pixmap(alpha=False, dpi=96) # default dpi is 72
+        return QImage(pix.samples, pix.width, pix.height, pix.stride, QImage.Format_RGB888)
+        # It might be faster to use samples_ptr but the code results in crashes.
+        # https://pymupdf.readthedocs.io/en/latest/tutorial.html
+        # pix = page.get_pixmap()
+        # set the correct QImage format depending on alpha
+        # fmt = QImage.Format_RGBA8888 if pix.alpha else QImage.Format_RGB888
+        # return QImage(pix.samples_ptr, pix.width, pix.height, fmt)
+
+    def pageGetRotation(self, idx):        
+        page = self._pdfdoc[idx]
+        return page.rotation
+
+
+# determine whether to use PopplerQt or PyMuPDF for rendering
+POPPLERQT = 1
+PYMUPDF = 2
+lib_render = 0
+
+# use PyMuPDF if requested
+if '--use-pymupdf' in sys.argv and not '--use-popplerqt' in sys.argv:
+    try:
+        import fitz
+        lib_render = PYMUPDF
+    except ImportError:
+        print("PyMuPDF was requested but failed to load.", file=sys.stderr)
+
+if not lib_render:
+    # try PopplerQt
+    if PYQT5:
+        try:
+            from popplerqt5 import Poppler
+            lib_render = POPPLERQT
+        except ImportError:
+            pass
+    else:
+        try:
+            from popplerqt4 import Poppler
+            lib_render = POPPLERQT
+        except ImportError:
+            pass
+    # try PyMuPDF
+    if not lib_render:
+        try:
+            import fitz
+            lib_render = PYMUPDF
+        except ImportError:
+            pass
+    # complain if no version is available
+    if not lib_render:
+        _msg = "Please install PopplerQt or PyMuPDF first."\
+            "\n\tOn recent versions of Ubuntu, the following should do the trick:"\
+            "\n\tsudo apt install python3-poppler-qt5"
+        raise RuntimeError(_msg)
+
+
+if lib_render == PYMUPDF:
+    ViewerItem = MuPDFViewerItem
+    print("Using PyMuPDF for rendering.", file=sys.stderr)
+else:
+    ViewerItem = PopplerViewerItem
+    print("Using PopplerQt for rendering.", file=sys.stderr)

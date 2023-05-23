@@ -57,8 +57,10 @@ def main():
 
     parser.add_argument('--no-kde', action='store_true', help='do not use KDE libraries (default: use if available)')
     parser.add_argument('--no-qt5', action='store_true', help='do not use PyQt5 instead of PyQt4 (default: use PyQt5 if available)')
-    parser.add_argument('--use-pikepdf', action='store_true', help='use pikepdf instead of pypdf (default: use pypdf/PyPDF2 if available)')
-    parser.add_argument('--use-pypdf2', action='store_true', help='use PyPDF2 instead of pypdf (default: use pypdf if available)')
+    parser.add_argument('--use-pymupdf', action='store_true', help='use PyMuPDF for rendering and cropping (default: use PopplerQt for rendering and pypdf for cropping)')
+    parser.add_argument('--use-pikepdf', action='store_true', help='use pikepdf for cropping (default: use pypdf/PyPDF2 if available)')
+    parser.add_argument('--use-pypdf2', action='store_true', help='use PyPDF2 for cropping instead of pypdf (default: use pypdf if available)')
+    parser.add_argument('--use-popplerqt', action='store_true', help='use PopplerQt for rendering (default: use PyMuPDF if requested)')
 
     args = parser.parse_args()
 
