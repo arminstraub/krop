@@ -47,7 +47,7 @@ class PyPdfFile(AbstractPdfFile):
 class PyPdfOldFile(PyPdfFile):
     """Implementation of PdfFile using PyPDF2 or the old PyPdf"""
     def loadFromStream(self, stream):
-        if pypdf_version == 2:
+        if lib_crop == PYPDF2:
             self.reader = PdfReader(stream, strict=False)
         else:
             self.reader = PdfReader(stream)
@@ -59,6 +59,17 @@ class PyPdfOldFile(PyPdfFile):
                 raise PdfEncryptedError
     def getPage(self, nr):
         return self.reader.getPage(nr)
+
+class PyMuPdfFile(AbstractPdfFile):
+    """Implementation of PdfFile using PyMuPDF"""
+    def __init__(self):
+        self.reader = None
+    def loadFromStream(self, stream):
+        self.reader = fitz.open(stream)
+        if self.reader.is_encrypted:
+            raise PdfEncryptedError
+    def getPage(self, nr):
+        return self.reader[nr]
 
 class PikePdfFile(AbstractPdfFile):
     """Implementation of PdfFile using pikepdf"""
@@ -169,6 +180,43 @@ class PyPdfOldCropper(PyPdfCropper):
             self.output.addNamedDestinationObject(dest)
 
 
+class PyMuPdfCropper(SemiAbstractPdfCropper):
+    """Implementation of PdfCropper using PyMuPDF"""
+    def __init__(self):
+        self.output = fitz.open()
+    def writeToStream(self, stream):
+        self.output.save(stream)
+    def addPageCropped(self, pdffile, pagenumber, croplist, alwaysinclude, rotate=0):
+        # https://pymupdf.readthedocs.io/en/latest/the-basics.html
+        if not croplist and alwaysinclude:
+            self.output.insert_pdf(pdffile.reader, pagenumber, pagenumber)
+        else:
+            page = pdffile.getPage(pagenumber)
+            for crop in croplist:
+                self.output.insert_pdf(pdffile.reader, pagenumber, pagenumber)
+                new_page = self.output[-1]
+                box = self.pageGetCropBox(new_page)
+                # MuPDF uses coordinates where (0,0) is the top-right point, unlike
+                # PDF where (0,0) is the bottom-left.
+                new_box = computeCropBoxCoords(box, crop, pdf_coords=False)
+                self.pageSetCropBox(new_page, new_box)
+                if rotate != 0:
+                    self.pageRotateClockwise(new_page, rotate)
+    def pageGetCropBox(self, page):
+        return page.cropbox
+    def pageSetCropBox(self, page, box):
+        page.set_cropbox(box)
+        page.set_artbox(page.cropbox)
+        page.set_bleedbox(page.cropbox)
+        # careful: mediabox in MuPDF is an exception and uses PDF coordinates
+        # page.set_mediabox(page.cropbox)
+        page.set_trimbox(page.cropbox)
+    def pageRotateClockwise(self, page, rotate):
+        page.set_rotation(page.rotation + rotate)
+    def copyDocumentRoot(self, pdffile):
+        pass
+
+
 class PikePdfCropper(SemiAbstractPdfCropper):
     """Implementation of PdfCropper using pikepdf"""
     def __init__(self):
@@ -184,8 +232,8 @@ class PikePdfCropper(SemiAbstractPdfCropper):
         except AttributeError:
             raise RuntimeError("Please install a more recent version of pikepdf.")
     def pageSetCropBox(self, page, box):
-        page.mediabox = box
         page.cropbox = box
+        page.mediabox = box
         page.trimbox = box
     def pageRotateClockwise(self, page, rotate):
         page.rotate(rotate, relative=True)
@@ -193,10 +241,13 @@ class PikePdfCropper(SemiAbstractPdfCropper):
         pass
 
 
-def computeCropBoxCoords(box, crop):
+def computeCropBoxCoords(box, crop, pdf_coords=True):
     x0, y0, x1, y1 = box
     x0, y0, x1, y1 = float(x0), float(y0), float(x1), float(y1)
-    # Note that the coordinate system is up-side down compared with Qt.
+    # In PDF coordinates (0,0) is the bottom-left point; otherwise, as in
+    # MuPDF or Qt, this would be the top-left point.
+    if not pdf_coords:
+        crop[1], crop[3] = crop[3], crop[1]
     x0, x1 = x0+crop[0]*(x1-x0), x1-crop[2]*(x1-x0)
     y0, y1 = y0+crop[3]*(y1-y0), y1-crop[1]*(y1-y0)
     return x0, y0, x1, y1
@@ -207,15 +258,27 @@ def optimizePdfGhostscript(oldfilename, newfilename):
         '-dNOPAUSE', '-dBATCH', oldfilename))
 
 
-# determine which of pypdf, PyPDF2, pyPdf, pikepdf to use
-use_pikepdf = False
-pypdf_version = 0 # 3 = new pypdf, 2 = PyPDF2, 1 = old pyPdf, 0 = none
+# determine which of pypdf, PyPDF2, pyPdf, pikepdf, PyMuPDF to use
+PYPDF1 = 1 # pyPdf (old)
+PYPDF2 = 2 # PyPDF2
+PYPDF = 3 # pydf
+PYMUPDF = 4
+PIKEPDF = 5
+lib_crop = 0
+
+# use PyMuPDF if requested
+if '--use-pymupdf' in sys.argv:
+    try:
+        import fitz
+        lib_crop = PYMUPDF
+    except ImportError:
+        print("PyMuPDF was requested but failed to load.", file=sys.stderr)
 
 # use pikepdf if requested
 if '--use-pikepdf' in sys.argv:
     try:
         from pikepdf import Pdf
-        use_pikepdf = True
+        lib_crop = PIKEPDF
     except ImportError:
         print("pikepdf was requested but failed to load.", file=sys.stderr)
 
@@ -223,56 +286,67 @@ if '--use-pikepdf' in sys.argv:
 if '--use-pypdf2' in sys.argv:
     try:
         from PyPDF2 import PdfFileReader as PdfReader, PdfFileWriter as PdfWriter
-        pypdf_version = 2
+        lib_crop = PYPDF2
     except ImportError:
         print("PyPDF2 was requested but failed to load.", file=sys.stderr)
 
 # by default use pypdf / PyPDF2
-if not use_pikepdf and not pypdf_version:
+if not lib_crop:
     # if possible use the new pypdf
     try:
         from pypdf import PdfReader, PdfWriter
-        pypdf_version = 3
+        lib_crop = PYPDF
     except ImportError:
         pass
     # otherwise use PyPDF2
-    if not pypdf_version:
+    if not lib_crop:
         try:
             from PyPDF2 import PdfFileReader as PdfReader, PdfFileWriter as PdfWriter
-            pypdf_version = 2
+            lib_crop = PYPDF2
         except ImportError:
             pass
     # or the very old pyPdf
-    if not pypdf_version:
+    if not lib_crop:
         try:
             from pyPdf import PdfFileReader as PdfReader, PdfFileWriter as PdfWriter
-            pypdf_version = 1
+            lib_crop = PYPDF1
         except ImportError:
             pass
     # try pikepdf
-    if not pypdf_version:
+    if not lib_crop:
         try:
             from pikepdf import Pdf
-            use_pikepdf = True
+            lib_crop = PIKEPDF
+        except ImportError:
+            pass
+    # try PyMuPDF
+    if not lib_crop:
+        try:
+            import fitz
+            lib_crop = PYMUPDF
         except ImportError:
             pass
     # complain if no version is available
-    if not pypdf_version and not use_pikepdf:
-        _msg = "Please install pypdf (or its predecessor PyPDF2) or a new version of pikepdf first."\
+    if not lib_crop:
+        _msg = "Please install pypdf (or its predecessor PyPDF2), PyMuPDF or a new version of pikepdf first."\
             "\n\tOn recent versions of Ubuntu, the following should do the trick:"\
             "\n\tsudo apt-get install python3-pypdf2"
         raise RuntimeError(_msg)
 
-if use_pikepdf:
+if lib_crop == PYMUPDF:
+    PdfFile = PyMuPdfFile
+    PdfCropper = PyMuPdfCropper
+    print("Using PyMuPDF for cropping.", file=sys.stderr)
+elif lib_crop == PIKEPDF:
     PdfFile = PikePdfFile
     PdfCropper = PikePdfCropper
-    print("pikepdf loaded.", file=sys.stderr)
-elif pypdf_version < 3:
+    print("Using pikepdf for cropping.", file=sys.stderr)
+elif lib_crop == PYPDF1 or lib_crop == PYPDF2:
     # PyPDF2 and the old pyPdf use a naming scheme different from the new pypdf
     PdfFile = PyPdfOldFile
     PdfCropper = PyPdfOldCropper
-    print(pypdf_version == 2 and "PyPDF2 loaded." or "pyPdf loaded.", file=sys.stderr)
+    print("Using " + (lib_crop == PYPDF2 and "PyPDF2" or "pyPdf") + " for cropping.", file=sys.stderr)
 else:
     PdfFile = PyPdfFile
     PdfCropper = PyPdfCropper
-    print("pypdf loaded.", file=sys.stderr)
+    print("Using pypdf for cropping.", file=sys.stderr)
