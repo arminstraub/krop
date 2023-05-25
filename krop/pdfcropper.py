@@ -145,10 +145,8 @@ class PyPdfCropper(SemiAbstractPdfCropper):
             page_box.lower_left = (x0, y0)
             page_box.upper_right = (x1, y1)
     def copyDocumentRoot(self, pdffile):
-        # Sounds promising in PyPDF2 (see PdfWriter.cloneDocumentFromReader),
-        # but doesn't seem to produce a readable PDF:
-        # self.output.cloneReaderDocumentRoot(pdffile.reader)
-        # Instead, this copies at least the named destinations for links:
+        # Copy the named destinations for links.
+        # TODO: this worked for links in PyPDF2 but doesn't seem to work for pypdf
         for dest in pdffile.reader.named_destinations.values():
             self.output.add_named_destination_object(dest)
 
@@ -168,10 +166,7 @@ class PyPdfOldCropper(PyPdfCropper):
             page_box.lowerLeft = (x0, y0)
             page_box.upperRight = (x1, y1)
     def copyDocumentRoot(self, pdffile):
-        # Sounds promising in PyPDF2 (see PdfWriter.cloneDocumentFromReader),
-        # but doesn't seem to produce a readable PDF:
-        # self.output.cloneReaderDocumentRoot(pdffile.reader)
-        # Instead, this copies at least the named destinations for links:
+        # Copy the named destinations for links.
         for dest in pdffile.reader.namedDestinations.values():
             self.output.addNamedDestinationObject(dest)
 
@@ -245,7 +240,7 @@ def computeCropBoxCoords(box, crop, pdf_coords=True):
     # In PDF coordinates (0,0) is the bottom-left point; otherwise, as in
     # MuPDF or Qt, this would be the top-left point.
     if not pdf_coords:
-        crop[1], crop[3] = crop[3], crop[1]
+        crop = (crop[0], crop[3], crop[2], crop[1])
     x0, x1 = x0+crop[0]*(x1-x0), x1-crop[2]*(x1-x0)
     y0, y1 = y0+crop[3]*(y1-y0), y1-crop[1]*(y1-y0)
     return x0, y0, x1, y1
