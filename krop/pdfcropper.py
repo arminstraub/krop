@@ -147,7 +147,7 @@ class PyPdfCropper(SemiAbstractPdfCropper):
             page_box.lower_left = (x0, y0)
             page_box.upper_right = (x1, y1)
     def pageRotateClockwise(self, page, rotate):
-        page.rotate_clockwise(rotate)
+        page.rotate(rotate)
     def copyDocumentRoot(self, pdffile):
         # Sounds promising in PyPDF2 (see PdfWriter.cloneDocumentFromReader),
         # but doesn't seem to produce a readable PDF:
