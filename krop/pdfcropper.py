@@ -103,23 +103,19 @@ class SemiAbstractPdfCropper(AbstractPdfCropper):
     def addPageCropped(self, pdffile, pagenumber, croplist, alwaysinclude, rotate=0):
         page = pdffile.getPage(pagenumber)
         if not croplist and alwaysinclude:
-            self.doAddPage(page)
+            self.doAddPage(page, rotate)
         else:
             box = self.pageGetCropBox(page)
             for crop in croplist:
                 new_page = copy.copy(page)
                 new_box = computeCropBoxCoords(box, crop)
                 self.pageSetCropBox(new_page, new_box)
-                if rotate != 0:
-                    self.pageRotateClockwise(new_page, rotate)
-                self.doAddPage(new_page)
-    def doAddPage(self, page):
+                self.doAddPage(new_page, rotate)
+    def doAddPage(self, page, rotate):
         pass
     def pageGetCropBox(self, page):
         pass
     def pageSetCropBox(self, page, box):
-        pass
-    def pageRotateClockwise(self, page, rotate):
         pass
 
 class PyPdfCropper(SemiAbstractPdfCropper):
@@ -135,7 +131,9 @@ class PyPdfCropper(SemiAbstractPdfCropper):
         sys.setrecursionlimit(10000)
         self.output.write(stream)
         sys.setrecursionlimit(old_reclimit)
-    def doAddPage(self, page):
+    def doAddPage(self, page, rotate):
+        if rotate != 0:
+            page.rotate(rotate)
         self.output.add_page(page)
     def pageGetCropBox(self, page):
         x0, y0 = page.cropbox.lower_left
@@ -146,8 +144,6 @@ class PyPdfCropper(SemiAbstractPdfCropper):
         for page_box in (page.artbox, page.bleedbox, page.cropbox, page.mediabox, page.trimbox):
             page_box.lower_left = (x0, y0)
             page_box.upper_right = (x1, y1)
-    def pageRotateClockwise(self, page, rotate):
-        page.rotate(rotate)
     def copyDocumentRoot(self, pdffile):
         # Sounds promising in PyPDF2 (see PdfWriter.cloneDocumentFromReader),
         # but doesn't seem to produce a readable PDF:
@@ -158,7 +154,9 @@ class PyPdfCropper(SemiAbstractPdfCropper):
 
 class PyPdfOldCropper(PyPdfCropper):
     """Implementation of PdfCropper using PyPDF2 or the old PyPdf"""
-    def doAddPage(self, page):
+    def doAddPage(self, page, rotate):
+        if rotate != 0:
+            page.rotateClockwise(rotate)
         self.output.addPage(page)
     def pageGetCropBox(self, page):
         x0, y0 = page.cropBox.lowerLeft
@@ -169,8 +167,6 @@ class PyPdfOldCropper(PyPdfCropper):
         for page_box in (page.artBox, page.bleedBox, page.cropBox, page.mediaBox, page.trimBox):
             page_box.lowerLeft = (x0, y0)
             page_box.upperRight = (x1, y1)
-    def pageRotateClockwise(self, page, rotate):
-        page.rotateClockwise(rotate)
     def copyDocumentRoot(self, pdffile):
         # Sounds promising in PyPDF2 (see PdfWriter.cloneDocumentFromReader),
         # but doesn't seem to produce a readable PDF:
@@ -187,21 +183,25 @@ class PyMuPdfCropper(SemiAbstractPdfCropper):
     def writeToStream(self, stream):
         self.output.save(stream)
     def addPageCropped(self, pdffile, pagenumber, croplist, alwaysinclude, rotate=0):
-        # https://pymupdf.readthedocs.io/en/latest/the-basics.html
+        def addPage():
+            # https://pymupdf.readthedocs.io/en/latest/the-basics.html
+            r = pdffile.reader[pagenumber].rotation + rotate
+            self.output.insert_pdf(pdffile.reader, pagenumber, pagenumber, rotate=r)
         if not croplist and alwaysinclude:
-            self.output.insert_pdf(pdffile.reader, pagenumber, pagenumber)
+            addPage()
+            # self.output.insert_pdf(pdffile.reader, pagenumber, pagenumber, rotate=rotate)
         else:
-            page = pdffile.getPage(pagenumber)
             for crop in croplist:
-                self.output.insert_pdf(pdffile.reader, pagenumber, pagenumber)
+                addPage()
+                # self.output.insert_pdf(pdffile.reader, pagenumber, pagenumber, rotate=rotate)
                 new_page = self.output[-1]
                 box = self.pageGetCropBox(new_page)
                 # MuPDF uses coordinates where (0,0) is the top-right point, unlike
                 # PDF where (0,0) is the bottom-left.
                 new_box = computeCropBoxCoords(box, crop, pdf_coords=False)
                 self.pageSetCropBox(new_page, new_box)
-                if rotate != 0:
-                    self.pageRotateClockwise(new_page, rotate)
+                # if rotate != 0:
+                #     self.pageRotateClockwise(new_page, rotate)
     def pageGetCropBox(self, page):
         return page.cropbox
     def pageSetCropBox(self, page, box):
@@ -211,8 +211,6 @@ class PyMuPdfCropper(SemiAbstractPdfCropper):
         # careful: mediabox in MuPDF is an exception and uses PDF coordinates
         # page.set_mediabox(page.cropbox)
         page.set_trimbox(page.cropbox)
-    def pageRotateClockwise(self, page, rotate):
-        page.set_rotation(page.rotation + rotate)
     def copyDocumentRoot(self, pdffile):
         pass
 
@@ -223,7 +221,9 @@ class PikePdfCropper(SemiAbstractPdfCropper):
         self.output = Pdf.new()
     def writeToStream(self, stream):
         self.output.save(stream)
-    def doAddPage(self, page):
+    def doAddPage(self, page, rotate):
+        if rotate != 0:
+            page.rotate(rotate, relative=True)
         self.output.pages.append(page)
     def pageGetCropBox(self, page):
         try:
@@ -235,8 +235,6 @@ class PikePdfCropper(SemiAbstractPdfCropper):
         page.cropbox = box
         page.mediabox = box
         page.trimbox = box
-    def pageRotateClockwise(self, page, rotate):
-        page.rotate(rotate, relative=True)
     def copyDocumentRoot(self, pdffile):
         pass
 
