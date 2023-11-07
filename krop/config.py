@@ -1,16 +1,17 @@
 import sys
 
 PYQT5 = False
+
 try:
-    # use PyQt5 unless not available or specified otherwise
-    if '--no-qt5' not in sys.argv:
+    # use PyQt5 unless PyQt6 is specified
+    if '--use-qt6' not in sys.argv:
         try:
             from PyQt5 import QtCore
             PYQT5 = True
         except ImportError:
             pass
     if not PYQT5:
-        from PyQt4 import QtCore
+        from PyQt6 import QtCore
 except ImportError:
-    _msg = "Please install PyQt4 or PyQt5 first."
+    _msg = "Please install PyQt5 or PyQt6 first."
     raise RuntimeError(_msg)

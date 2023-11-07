@@ -31,7 +31,7 @@ from krop.config import PYQT5
 if PYQT5:
     from krop.mainwindowui_qt5 import Ui_MainWindow
 else:
-    from krop.mainwindowui_qt4 import Ui_MainWindow
+    from krop.mainwindowui_qt6 import Ui_MainWindow
 
 from krop.viewerselections import ViewerSelections, aspectRatioFromStr
 from krop.vieweritem import ViewerItem
@@ -343,10 +343,7 @@ class MainWindow(QMainWindow):
     def slotOpenFile(self):
         fileName = QFileDialog.getOpenFileName(self,
              self.tr("Open PDF"), "", self.tr("PDF Files (*.pdf)"));
-        # in PyQt5, getOpenFileName is what used to be
-        # getOpenFileNameAndFilter
-        if PYQT5:
-            fileName = fileName[0]
+        fileName = fileName[0]
         self.openFile(fileName)
 
     def slotSelectFile(self):
@@ -400,7 +397,7 @@ class MainWindow(QMainWindow):
         #             self.tr("A file named \"...\" already exists. Are you sure you want to overwrite it?"))
         #     return
 
-        QApplication.setOverrideCursor(Qt.WaitCursor)
+        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         try:
             pdf = PdfFile()
             pdf.loadFromFile(inputFileName)
@@ -453,7 +450,7 @@ class MainWindow(QMainWindow):
     def slotFitInView(self, checked):
         if checked:
             self.ui.documentView.fitInView(self.pdfScene.sceneRect(),
-                    Qt.KeepAspectRatio)
+                    Qt.AspectRatioMode.KeepAspectRatio)
 
     def slotSplitterMoved(self, pos, idx):
         self.slotFitInView(self.ui.actionFitInView.isChecked())
@@ -687,7 +684,7 @@ class MainWindow(QMainWindow):
         if self.ui.checkTrimUseAllPages.isChecked():
             pages = [i for i in range(self.viewer.numPages()) if sel.selectionVisibleOnPage(i)]
 
-        QApplication.setOverrideCursor(Qt.WaitCursor)
+        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         try:
             # orect is the original selection, nrect is the trimmed version
             orect = sel.mapRectToImage(sel.rect).toRect()

@@ -13,8 +13,8 @@ krop/autotrim.py
 krop/config.py
 krop/mainwindow.py
 krop/mainwindow.ui
-krop/mainwindowui_qt4.py
 krop/mainwindowui_qt5.py
+krop/mainwindowui_qt6.py
 krop/pdfcropper.py
 krop/qt.py
 krop/version.py

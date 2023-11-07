@@ -54,7 +54,7 @@ def main():
 
     parser.add_argument('--go', action='store_true', help='output PDF without opening the krop GUI (using the choices supplied on the command line); if used in a script without X server access, you can run krop using xvfb-run')
 
-    parser.add_argument('--no-qt5', action='store_true', help='do not use PyQt5 instead of PyQt4 (default: use PyQt5 if available)')
+    parser.add_argument('--use-qt6', action='store_true', help='do use PyQt6 instead of PyQt5 (default: use PyQt5 if available)')
     parser.add_argument('--use-pymupdf', action='store_true', help='use PyMuPDF for rendering and cropping (default: use PopplerQt for rendering and pypdf for cropping)')
     parser.add_argument('--use-pikepdf', action='store_true', help='use pikepdf for cropping (default: use pypdf/PyPDF2 if available)')
     parser.add_argument('--use-pypdf2', action='store_true', help='use PyPDF2 for cropping instead of pypdf (default: use pypdf if available)')
