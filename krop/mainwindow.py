@@ -29,12 +29,7 @@ except:
 
 
 from krop.qt import *
-from krop.config import PYQT5, KDE
-
-if KDE:
-    from PyKDE4.kdeui import KMainWindow as QKMainWindow
-else:
-    QKMainWindow = QMainWindow
+from krop.config import PYQT5
 
 if PYQT5:
     from krop.mainwindowui_qt5 import Ui_MainWindow
@@ -133,12 +128,12 @@ class DeviceTypeManager(AspectRatioTypeManager):
         self.addType("Nook 1st Ed. (widescreen)", 730, 600)
 
 
-class MainWindow(QKMainWindow):
+class MainWindow(QMainWindow):
 
     fileName = None
 
     def __init__(self):
-        QKMainWindow.__init__(self)
+        QMainWindow.__init__(self)
 
         self.selAspectRatioTypes = SelAspectRatioTypeManager()
         self.deviceTypes = DeviceTypeManager()
