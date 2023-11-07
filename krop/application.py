@@ -74,11 +74,7 @@ def main():
 
     if args.file is not None:
         fileName = args.file
-        try:
-            fileName = fileName.decode(sys.stdin.encoding or sys.getdefaultencoding())
-        except AttributeError:
-            # not necessary (or possible) in python3, which uses unicode
-            pass
+        fileName = fileName.decode(sys.stdin.encoding or sys.getdefaultencoding())
         window.openFile(fileName)
 
     if args.output is not None:
@@ -128,5 +124,4 @@ def main():
         window.show()
         window.slotFitInView(window.ui.actionFitInView.isChecked())
 
-    # using exec_ because exec is a reserved keyword before python 3
-    sys.exit(app.exec_())
+    sys.exit(app.exec())

@@ -16,11 +16,8 @@ the Free Software Foundation; either version 3 of the License, or
 import sys
 from os.path import exists, splitext
 
-try:
-    from shutil import which
-except:
-    # shutil is not available in python2; instead we use the following:
-    from distutils.spawn import find_executable as which
+from shutil import which
+
 
 try:
     str_unicode = unicode
