@@ -204,12 +204,12 @@ class MuPDFViewerItem(AbstractViewerItem):
     def cacheImage(self, idx):        
         page = self._pdfdoc[idx]
         pix = page.get_pixmap(alpha=False, dpi=96) # default dpi is 72
-        return QImage(pix.samples, pix.width, pix.height, pix.stride, QImage.Format_RGB888)
+        return QImage(pix.samples, pix.width, pix.height, pix.stride, QImage.Format.Format_RGB888)
         # It might be faster to use samples_ptr but the code results in crashes.
         # https://pymupdf.readthedocs.io/en/latest/tutorial.html
         # pix = page.get_pixmap()
         # set the correct QImage format depending on alpha
-        # fmt = QImage.Format_RGBA8888 if pix.alpha else QImage.Format_RGB888
+        # fmt = QImage.Format_RGBA8888 if pix.alpha else QImage.Format.Format_RGB888
         # return QImage(pix.samples_ptr, pix.width, pix.height, fmt)
 
     def pageGetRotation(self, idx):        
@@ -231,16 +231,10 @@ if '--use-pymupdf' in sys.argv and not '--use-popplerqt' in sys.argv:
         print("PyMuPDF was requested but failed to load.", file=sys.stderr)
 
 if not lib_render:
-    # try PopplerQt
+    # try PopplerQt, not possible when using PyQt6 
     if PYQT5:
         try:
             from popplerqt5 import Poppler
-            lib_render = POPPLERQT
-        except ImportError:
-            pass
-    else:
-        try:
-            from popplerqt4 import Poppler
             lib_render = POPPLERQT
         except ImportError:
             pass

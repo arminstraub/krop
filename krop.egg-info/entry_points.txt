@@ -1,0 +1,2 @@
+[console_scripts]
+krop = krop.__main__:main
