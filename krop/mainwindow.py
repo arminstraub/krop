@@ -26,12 +26,12 @@ except:
 
 
 from krop.qt import *
-from krop.config import PYQT5
+from krop.config import PYQT6
 
-if PYQT5:
-    from krop.mainwindowui_qt5 import Ui_MainWindow
-else:
+if PYQT6:
     from krop.mainwindowui_qt6 import Ui_MainWindow
+else:
+    from krop.mainwindowui_qt5 import Ui_MainWindow
 
 from krop.viewerselections import ViewerSelections, aspectRatioFromStr
 from krop.vieweritem import ViewerItem
