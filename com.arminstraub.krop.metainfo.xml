@@ -12,7 +12,7 @@
   <summary>Crop PDF files</summary>
   <description>
     <p>
-      krop is a simple graphical tool to crop the pages of PDF files. A unique feature of krop is its ability to automatically split pages into subpages to fit the limited screen size of devices such as eReaders. This is particularly useful, if your eReader does not support convenient scrolling.
+      krop is a simple graphical tool to crop the pages of PDF files. It is written in Python and relies on PyQt6 and PyMuPDF for its functionality, but includes a PyQt5 fallback. A unique feature of krop is its ability to automatically split pages into subpages to fit the limited screen size of devices such as eReaders. This is particularly useful, if your eReader does not support convenient scrolling.
     </p>
   </description>
   <keywords>
