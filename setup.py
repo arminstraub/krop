@@ -45,7 +45,7 @@ setup(
             ('share/applications', ['com.arminstraub.krop.desktop']),
             ('share/man/man1', ['krop.1']),
             ('share/metainfo', ['com.arminstraub.krop.metainfo.xml']),
-            ('share/icon/hicolor/scalable/apps', ['com.arminstraub.krop.svg'])
+            ('share/icons/hicolor/scalable/apps', ['com.arminstraub.krop.svg'])
         ],
         # https://pypi.org/classifiers/
         classifiers = [
