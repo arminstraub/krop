@@ -42,8 +42,9 @@ setup(
             'console_scripts': ['krop = krop.__main__:main']
         },
         data_files = [
-            ('share/applications', ['krop.desktop']),
+            ('share/applications', ['com.arminstraub.krop.desktop']),
             ('share/man/man1', ['krop.1']),
+            ('share/metainfo', ['com.arminstraub.krop.metainfo.xml'])
         ],
         # https://pypi.org/classifiers/
         classifiers = [
