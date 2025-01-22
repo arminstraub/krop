@@ -15,7 +15,7 @@ the Free Software Foundation; either version 3 of the License, or
 
 import sys
 
-from krop.config import PYQT5
+from krop.config import PYQT6
 from krop.qt import *
 
 from krop.viewerselections import ViewerSelections
@@ -222,27 +222,29 @@ POPPLERQT = 1
 PYMUPDF = 2
 lib_render = 0
 
-# use PyMuPDF if requested
-if '--use-pymupdf' in sys.argv and not '--use-popplerqt' in sys.argv:
+from krop.config import PYQT6
+
+# for PyQt6 use PyMuPDF
+if PYQT6:
     try:
         import fitz
-        lib_render = PYMUPDF
+        lib_crop = PYMUPDF
     except ImportError:
-        print("PyMuPDF was requested but failed to load.", file=sys.stderr)
-
-if not lib_render:
-    # try PopplerQt, not possible when using PyQt6 
-    if PYQT5:
-        try:
-            from popplerqt5 import Poppler
-            lib_render = POPPLERQT
-        except ImportError:
-            pass
-    # try PyMuPDF
-    if not lib_render:
+        _msg = "Please install PyMuPDF first."\
+            "\n\tsudo apt-get install python3-pymupdf"
+        raise RuntimeError(_msg)
+else:
+    # PyQt5 was requested
+    if not '--use-poppler' in sys.argv:
         try:
             import fitz
             lib_render = PYMUPDF
+        except ImportError:
+            print("PyMuPDF was requested but failed to load.", file=sys.stderr)
+    if not '--use-pymupdf' in sys.argv:
+        try:
+            from popplerqt5 import Poppler
+            lib_render = POPPLERQT
         except ImportError:
             pass
     # complain if no version is available
@@ -251,7 +253,6 @@ if not lib_render:
             "\n\tOn recent versions of Ubuntu, the following should do the trick:"\
             "\n\tsudo apt install python3-poppler-qt5"
         raise RuntimeError(_msg)
-
 
 if lib_render == PYMUPDF:
     ViewerItem = MuPDFViewerItem
