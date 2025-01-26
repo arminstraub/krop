@@ -201,11 +201,15 @@ class PyMuPdfCropper(SemiAbstractPdfCropper):
         return page.cropbox
     def pageSetCropBox(self, page, box):
         page.set_cropbox(box)
-        page.set_artbox(page.cropbox)
-        page.set_bleedbox(page.cropbox)
-        # careful: mediabox in MuPDF is an exception and uses PDF coordinates
-        # page.set_mediabox(page.cropbox)
-        page.set_trimbox(page.cropbox)
+        try:
+            page.set_artbox(page.cropbox)
+            page.set_bleedbox(page.cropbox)
+            # careful: mediabox in MuPDF is an exception and uses PDF coordinates
+            # page.set_mediabox(page.cropbox)
+            page.set_trimbox(page.cropbox)
+        except:
+            # these functions did not exist prior to v1.19.4
+            pass
     def copyDocumentRoot(self, pdffile):
         pass
 
@@ -278,6 +282,14 @@ if '--use-pikepdf' in sys.argv:
     except ImportError:
         print("pikepdf was requested but failed to load.", file=sys.stderr)
 
+# use pypdf if requested
+if '--use-pypdf' in sys.argv:
+    try:
+        from pypdf import PdfReader, PdfWriter
+        lib_crop = PYPDF
+    except ImportError:
+        print("pypdf was requested but failed to load.", file=sys.stderr)
+
 # use PyPDF2 if requested
 if '--use-pypdf2' in sys.argv:
     try:
@@ -297,19 +309,27 @@ if PYQT6:
         import fitz
         lib_crop = PYMUPDF
     except ImportError:
-        _msg = "Using PyQt6; Please install PyMuPDF first."\
+        _msg = "Please install PyMuPDF first (PyQt6 is being used)."\
+            "\n\tOn recent versions of Ubuntu, the following should do the trick:"\
             "\n\tsudo apt-get install python3-pymupdf"
         raise RuntimeError(_msg)
 # PyQt5: by default use pypdf / PyPDF2
 else:
     if not lib_crop:
-        # if possible use the new pypdf
+        # try PyMuPDF
+        if not lib_crop:
+            try:
+                import fitz
+                lib_crop = PYMUPDF
+            except ImportError:
+                pass
+        # try the new pypdf
         try:
             from pypdf import PdfReader, PdfWriter
             lib_crop = PYPDF
         except ImportError:
             pass
-        # otherwise use PyPDF2
+        # try PyPDF2
         if not lib_crop:
             try:
                 import PyPDF2
@@ -321,7 +341,7 @@ else:
                     lib_crop = PYPDF2b
             except ImportError:
                 pass
-        # or the very old pyPdf
+        # try the very old pyPdf
         if not lib_crop:
             try:
                 from pyPdf import PdfFileReader as PdfReader, PdfFileWriter as PdfWriter
@@ -335,17 +355,11 @@ else:
                 lib_crop = PIKEPDF
             except ImportError:
                 pass
-        # try PyMuPDF
+        # complain if no option is available
         if not lib_crop:
-            try:
-                import fitz
-                lib_crop = PYMUPDF
-            except ImportError:
-                pass
-        # complain if no version is available
-        if not lib_crop:
-            _msg = "Please install pypdf (or its predecessor PyPDF2), PyMuPDF or a new version of pikepdf first."\
-                "\n\tOn recent versions of Ubuntu, the following should do the trick:"\
+            _msg = "Please install pypdf (or its predecessor PyPDF2), PyMuPDF or a new version of pikepdf first (PyQt5 is being used)."\
+                "\n\tOn versions of Ubuntu such as 22.04, one of the following should do the trick:"\
+                "\n\tsudo apt install python3-fitz"\
                 "\n\tsudo apt-get install python3-pypdf2"
             raise RuntimeError(_msg)
 

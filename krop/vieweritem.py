@@ -3,7 +3,7 @@
 """
 Viewer for krop used to display PDF files.
 
-Copyright (C) 2010-2023 Armin Straub, http://arminstraub.com
+Copyright (C) 2010-2025 Armin Straub, http://arminstraub.com
 """
 
 """
@@ -230,7 +230,8 @@ if PYQT6:
         import fitz
         lib_crop = PYMUPDF
     except ImportError:
-        _msg = "Please install PyMuPDF first."\
+        _msg = "Please install PyMuPDF first (PyQt6 is being used)."\
+            "\n\tOn recent versions of Ubuntu, the following should do the trick:"\
             "\n\tsudo apt-get install python3-pymupdf"
         raise RuntimeError(_msg)
 else:
@@ -240,8 +241,8 @@ else:
             import fitz
             lib_render = PYMUPDF
         except ImportError:
-            print("PyMuPDF was requested but failed to load.", file=sys.stderr)
-    if not '--use-pymupdf' in sys.argv:
+            pass
+    if not lib_render:
         try:
             from popplerqt5 import Poppler
             lib_render = POPPLERQT
@@ -249,8 +250,9 @@ else:
             pass
     # complain if no version is available
     if not lib_render:
-        _msg = "Please install PopplerQt or PyMuPDF first."\
-            "\n\tOn recent versions of Ubuntu, the following should do the trick:"\
+        _msg = "Please install PyMuPDF or Poppler Qt first (PyQt5 is being used)."\
+            "\n\tOn versions of Ubuntu such as 22.04, one of the following should do the trick:"\
+            "\n\tsudo apt install python3-fitz"\
             "\n\tsudo apt install python3-poppler-qt5"
         raise RuntimeError(_msg)
 
