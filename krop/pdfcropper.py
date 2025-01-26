@@ -3,7 +3,7 @@
 """
 Cropping functionality for krop.
 
-Copyright (C) 2010-2023 Armin Straub, http://arminstraub.com
+Copyright (C) 2010-2025 Armin Straub, http://arminstraub.com
 """
 
 """
@@ -47,7 +47,7 @@ class PyPdfFile(AbstractPdfFile):
 class PyPdfOldFile(PyPdfFile):
     """Implementation of PdfFile using PyPDF2 or the old PyPdf"""
     def loadFromStream(self, stream):
-        if lib_crop == PYPDF2:
+        if lib_crop == PYPDF2a:
             self.reader = PdfReader(stream, strict=False)
         else:
             self.reader = PdfReader(stream)
@@ -251,12 +251,13 @@ def optimizePdfGhostscript(oldfilename, newfilename):
         '-dNOPAUSE', '-dBATCH', oldfilename))
 
 
-# determine which of pypdf, PyPDF2, pyPdf, pikepdf, PyMuPDF to use
-PYPDF1 = 1 # pyPdf (old)
-PYPDF2 = 2 # PyPDF2
+# determine which of pypdf, PyPDF2 (<2 or >=2), pyPdf, pikepdf, PyMuPDF to use
+PYMUPDF = 1
+PIKEPDF = 2
 PYPDF = 3 # pydf
-PYMUPDF = 4
-PIKEPDF = 5
+PYPDF1 = 4 # pyPdf (old)
+PYPDF2a = 5 # PyPDF2 <2.0.0
+PYPDF2b = 6 # PyPDF2 >=2.0.0
 lib_crop = 0
 
 from krop.config import PYQT6
@@ -280,8 +281,13 @@ if '--use-pikepdf' in sys.argv:
 # use PyPDF2 if requested
 if '--use-pypdf2' in sys.argv:
     try:
-        from PyPDF2 import PdfFileReader as PdfReader, PdfFileWriter as PdfWriter
-        lib_crop = PYPDF2
+        import PyPDF2
+        if PyPDF2.__version__.startswith("1."):
+            from PyPDF2 import PdfFileReader as PdfReader, PdfFileWriter as PdfWriter
+            lib_crop = PYPDF2a
+        else:
+            from PyPDF2 import PdfReader, PdfWriter
+            lib_crop = PYPDF2b
     except ImportError:
         print("PyPDF2 was requested but failed to load.", file=sys.stderr)
 
@@ -306,8 +312,13 @@ else:
         # otherwise use PyPDF2
         if not lib_crop:
             try:
-                from PyPDF2 import PdfFileReader as PdfReader, PdfFileWriter as PdfWriter
-                lib_crop = PYPDF2
+                import PyPDF2
+                if PyPDF2.__version__.startswith("1."):
+                    from PyPDF2 import PdfFileReader as PdfReader, PdfFileWriter as PdfWriter
+                    lib_crop = PYPDF2a
+                else:
+                    from PyPDF2 import PdfReader, PdfWriter
+                    lib_crop = PYPDF2b
             except ImportError:
                 pass
         # or the very old pyPdf
@@ -346,12 +357,12 @@ elif lib_crop == PIKEPDF:
     PdfFile = PikePdfFile
     PdfCropper = PikePdfCropper
     print("Using pikepdf for cropping.", file=sys.stderr)
-elif lib_crop == PYPDF1 or lib_crop == PYPDF2:
-    # PyPDF2 and the old pyPdf use a naming scheme different from the new pypdf
+elif lib_crop == PYPDF1 or lib_crop == PYPDF2a:
+    # PyPDF2 (<2) and the old pyPdf use camelCase while the new pypdf (and PyPDF2 >=2) uses snake_case
     PdfFile = PyPdfOldFile
     PdfCropper = PyPdfOldCropper
-    print("Using " + (lib_crop == PYPDF2 and "PyPDF2" or "pyPdf") + " for cropping.", file=sys.stderr)
+    print("Using " + (lib_crop == PYPDF2a and "PyPDF2 (<2.0.0)" or "pyPdf") + " for cropping.", file=sys.stderr)
 else:
     PdfFile = PyPdfFile
     PdfCropper = PyPdfCropper
-    print("Using pypdf for cropping.", file=sys.stderr)
+    print("Using " + (lib_crop == PYPDF2b and "PyPDF2 (>=2.0.0)" or "pypdf") + " for cropping.", file=sys.stderr)
