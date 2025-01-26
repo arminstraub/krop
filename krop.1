@@ -12,10 +12,11 @@ This manual page briefly documents the
 command.
 .PP
 \fBkrop\fP is a simple graphical tool to crop the pages of PDF files. It is written
-in Python and relies on PyQT, python-poppler-qt5 and PyPDF2 for its functionality.
-A unique feature of krop is its ability to automatically split pages into subpages
-to fit the limited screen size of devices such as eReaders. This is particularly
-useful, if your eReader does not support convenient scrolling.
+in Python and relies on PyQt and PyMuPDF (or a suitable subset of pypdf/pikepdf/
+python-poppler-qt) for its functionality.  A unique feature of krop is its
+ability to automatically split pages into subpages to fit the limited screen
+size of devices such as eReaders. This is particularly useful, if your eReader
+does not support convenient scrolling.
 .SH OPTIONS
 A summary of options is included below.
 For a complete description, use the \fB\-\-help\fP option.
@@ -66,12 +67,3 @@ how much padding to include when auto trimming (default: previous value)
 .TP
 .B \-\-go
 output PDF without opening the krop GUI (using the choices supplied on the command line); if used in a script without X server access, you can run krop using xvfb\-run
-.TP
-.B \-\-no\-kde
-do not use KDE libraries (default: use if available)
-.TP
-.B \-\-no\-qt5
-do not use PyQt5 instead of PyQt4 (default: use PyQt5 if available)
-.TP
-.B \-\-no\-PyPDF2
-do not use PyPDF2 instead of pyPdf (default: use PyPDF2 if available)
