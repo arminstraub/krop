@@ -16,11 +16,8 @@ the Free Software Foundation; either version 3 of the License, or
 import sys
 from os.path import exists, splitext
 
-try:
-    from shutil import which
-except:
-    # shutil is not available in python2; instead we use the following:
-    from distutils.spawn import find_executable as which
+from shutil import which
+
 
 try:
     str_unicode = unicode
@@ -29,17 +26,12 @@ except:
 
 
 from krop.qt import *
-from krop.config import PYQT5, KDE
+from krop.config import PYQT6
 
-if KDE:
-    from PyKDE4.kdeui import KMainWindow as QKMainWindow
+if PYQT6:
+    from krop.mainwindowui_qt6 import Ui_MainWindow
 else:
-    QKMainWindow = QMainWindow
-
-if PYQT5:
     from krop.mainwindowui_qt5 import Ui_MainWindow
-else:
-    from krop.mainwindowui_qt4 import Ui_MainWindow
 
 from krop.viewerselections import ViewerSelections, aspectRatioFromStr
 from krop.vieweritem import ViewerItem
@@ -133,12 +125,12 @@ class DeviceTypeManager(AspectRatioTypeManager):
         self.addType("Nook 1st Ed. (widescreen)", 730, 600)
 
 
-class MainWindow(QKMainWindow):
+class MainWindow(QMainWindow):
 
     fileName = None
 
     def __init__(self):
-        QKMainWindow.__init__(self)
+        QMainWindow.__init__(self)
 
         self.selAspectRatioTypes = SelAspectRatioTypeManager()
         self.deviceTypes = DeviceTypeManager()
@@ -351,10 +343,7 @@ class MainWindow(QKMainWindow):
     def slotOpenFile(self):
         fileName = QFileDialog.getOpenFileName(self,
              self.tr("Open PDF"), "", self.tr("PDF Files (*.pdf)"));
-        # in PyQt5, getOpenFileName is what used to be
-        # getOpenFileNameAndFilter
-        if PYQT5:
-            fileName = fileName[0]
+        fileName = fileName[0]
         self.openFile(fileName)
 
     def slotSelectFile(self):
@@ -408,7 +397,7 @@ class MainWindow(QKMainWindow):
         #             self.tr("A file named \"...\" already exists. Are you sure you want to overwrite it?"))
         #     return
 
-        QApplication.setOverrideCursor(Qt.WaitCursor)
+        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         try:
             pdf = PdfFile()
             pdf.loadFromFile(inputFileName)
@@ -461,7 +450,7 @@ class MainWindow(QKMainWindow):
     def slotFitInView(self, checked):
         if checked:
             self.ui.documentView.fitInView(self.pdfScene.sceneRect(),
-                    Qt.KeepAspectRatio)
+                    Qt.AspectRatioMode.KeepAspectRatio)
 
     def slotSplitterMoved(self, pos, idx):
         self.slotFitInView(self.ui.actionFitInView.isChecked())
@@ -695,7 +684,7 @@ class MainWindow(QKMainWindow):
         if self.ui.checkTrimUseAllPages.isChecked():
             pages = [i for i in range(self.viewer.numPages()) if sel.selectionVisibleOnPage(i)]
 
-        QApplication.setOverrideCursor(Qt.WaitCursor)
+        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         try:
             # orect is the original selection, nrect is the trimmed version
             orect = sel.mapRectToImage(sel.rect).toRect()

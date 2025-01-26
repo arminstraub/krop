@@ -27,7 +27,6 @@ the Free Software Foundation; either version 3 of the License, or
 import sys
 
 from krop.version import __version__
-from krop.config import KDE
 
 
 def main():
@@ -55,32 +54,17 @@ def main():
 
     parser.add_argument('--go', action='store_true', help='output PDF without opening the krop GUI (using the choices supplied on the command line); if used in a script without X server access, you can run krop using xvfb-run')
 
-    parser.add_argument('--no-kde', action='store_true', help='do not use KDE libraries (default: use if available)')
-    parser.add_argument('--no-qt5', action='store_true', help='do not use PyQt5 instead of PyQt4 (default: use PyQt5 if available)')
-    parser.add_argument('--use-pymupdf', action='store_true', help='use PyMuPDF for rendering and cropping (default: use PopplerQt for rendering and pypdf for cropping)')
-    parser.add_argument('--use-pikepdf', action='store_true', help='use pikepdf for cropping (default: use pypdf/PyPDF2 if available)')
-    parser.add_argument('--use-pypdf2', action='store_true', help='use PyPDF2 for cropping instead of pypdf (default: use pypdf if available)')
-    parser.add_argument('--use-popplerqt', action='store_true', help='use PopplerQt for rendering (default: use PyMuPDF if requested)')
+    parser.add_argument('--use-qt5', action='store_true', help='do use PyQt5 instead of PyQt6 (default: use PyQt6 if available)')
+    parser.add_argument('--use-pymupdf', action='store_true', help='use PyMuPDF for rendering and cropping (default)')
+    parser.add_argument('--use-pikepdf', action='store_true', help='use pikepdf for cropping (PyQt5 only, default: use PyMuPDF)')
+    parser.add_argument('--use-pypdf2', action='store_true', help='use PyPDF2 for cropping instead of pypdf (PyQt5 only, default: use PyMuPDF)')
+    parser.add_argument('--use-popplerqt', action='store_true', help='use PopplerQt for rendering (PyQt5 only, default: use PyMuPDF)')
 
     args = parser.parse_args()
 
-    # start the GUI
-    if KDE:
-        #TODO also use PyKDE5 once more easily available
-        from PyKDE4.kdecore import ki18n, KCmdLineArgs, KAboutData
-        from PyKDE4.kdeui import KApplication
-        appName     = "krop"
-        catalog     = ""
-        programName = ki18n("krop")
-         
-        aboutData = KAboutData(appName, catalog, programName, __version__)
-         
-        KCmdLineArgs.init(aboutData)
-        app = KApplication()
-    else:
-        from krop.qt import QApplication
-        app = QApplication(sys.argv)
-        app.setApplicationName("krop")
+    from krop.qt import QApplication
+    app = QApplication(sys.argv)
+    app.setApplicationName("krop")
 
     app.setOrganizationName("arminstraub.com")
     app.setOrganizationDomain("arminstraub.com")
@@ -90,11 +74,7 @@ def main():
 
     if args.file is not None:
         fileName = args.file
-        try:
-            fileName = fileName.decode(sys.stdin.encoding or sys.getdefaultencoding())
-        except AttributeError:
-            # not necessary (or possible) in python3, which uses unicode
-            pass
+        fileName = fileName.decode(sys.stdin.encoding or sys.getdefaultencoding())
         window.openFile(fileName)
 
     if args.output is not None:
@@ -144,5 +124,4 @@ def main():
         window.show()
         window.slotFitInView(window.ui.actionFitInView.isChecked())
 
-    # using exec_ because exec is a reserved keyword before python 3
-    sys.exit(app.exec_())
+    sys.exit(app.exec())

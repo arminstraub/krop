@@ -1,40 +1,17 @@
 import sys
 
-try:
-    # the following is only needed in python2
-    # for PyQt5 >=5.11 and PyQt4 >= 4.12.2, PyQt uses a private copy of sip
-    # that can be included as: from PyQt4 import sip
-    # however, we don't need sip.setapi except in the old python2 setup
-    import sip
-    sip.setapi('QString', 2)
-    sip.setapi('QVariant', 2)
-except ImportError:
-    pass
+PYQT6 = False
 
-PYQT5 = False
 try:
-    # use PyQt5 unless not available or specified otherwise
-    if '--no-qt5' not in sys.argv:
+    # use PyQt6 unless PyQt5 is specified
+    if '--use-qt5' not in sys.argv:
         try:
-            from PyQt5 import QtCore
-            PYQT5 = True
+            from PyQt6 import QtCore
+            PYQT6 = True
         except ImportError:
             pass
-    if not PYQT5:
-        from PyQt4 import QtCore
+    if not PYQT6:
+        from PyQt5 import QtCore
 except ImportError:
-    _msg = "Please install PyQt4 or PyQt5 first."
+    _msg = "Please install PyQt6 (or PyQt5) first."
     raise RuntimeError(_msg)
-
-# use KDE unless not available or specified otherwise
-KDE = False
-if '--no-kde' not in sys.argv:
-    if PYQT5:
-        #TODO use PyKDE5 once more easily available
-        pass
-    else:
-        try:
-            import PyKDE4
-            KDE = True
-        except ImportError:
-            pass

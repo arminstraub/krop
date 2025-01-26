@@ -131,7 +131,7 @@ class ViewerSelections(object):
                 for c in s.cropValues() ]
 
     def mousePressEvent(self, event):
-        if event.button() == Qt.LeftButton:
+        if event.button() == Qt.MouseButton.LeftButton:
             pos = event.pos()
             rect = QRectF(pos, QSizeF())
             self.currentSelection = self.addSelection(rect)
@@ -154,7 +154,7 @@ class ViewerSelectionItem(QGraphicsItem):
     """An individual user-created selection"""
     def __init__(self, parent, rect=None):
         QGraphicsItem.__init__(self, parent)
-        self.setFlag(QGraphicsItem.ItemIsFocusable)
+        self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsFocusable)
 
         if rect is None:
             rect = self.mapRectFromParent(self.viewer.irect)
@@ -176,7 +176,7 @@ class ViewerSelectionItem(QGraphicsItem):
         SelectionCornerHandleItem(self, 1, 1)
         self.adjustBoundingRect()
 
-        self.setCursor(Qt.OpenHandCursor)
+        self.setCursor(Qt.CursorShape.OpenHandCursor)
 
 
     @property
@@ -386,14 +386,14 @@ class ViewerSelectionItem(QGraphicsItem):
 
         # outer dashed rectangle
         outerPen = QPen()
-        outerPen.setStyle(Qt.DashLine)
-        painter.setPen(Qt.white)
+        outerPen.setStyle(Qt.PenStyle.DashLine)
+        painter.setPen(QColorConstants.White)
         painter.drawRect(rect)
         painter.setPen(outerPen)
         painter.drawRect(rect)
 
         def drawLine(pt1, pt2):
-            painter.setPen(Qt.white)
+            painter.setPen(QColorConstants.White)
             painter.drawLine(pt1, pt2)
             painter.setPen(outerPen)
             painter.drawLine(pt1, pt2)
@@ -403,9 +403,9 @@ class ViewerSelectionItem(QGraphicsItem):
         brush = QBrush()
         brush.setColor(QColor(0,0,0,50))
         for r in self.distributeRect():
-            brush.setStyle(even and Qt.BDiagPattern or Qt.FDiagPattern)
+            brush.setStyle(even and Qt.BrushStyle.BDiagPattern or Qt.BrushStyle.FDiagPattern)
             painter.setBrush(brush)
-            painter.setPen(Qt.NoPen)
+            painter.setPen(Qt.PenStyle.NoPen)
             painter.drawRect(r)
             if r.top() > self.rect.top():
                 drawLine(r.topLeft(),r.topRight())
@@ -416,10 +416,10 @@ class ViewerSelectionItem(QGraphicsItem):
         # inner number
         font = QFont()
         font.setPointSize(20)
-        font.setWeight(QFont.Bold)
+        font.setWeight(700)
         painter.setPen(QColor(0,0,0,155))
         painter.setFont(font)
-        painter.drawText(rect, Qt.AlignCenter, str(self.orderIndex))
+        painter.drawText(rect, Qt.AlignmentFlag.AlignCenter, str(self.orderIndex))
 
     def mousePressEvent(self, event):
         # happens after right-click (trim margins) and then clicking
@@ -427,10 +427,10 @@ class ViewerSelectionItem(QGraphicsItem):
         if not self.boundingRect().contains(event.pos()):
             self.lastPos = None
             # event.ignore()
-        elif event.button() == Qt.LeftButton:
+        elif event.button() == Qt.MouseButton.LeftButton:
             pos = event.pos()
             self.lastPos = pos
-            self.setCursor(Qt.ClosedHandCursor)
+            self.setCursor(Qt.CursorShape.ClosedHandCursor)
             self.setAsCurrent()
 
     def mouseMoveEvent(self, event):
@@ -454,19 +454,19 @@ class ViewerSelectionItem(QGraphicsItem):
 
     def mouseReleaseEvent(self, event):
         self.lastPos = None
-        self.setCursor(Qt.OpenHandCursor)
+        self.setCursor(Qt.CursorShape.OpenHandCursor)
 
     def keyPressEvent(self, event):
         accepted = False
-        if event.modifiers() == Qt.ShiftModifier:
+        if event.modifiers() == Qt.KeyboardModifier.ShiftModifier:
             accepted = True
-            if event.key() == Qt.Key_Left:
+            if event.key() == Qt.Key.Key_Left:
                 self.moveBoundingRect(-1, 0)
-            elif event.key() == Qt.Key_Right:
+            elif event.key() == Qt.Key.Key_Right:
                 self.moveBoundingRect(1, 0)
-            elif event.key() == Qt.Key_Down:
+            elif event.key() == Qt.Key.Key_Down:
                 self.moveBoundingRect(0, 1)
-            elif event.key() == Qt.Key_Up:
+            elif event.key() == Qt.Key.Key_Up:
                 self.moveBoundingRect(0, -1)
             else:
                 accepted = False
@@ -495,9 +495,9 @@ class SelectionHandleItem(QGraphicsItem):
         self.ac = self.ah
 
         if self.role==SelectionHandleItem.LeftHandle or self.role==SelectionHandleItem.RightHandle:
-            self.setCursor(Qt.SizeHorCursor)
+            self.setCursor(Qt.CursorShape.SizeHorCursor)
         elif self.role==SelectionHandleItem.TopHandle or self.role==SelectionHandleItem.BottomHandle:
-            self.setCursor(Qt.SizeVerCursor)
+            self.setCursor(Qt.CursorShape.SizeVerCursor)
 
     @property
     def selection(self):
@@ -549,7 +549,7 @@ class SelectionHandleItem(QGraphicsItem):
         painter.drawConvexPolygon(QPolygonF([pt+p for p in pts]))
 
     def mousePressEvent(self, event):
-        if event.button() == Qt.LeftButton:
+        if event.button() == Qt.MouseButton.LeftButton:
             pos = event.pos()
             self.lastPos = pos
             self.selection.setAsCurrent()
@@ -586,7 +586,7 @@ class SelectionCornerHandleItem(QGraphicsItem):
         # size (half, that is)
         self.bs = 4
 
-        self.setCursor((Qt.SizeFDiagCursor, Qt.SizeBDiagCursor)[(lr+tb)%2])
+        self.setCursor((Qt.CursorShape.SizeFDiagCursor, Qt.CursorShape.SizeBDiagCursor)[(lr+tb)%2])
 
     @property
     def selection(self):
@@ -621,7 +621,7 @@ class SelectionCornerHandleItem(QGraphicsItem):
         painter.drawRect(rect)
 
     def mousePressEvent(self, event):
-        if event.button() == Qt.LeftButton:
+        if event.button() == Qt.MouseButton.LeftButton:
             pos = event.pos()
             self.lastPos = pos
             self.selection.setAsCurrent()

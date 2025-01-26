@@ -31,9 +31,9 @@ setup(
         version = version,
         author = 'Armin Straub',
         author_email = 'mail@arminstraub.com',
-        url = 'http://arminstraub.com/software/krop',
+        url = 'https://arminstraub.com/software/krop',
         description = 'A tool to crop PDF files',
-        long_description = 'krop is a simple graphical tool to crop the pages of PDF files. It is written in Python and relies on PyQT, python-poppler-qt5 and PyPDF2 for its functionality. A unique feature of krop is its ability to automatically split pages into subpages to fit the limited screen size of devices such as eReaders. This is particularly useful, if your eReader does not support convenient scrolling.',
+        long_description = 'krop is a simple graphical tool to crop the pages of PDF files. It is written in Python and relies on PyQt6 and PyMuPDF for its functionality. A unique feature of krop is its ability to automatically split pages into subpages to fit the limited screen size of devices such as eReaders. This is particularly useful, if your eReader does not support convenient scrolling.',
         # this is redundant but the egg/wheel produced by setuptools otherwise reports "License: UNKNOWN"
         license = 'GPLv3+',
         keywords = 'pdf crop ereader',
@@ -42,8 +42,10 @@ setup(
             'console_scripts': ['krop = krop.__main__:main']
         },
         data_files = [
-            ('share/applications', ['krop.desktop']),
+            ('share/applications', ['com.arminstraub.krop.desktop']),
             ('share/man/man1', ['krop.1']),
+            ('share/metainfo', ['com.arminstraub.krop.metainfo.xml']),
+            ('share/icons/hicolor/scalable/apps', ['com.arminstraub.krop.svg'])
         ],
         # https://pypi.org/classifiers/
         classifiers = [
@@ -51,7 +53,6 @@ setup(
             'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
             'Topic :: Utilities',
             'Intended Audience :: End Users/Desktop',
-            'Programming Language :: Python :: 2',
             'Programming Language :: Python :: 3',
             'Environment :: X11 Applications :: Qt',
         ],
