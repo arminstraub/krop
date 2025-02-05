@@ -3,7 +3,7 @@
 """
 The main window of krop
 
-Copyright (C) 2010-2020 Armin Straub, http://arminstraub.com
+Copyright (C) 2010-2025 Armin Straub, http://arminstraub.com
 """
 
 """
@@ -15,15 +15,7 @@ the Free Software Foundation; either version 3 of the License, or
 
 import sys
 from os.path import exists, splitext
-
 from shutil import which
-
-
-try:
-    str_unicode = unicode
-except:
-    str_unicode = str
-
 
 from krop.qt import *
 from krop.config import PYQT6
@@ -327,7 +319,7 @@ class MainWindow(QMainWindow):
             self.viewer.load(fileName)
             if not self.viewer.isEmpty():
                 self.fileName = fileName
-                outputFileName = "%s-cropped.pdf" % splitext(str_unicode(fileName))[0]
+                outputFileName = "%s-cropped.pdf" % splitext(fileName)[0]
                 self.slotFitInView(self.ui.actionFitInView.isChecked())
             else:
                 self.fileName = ''
@@ -377,11 +369,11 @@ class MainWindow(QMainWindow):
 
     def slotKrop(self):
         # file names
-        inputFileName = str_unicode(self.fileName)
-        outputFileName = str_unicode(self.ui.editFile.text())
+        inputFileName = self.fileName
+        outputFileName = self.ui.editFile.text()
 
         # which pages
-        s = str(self.ui.editWhichPages.text())
+        s = self.ui.editWhichPages.text()
         if not s:
             pages = range(self.viewer.numPages())
         else:
@@ -501,13 +493,13 @@ class MainWindow(QMainWindow):
             self.ui.editSelExceptions.setEnabled(enableExceptions)
 
     def slotSelExceptionsChanged(self):
-        s = str(self.ui.editSelExceptions.text())
+        s = self.ui.editSelExceptions.text()
         pages = self.str2pages(s)
         self.selections.selectionExceptions = pages
 
     def slotSelExceptionsEdited(self, text):
         try:
-            pages = self.str2pages(str(text))
+            pages = self.str2pages(text)
             self.selections.selectionExceptions = pages
         except ValueError:
             pass

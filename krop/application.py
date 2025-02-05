@@ -75,7 +75,6 @@ def main():
 
     if args.file is not None:
         fileName = args.file
-        fileName = fileName.decode(sys.stdin.encoding or sys.getdefaultencoding())
         window.openFile(fileName)
 
     if args.output is not None:
