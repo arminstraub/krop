@@ -16,6 +16,8 @@ the Free Software Foundation; either version 3 of the License, or
 import copy
 import sys
 
+from krop.config import PYQT6
+
 
 class PdfEncryptedError(Exception):
     pass
@@ -34,7 +36,7 @@ class PyPdfFile(AbstractPdfFile):
     def __init__(self):
         self.reader = None
     def loadFromStream(self, stream):
-        self.reader = PdfReader(stream)
+        self.reader = self.PdfReader(stream)
         if self.reader.is_encrypted:
             try:
                 if not self.reader.decrypt(''):
@@ -45,12 +47,10 @@ class PyPdfFile(AbstractPdfFile):
         return self.reader.pages[nr]
 
 class PyPdfOldFile(PyPdfFile):
-    """Implementation of PdfFile using PyPDF2 or the old PyPdf"""
+    """Implementation of PdfFile using PyPDF2 (<2) which uses camelCase rather
+    than snake_case"""
     def loadFromStream(self, stream):
-        if lib_crop == PYPDF2a:
-            self.reader = PdfReader(stream, strict=False)
-        else:
-            self.reader = PdfReader(stream)
+        self.reader = self.PdfReader(stream, strict=False)
         if self.reader.isEncrypted:
             try:
                 if not self.reader.decrypt(''):
@@ -65,7 +65,7 @@ class PyMuPdfFile(AbstractPdfFile):
     def __init__(self):
         self.reader = None
     def loadFromStream(self, stream):
-        self.reader = fitz.open(stream)
+        self.reader = self.pymupdf.open(stream)
         if self.reader.is_encrypted:
             raise PdfEncryptedError
     def getPage(self, nr):
@@ -76,7 +76,7 @@ class PikePdfFile(AbstractPdfFile):
     def __init__(self):
         self.reader = None
     def loadFromStream(self, stream):
-        self.reader = Pdf.open(stream)
+        self.reader = self.Pdf.open(stream)
         if self.reader.is_encrypted:
             raise PdfEncryptedError
     def getPage(self, nr):
@@ -121,11 +121,11 @@ class SemiAbstractPdfCropper(AbstractPdfCropper):
 class PyPdfCropper(SemiAbstractPdfCropper):
     """Implementation of PdfCropper using pypdf"""
     def __init__(self):
-        self.output = PdfWriter()
+        self.output = self.PdfWriter()
     def writeToStream(self, stream):
         # For certain large pdf files, PdfWriter.write() causes the error:
         #   maximum recursion depth exceeded while calling a Python object
-        # This issue is present in pyPdf as well as PyPDF2 1.23
+        # This issue is present, for instance, in PyPDF2 1.23.
         # We therefore temporarily increase the recursion limit.
         old_reclimit = sys.getrecursionlimit()
         sys.setrecursionlimit(10000)
@@ -151,7 +151,7 @@ class PyPdfCropper(SemiAbstractPdfCropper):
             self.output.add_named_destination_object(dest)
 
 class PyPdfOldCropper(PyPdfCropper):
-    """Implementation of PdfCropper using PyPDF2 or the old PyPdf"""
+    """Implementation of PdfCropper using PyPDF2 (<2)"""
     def doAddPage(self, page, rotate):
         if rotate != 0:
             page.rotateClockwise(rotate)
@@ -174,7 +174,7 @@ class PyPdfOldCropper(PyPdfCropper):
 class PyMuPdfCropper(SemiAbstractPdfCropper):
     """Implementation of PdfCropper using PyMuPDF"""
     def __init__(self):
-        self.output = fitz.open()
+        self.output = self.pymupdf.open()
     def writeToStream(self, stream):
         self.output.save(stream)
     def addPageCropped(self, pdffile, pagenumber, croplist, alwaysinclude, rotate=0):
@@ -217,7 +217,7 @@ class PyMuPdfCropper(SemiAbstractPdfCropper):
 class PikePdfCropper(SemiAbstractPdfCropper):
     """Implementation of PdfCropper using pikepdf"""
     def __init__(self):
-        self.output = Pdf.new()
+        self.output = self.Pdf.new()
     def writeToStream(self, stream):
         self.output.save(stream)
     def doAddPage(self, page, rotate):
@@ -255,128 +255,77 @@ def optimizePdfGhostscript(oldfilename, newfilename):
         '-dNOPAUSE', '-dBATCH', oldfilename))
 
 
-# determine which of pypdf, PyPDF2 (<2 or >=2), pyPdf, pikepdf, PyMuPDF to use
-PYMUPDF = 1
-PIKEPDF = 2
-PYPDF = 3 # pydf
-PYPDF1 = 4 # pyPdf (old)
-PYPDF2a = 5 # PyPDF2 <2.0.0
-PYPDF2b = 6 # PyPDF2 >=2.0.0
-lib_crop = 0
+# In the following, we determine which cropping library to use.
+# See lib_crop_options below for a list of the supported libraries.
 
-from krop.config import PYQT6
+def import_pymupdf():
+    import fitz
+    # note: since 1.24.3, one can use 'import pymupdf' instead but fitz is
+    # promised to always be supported as well
+    PyMuPdfFile.pymupdf = fitz
+    PyMuPdfCropper.pymupdf = fitz
+    return PyMuPdfFile, PyMuPdfCropper
 
-# use PyMuPDF if requested
-if '--use-pymupdf' in sys.argv:
-    try:
-        import fitz
-        lib_crop = PYMUPDF
-    except ImportError:
-        print("PyMuPDF was requested but failed to load.", file=sys.stderr)
+def import_pikepdf():
+    from pikepdf import Pdf
+    PikePdfFile.Pdf = Pdf
+    PikePdfCropper.Pdf = Pdf
+    return PikePdfFile, PikePdfCropper
 
-# use pikepdf if requested
-if '--use-pikepdf' in sys.argv:
-    try:
-        from pikepdf import Pdf
-        lib_crop = PIKEPDF
-    except ImportError:
-        print("pikepdf was requested but failed to load.", file=sys.stderr)
+def import_pypdf():
+    from pypdf import PdfReader, PdfWriter
+    PyPdfFile.PdfReader = PdfReader
+    PyPdfCropper.PdfWriter = PdfWriter
+    return PyPdfFile, PyPdfCropper
 
-# use pypdf if requested
-if '--use-pypdf' in sys.argv:
-    try:
-        from pypdf import PdfReader, PdfWriter
-        lib_crop = PYPDF
-    except ImportError:
-        print("pypdf was requested but failed to load.", file=sys.stderr)
+def import_pypdf2():
+    import PyPDF2
+    # PyPDF2 (<2) uses camelCase while newer versions (just like pypdf) use snake_case
+    if PyPDF2.__version__.startswith("1."):
+        from PyPDF2 import PdfFileReader as PdfReader, PdfFileWriter as PdfWriter
+        PdfFile = PyPdfOldFile
+        PdfCropper = PyPdfOldCropper
+    else:
+        from PyPDF2 import PdfReader, PdfWriter
+        PdfFile = PyPdfFile
+        PdfCropper = PyPdfCropper
+    PdfFile.PdfReader = PdfReader
+    PdfCropper.PdfWriter = PdfWriter
+    return PdfFile, PdfCropper
 
-# use PyPDF2 if requested
-if '--use-pypdf2' in sys.argv:
-    try:
-        import PyPDF2
-        if PyPDF2.__version__.startswith("1."):
-            from PyPDF2 import PdfFileReader as PdfReader, PdfFileWriter as PdfWriter
-            lib_crop = PYPDF2a
-        else:
-            from PyPDF2 import PdfReader, PdfWriter
-            lib_crop = PYPDF2b
-    except ImportError:
-        print("PyPDF2 was requested but failed to load.", file=sys.stderr)
+# for each cropping library: [name, import function, flag to request it]
+lib_crop_options = [
+        ['PyMuPDF', import_pymupdf, '--use-pymupdf'],
+        ['pikepdf', import_pikepdf, '--use-pikepdf'],
+        ['pypdf', import_pypdf, '--use-pypdf'],
+        ['PyPDF2', import_pypdf2, '--use-pypdf2'],
+        ]
+# lib_crop will be set to the name of the cropping library in use
+lib_crop = None
 
-# PyQt6: Search for PyMuPDF
-if PYQT6:
-    try:
-        import fitz
-        lib_crop = PYMUPDF
-    except ImportError:
-        _msg = "Please install PyMuPDF first (PyQt6 is being used)."\
-            "\n\tOn recent versions of Ubuntu, the following should do the trick:"\
+# We go through all options for libraries twice:
+# during the first round, we load a library if it is specifically requested,
+# and during the second round, we load the first available library.
+for load_only_if_requested in [True, False]:
+    for lib, import_func, flag in lib_crop_options:
+        if not lib_crop and (not load_only_if_requested or (flag and flag in sys.argv)):
+            try:
+                PdfFile, PdfCropper = import_func()
+                lib_crop = lib
+                print(f"Using {lib} for cropping.", file=sys.stderr)
+            except ImportError:
+                if load_only_if_requested:
+                    print(f"{lib} was requested but failed to load.", file=sys.stderr)
+
+# complain if no library could be imported
+if not lib_crop:
+    _msg = "Please install one of the supported cropping libraries first (PyMuPDF, pypdf, or pikepdf)."
+    if PYQT6:
+        _msg += "\n\tFor instance, on recent versions of Ubuntu, the following should do the trick:"\
             "\n\tsudo apt-get install python3-pymupdf"
-        raise RuntimeError(_msg)
-# PyQt5: by default use pypdf / PyPDF2
-else:
-    if not lib_crop:
-        # try PyMuPDF
-        if not lib_crop:
-            try:
-                import fitz
-                lib_crop = PYMUPDF
-            except ImportError:
-                pass
-        # try the new pypdf
-        try:
-            from pypdf import PdfReader, PdfWriter
-            lib_crop = PYPDF
-        except ImportError:
-            pass
-        # try PyPDF2
-        if not lib_crop:
-            try:
-                import PyPDF2
-                if PyPDF2.__version__.startswith("1."):
-                    from PyPDF2 import PdfFileReader as PdfReader, PdfFileWriter as PdfWriter
-                    lib_crop = PYPDF2a
-                else:
-                    from PyPDF2 import PdfReader, PdfWriter
-                    lib_crop = PYPDF2b
-            except ImportError:
-                pass
-        # try the very old pyPdf
-        if not lib_crop:
-            try:
-                from pyPdf import PdfFileReader as PdfReader, PdfFileWriter as PdfWriter
-                lib_crop = PYPDF1
-            except ImportError:
-                pass
-        # try pikepdf
-        if not lib_crop:
-            try:
-                from pikepdf import Pdf
-                lib_crop = PIKEPDF
-            except ImportError:
-                pass
-        # complain if no option is available
-        if not lib_crop:
-            _msg = "Please install pypdf (or its predecessor PyPDF2), PyMuPDF or a new version of pikepdf first (PyQt5 is being used)."\
-                "\n\tOn versions of Ubuntu such as 22.04, one of the following should do the trick:"\
-                "\n\tsudo apt install python3-fitz"\
-                "\n\tsudo apt-get install python3-pypdf2"
-            raise RuntimeError(_msg)
+    else:
+        _msg += "\n\tFor instance, on versions of Ubuntu such as 22.04, one of the following should do the trick:"\
+            "\n\tsudo apt install python3-fitz"\
+            "\n\tsudo apt-get install python3-pypdf2"
+    raise RuntimeError(_msg)
 
-if lib_crop == PYMUPDF:
-    PdfFile = PyMuPdfFile
-    PdfCropper = PyMuPdfCropper
-    print("Using PyMuPDF for cropping.", file=sys.stderr)
-elif lib_crop == PIKEPDF:
-    PdfFile = PikePdfFile
-    PdfCropper = PikePdfCropper
-    print("Using pikepdf for cropping.", file=sys.stderr)
-elif lib_crop == PYPDF1 or lib_crop == PYPDF2a:
-    # PyPDF2 (<2) and the old pyPdf use camelCase while the new pypdf (and PyPDF2 >=2) uses snake_case
-    PdfFile = PyPdfOldFile
-    PdfCropper = PyPdfOldCropper
-    print("Using " + (lib_crop == PYPDF2a and "PyPDF2 (<2.0.0)" or "pyPdf") + " for cropping.", file=sys.stderr)
-else:
-    PdfFile = PyPdfFile
-    PdfCropper = PyPdfCropper
-    print("Using " + (lib_crop == PYPDF2b and "PyPDF2 (>=2.0.0)" or "pypdf") + " for cropping.", file=sys.stderr)
