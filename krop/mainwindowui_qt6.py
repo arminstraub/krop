@@ -374,7 +374,6 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "krop: A tool to crop your PDFs"))
         self.groupSaveTo.setTitle(_translate("MainWindow", "Save cropped PDF to"))
         self.editFile.setToolTip(_translate("MainWindow", "<p>This is where the cropped PDF will be saved after you choose <i>Krop!</i> in the menu.</p>"))
         self.buttonFileSelect.setToolTip(_translate("MainWindow", "<p>This is where the cropped PDF will be saved after you choose <i>Krop!</i> in the menu.</p>"))
@@ -426,11 +425,11 @@ class Ui_MainWindow(object):
 "<p>Right-click a selection to delete it. Or simply press the Delete key.</p>\n"
 "<p>You can choose to create individual selections for each page.</p>\n"
 "<p>You can automatically trim the margins of your selections.</p>\n"
-"<p>Examples and more information can be found at: <a href=\'http://arminstraub.com/software/krop\'>arminstraub.com</a></p>\n"
+"<p>Examples and more information can be found at: <a href=\'https://arminstraub.com/software/krop\'>arminstraub.com</a></p>\n"
 ""))
         self.labelHelpCopyright.setToolTip(_translate("MainWindow", "<p>This program is free software and available to you in the hope that it will be useful; but without any warranty. It is distributed under the terms of the GNU General Public License (GPLv3+). See the accompanying files for more information.</p>"))
-        self.labelHelpCopyright.setText(_translate("MainWindow", "<p>Copyright (C) 2010-2020 Armin Straub\n"
-"<br><a href=\'http://arminstraub.com\'>http://arminstraub.com</a></p>"))
+        self.labelHelpCopyright.setText(_translate("MainWindow", "<p>Copyright (C) 2010-2025 Armin Straub\n"
+"<br><a href=\'https://arminstraub.com\'>https://arminstraub.com</a></p>"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabHelp), _translate("MainWindow", "Help"))
         self.label.setText(_translate("MainWindow", "of"))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))

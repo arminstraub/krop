@@ -327,6 +327,7 @@ class MainWindow(QMainWindow):
                 self.showWarning(self.tr("Something got in our way"),
                         self.tr("The PDF file couldn't be read. "
                             "Please check the file and its permissions."))
+            self.setWindowFilePath(self.fileName)
             self.ui.actionKrop.setEnabled(not self.viewer.isEmpty())
             self.ui.actionTrimMarginsAll.setEnabled(not self.viewer.isEmpty())
             self.ui.editFile.setText(outputFileName)

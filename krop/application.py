@@ -66,6 +66,7 @@ def main():
     from krop.qt import QApplication
     app = QApplication(sys.argv)
     app.setApplicationName("krop")
+    app.setApplicationDisplayName("krop")
 
     app.setOrganizationName("arminstraub.com")
     app.setOrganizationDomain("arminstraub.com")
