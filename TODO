@@ -1,9 +1,10 @@
 Roadmap (ideas planned for one of the next releases)
-+ Allow translations (once UI has stabilized)
-+ Support PySide in addition to PyQT
-+ Support pikepdf in addition to or instead of pyPdf/PyPDF2
++ Improve support for pikepdf, PyMuPDF and pypdf (e.g. preserve links)
++ Support QtPy, an abstraction layer for both PyQt and PySide (for Qt5 and Qt6)
 + Expose further Ghostscript features (like exporting to PDF 1.7)
 + Save and later reuse regions for cropping
++ Use parallel processing for certain tasks like cropping
++ Allow translations (once UI has stabilized)
 
 Wishlist (ideas that are likely difficult or currently impractical)
 + Preserve meta data, table of contents and bookmarks when cropping

@@ -2,7 +2,7 @@
 # -*- coding: iso-8859-1 -*-
 
 """
-Copyright (C) 2014-2020 Armin Straub, http://arminstraub.com
+Copyright (C) 2014-2025 Armin Straub, http://arminstraub.com
 """
 
 """
@@ -35,7 +35,7 @@ setup(
         description = 'A tool to crop PDF files',
         long_description = 'krop is a simple graphical tool to crop the pages of PDF files. It is written in Python and relies on PyQt and PyMuPDF (or a suitable subset of pypdf/pikepdf/python-poppler-qt) for its functionality. A unique feature of krop is its ability to automatically split pages into subpages to fit the limited screen size of devices such as eReaders. This is particularly useful, if your eReader does not support convenient scrolling.',
         # this is redundant but the egg/wheel produced by setuptools otherwise reports "License: UNKNOWN"
-        license = 'GPLv3+',
+        license = 'GPL-3.0-or-later',
         keywords = 'pdf crop ereader',
         packages = ['krop'],
         entry_points = {

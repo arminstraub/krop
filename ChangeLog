@@ -1,10 +1,15 @@
-krop (0.6.1)  2023-00-00 -- Armin Straub
+krop (0.7.0)  2025-04-06 -- Armin Straub
 
-  * Preserve links within a PDF (thanks to chrthi for doing this).
+  + Support PyQt6 and update packaging (thanks to PunkPangolin for this work).
+  + Support PyMuPDF for rendering and cropping.
+  + Support pikepdf for cropping (thanks to Hongzhuo Liang for the idea and
+  initial code).
   * Support the new version of pypdf in addition to its predecessor PyPDF2
   (thanks to Emmanuel Rosa for the idea and initial code).
-  + Support pikepdf as an alternative to pypdf (thanks to Hongzhuo Liang for
-  the idea and initial code).
+  * Support both old (<2) and new (>=2) versions of PyPDF2 (thanks to milahu
+  for the idea and initial code).
+  * When using PyPDF2, preserve links within a PDF (thanks to chrthi for this).
+  * Display PDF file name in window title.
 
 krop (0.6.0)  2020-06-09 -- Armin Straub
 
