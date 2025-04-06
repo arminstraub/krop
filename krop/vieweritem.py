@@ -228,7 +228,7 @@ from krop.config import PYQT6
 if PYQT6:
     try:
         import fitz
-        lib_crop = PYMUPDF
+        lib_render = PYMUPDF
     except ImportError:
         _msg = "Please install PyMuPDF first (PyQt6 is being used)."\
             "\n\tOn recent versions of Ubuntu, the following should do the trick:"\
