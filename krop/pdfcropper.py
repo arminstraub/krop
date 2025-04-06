@@ -181,14 +181,12 @@ class PyMuPdfCropper(SemiAbstractPdfCropper):
         def addPage():
             # https://pymupdf.readthedocs.io/en/latest/the-basics.html
             r = pdffile.reader[pagenumber].rotation + rotate
-            self.output.insert_pdf(pdffile.reader, pagenumber, pagenumber, rotate=r)
+            self.output.insert_pdf(pdffile.reader, from_page=pagenumber, to_page=pagenumber, rotate=r)
         if not croplist and alwaysinclude:
             addPage()
-            # self.output.insert_pdf(pdffile.reader, pagenumber, pagenumber, rotate=rotate)
         else:
             for crop in croplist:
                 addPage()
-                # self.output.insert_pdf(pdffile.reader, pagenumber, pagenumber, rotate=rotate)
                 new_page = self.output[-1]
                 box = self.pageGetCropBox(new_page)
                 # MuPDF uses coordinates where (0,0) is the top-right point, unlike
