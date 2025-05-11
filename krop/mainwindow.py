@@ -364,6 +364,10 @@ class MainWindow(QMainWindow):
         for i in intervals:
             a,b = i[0], i[-1]
             if a:
+                if a == 'current':
+                    a = self.viewer.currentPageIndex + 1
+                if b == 'current':
+                    b = self.viewer.currentPageIndex + 1
                 if not b: b = self.viewer.numPages()
                 pages.extend(range(int(a)-1,int(b))) # subtract 1 because pages are counted from 0 internally
         return pages
