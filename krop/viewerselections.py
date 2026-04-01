@@ -130,7 +130,35 @@ class ViewerSelections(object):
         return [ c for s in self.items if s.selectionVisibleOnPage(idx)
                 for c in s.cropValues() ]
 
+    def addHorizontalSplit(self, y):
+        prect = self.viewer.irect
+        if prect is None or prect.isNull():
+            return
+
+        split_point = prect.top() # We start at the top
+        for s in self._selections:
+            if not s.selectionVisibleOnPage(self.viewer.currentPageIndex):
+                continue
+            bottom = s.boundingRect().bottom()
+            if bottom >= y: # if that bottom bound is below the selection, then we disregard it
+                continue
+            if bottom > split_point:
+                split_point = bottom
+
+        _y = max(min(y, prect.bottom()), prect.top())
+        if _y <= split_point + 1:
+            return
+
+        rect = QRectF(prect.left(), split_point,
+                      prect.right(), _y - split_point).normalized()
+        self.currentSelection = self.addSelection(rect)
+
     def mousePressEvent(self, event):
+        if event.button() == Qt.MouseButton.LeftButton and event.modifiers() == Qt.KeyboardModifier.ControlModifier:
+            self.addHorizontalSplit(event.pos().y())
+            self.lastPos = None
+            return
+
         if event.button() == Qt.MouseButton.LeftButton:
             pos = event.pos()
             rect = QRectF(pos, QSizeF())
