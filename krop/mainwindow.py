@@ -335,13 +335,14 @@ class MainWindow(QMainWindow):
 
     def slotOpenFile(self):
         fileName = QFileDialog.getOpenFileName(self,
-             self.tr("Open PDF"), "", self.tr("PDF Files (*.pdf)"));
+             self.tr("Open PDF"), "", self.tr("PDF Files (*.pdf *.PDF);;All Files (*)",
+             self.tr("PDF Files (*.pdf *.PDF)")));
         fileName = fileName[0]
         self.openFile(fileName)
 
     def slotSelectFile(self):
         fileName = QFileDialog.getSaveFileName(self,
-                self.tr("Save cropped PDF to ..."), "", self.tr("PDF Files (*.pdf)"))
+                self.tr("Save cropped PDF to ..."), "", self.tr("PDF Files (*.pdf *.PDF)"))
                 # None, QFileDialog.DontConfirmOverwrite)
         try:
             self.ui.editFile.setText(fileName)
